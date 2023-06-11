@@ -6,14 +6,18 @@ import android.os.Bundle;
 
 import com.example.hatchatmobile1.databinding.ActivityContactListBinding;
 
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import com.example.hatchatmobile1.databinding.ActivityAddContactBinding;
+
 public class AddContactActivity extends AppCompatActivity {
 
-    private ActivityContactListBinding binding;
+    private ActivityAddContactBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityContactListBinding.inflate(getLayoutInflater());
+        binding = ActivityAddContactBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
 }

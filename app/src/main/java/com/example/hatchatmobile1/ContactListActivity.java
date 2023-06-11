@@ -17,7 +17,7 @@ public class ContactListActivity extends AppCompatActivity {
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.btnAdd.setOnClickListener(view ->{
+        binding.btnAddContact.setOnClickListener(view ->{
             Intent addContactIntent = new Intent(this, AddContactActivity.class);
             startActivity(addContactIntent);
         });
