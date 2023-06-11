@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_screen_background">
+    android:background="@drawable/login_screen_background"
+    tools:ignore="ExtraText">
     android:clipToPadding="false"
     android:padding="0dp"
     tools:context=".MainActivity">
@@ -55,32 +56,48 @@
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/usernameInputText"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameTextInputLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:hint="@string/usernameHint"
-            android:inputType="textPersonName" />
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/passwordInputText"
+            <EditText
+                android:id="@+id/usernameInputText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:hint="@string/usernameHint"
+                android:inputType="textPersonName" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:hint="@string/passwordHint"
-            android:inputType="textPassword" />
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/passwordInputText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:hint="@string/passwordHint"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <Button
             android:id="@+id/loginBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="20dp"
             android:backgroundTint="#5727AE"
             android:padding="15dp"
             android:text="@string/login"
             android:textColor="#FFFFFF" />
-
 
         <LinearLayout
             android:layout_width="wrap_content"

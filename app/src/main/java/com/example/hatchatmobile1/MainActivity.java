@@ -18,9 +18,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * The onCreate override for the main activity.
+     *
      * @param savedInstanceState If the activity is being re-initialized after
-     * previously being shut down then this Bundle contains the data it most
-     * recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *                           previously being shut down then this Bundle contains the data it most
+     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (isValidCredentials(username, password)) {
 
-                CharSequence text = "Welcome back " + username +"!";
+                CharSequence text = "Welcome back " + username + "!";
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(this, text, duration);
                 toast.show();
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method to validate the username and password.
+     *
      * @param username The entered username.
      * @param password The entered password.
      * @return True if the credentials are valid, false otherwise.
