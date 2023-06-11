@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">HatchatMobile.1</string>
     <string name="login">Login</string>
+    <string name="usernameHint">Username</string>
+    <string name="passwordHint">Password</string>
+    <string name="LogoName">HatChat</string>
 </resources>
