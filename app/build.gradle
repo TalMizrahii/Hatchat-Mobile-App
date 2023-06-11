@@ -6,6 +6,10 @@ android {
     namespace 'com.example.hatchatmobile1'
     compileSdk 33
 
+    buildFeatures{
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.example.hatchatmobile1"
         minSdk 21
