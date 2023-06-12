@@ -1,13 +1,21 @@
 <resources>
-    <string name="app_name">HatchatMobile.1</string>
+    <string name="app_name">HatchatMobile</string>
     <string name="login">Login</string>
     <string name="usernameHint">Username</string>
     <string name="passwordHint">Password</string>
     <string name="LogoName">HatChat</string>
+
     <string name="Enter_Username">Enter Username</string>
     <string name="submit">Submit</string>
     <string name="add_contact">Add Contact</string>
     <string name="bio">Bio</string>
     <string name="default_name">Default name</string>
     <string name="contactimage">contactImage</string>
+
+    <string name="hatchaticon">HatChatIcon</string>
+    <string name="not_registered_yet">Not registered yet?</string>
+    <string name="disclaimer_click_here">Click here</string>
+    <string name="disclaimer_to_register">to register.</string>
+    <string name="_2023_hatchat_inc">© 2023 HatChat, Inc.</string>
+
 </resources>
