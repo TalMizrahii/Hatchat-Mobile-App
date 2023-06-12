@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/contact_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/haticon"
+        android:contentDescription="@string/contactimage" />
+
+    <TextView
+        android:id="@+id/contact_name"
+        android:layout_width="183dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="1dp"
+        android:layout_toEndOf="@id/contact_image"
+        android:paddingStart="10dp"
+        android:text="@string/default_name"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/contact_number"
+        android:layout_width="153dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact_name"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="205dp"
+        android:paddingStart="10dp"
+        android:text="@string/bio"
+        tools:ignore="RtlSymmetry" />
+</RelativeLayout>

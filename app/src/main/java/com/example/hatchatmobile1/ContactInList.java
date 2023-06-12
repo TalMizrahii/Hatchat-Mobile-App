@@ -16,9 +16,10 @@ public class ContactInList {
         this.displayName = displayName;
     }
 
-    public ContactInList(){
+    public ContactInList() {
+        this.username = "No Name";
+        this.displayName = "No Display Name";
     }
-
 
     public String getUsername() {
         return username;
