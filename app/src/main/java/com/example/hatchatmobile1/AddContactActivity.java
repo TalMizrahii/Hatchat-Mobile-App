@@ -3,7 +3,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.os.Bundle;
-import android.widget.EditText;
 
 import com.example.hatchatmobile1.databinding.ActivityAddContactBinding;
 
@@ -48,4 +47,5 @@ public class AddContactActivity extends AppCompatActivity {
             finish();
         });
     }
+
 }

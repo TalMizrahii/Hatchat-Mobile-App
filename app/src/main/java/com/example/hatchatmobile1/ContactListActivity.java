@@ -20,6 +20,10 @@ public class ContactListActivity extends AppCompatActivity {
     // The Dao interface to communicate using the queries.
     private ContactDao contactDao;
 
+    ContactListAdapter contactAdapter;
+
+    ListView lvContacts;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +46,20 @@ public class ContactListActivity extends AppCompatActivity {
         // Get the array from the DB.
         contactsDataArray = contactDao.index();
         // Get the listView from the layout.
-        ListView lvContacts = binding.ContactListView;
+        lvContacts = binding.ContactListView;
         // Set the contacts to the adapter.
-        ArrayAdapter<ContactInList> contactAdapter = new ArrayAdapter<ContactInList>(this,
+        contactAdapter = new ContactListAdapter(this,
                 R.layout.contact_in_list,
                 contactsDataArray);
         // Insert all contacts to the ListView.
         lvContacts.setAdapter(contactAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        contactsDataArray.clear();
+        contactsDataArray.addAll(contactDao.index());
+        contactAdapter.notifyDataSetChanged();
     }
 }

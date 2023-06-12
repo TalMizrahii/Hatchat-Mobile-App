@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp">
 
     <ImageView
         android:id="@+id/contact_image"
@@ -13,23 +14,24 @@
         android:contentDescription="@string/contactimage" />
 
     <TextView
-        android:id="@+id/contact_name"
-        android:layout_width="183dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="1dp"
+        android:id="@+id/usernameInList"
+        android:layout_width="170dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="5dp"
         android:layout_toEndOf="@id/contact_image"
         android:paddingStart="10dp"
         android:text="@string/default_name"
         tools:ignore="RtlSymmetry" />
 
     <TextView
-        android:id="@+id/contact_number"
+        android:id="@+id/bio"
         android:layout_width="153dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/contact_name"
+        android:layout_below="@id/usernameInList"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="205dp"
+        android:layout_marginEnd="162dp"
         android:paddingStart="10dp"
         android:text="@string/bio"
         tools:ignore="RtlSymmetry" />
