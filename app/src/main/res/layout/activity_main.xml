@@ -32,9 +32,12 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="142dp"
-                android:layout_height="82dp"
+                android:layout_width="75dp"
+                android:layout_height="65dp"
                 android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:contentDescription="@string/hatchaticon"
                 android:rotationX="0"
                 android:visibility="visible"
