@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hatchatmobile1.databinding.ActivityMainBinding;
 
+import java.util.Objects;
+
 /**
  * The main activity to act as the login screen of the app.
  */
@@ -31,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view);
 
         binding.loginBtn.setOnClickListener(v -> {
-            String username = binding.usernameInputText.getText().toString();
-            String password = binding.passwordInputText.getText().toString();
+            String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
+            String password = Objects.requireNonNull(binding.passwordInputText.getText()).toString();
 
             if (isValidCredentials(username, password)) {
 
