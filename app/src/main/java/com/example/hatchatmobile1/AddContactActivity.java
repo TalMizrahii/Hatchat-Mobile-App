@@ -41,7 +41,7 @@ public class AddContactActivity extends AppCompatActivity {
         // the data in the EditText will get the user from the database.
         binding.btnSubmit.setOnClickListener(view ->{
             // Creating a new contact from the user's input. todo: Change it to get it from the server/local DB.
-            ContactInList contactInList = new ContactInList(0, binding.etContent.getText().toString());
+            ContactInList contactInList = new ContactInList(0, binding.etContent.getText().toString(), "123");
             contactDao.insert(contactInList);
             // Finish the activity back to the contacts lists.
             finish();

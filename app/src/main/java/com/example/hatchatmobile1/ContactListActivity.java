@@ -53,6 +53,8 @@ public class ContactListActivity extends AppCompatActivity {
                 contactsDataArray);
         // Insert all contacts to the ListView.
         lvContacts.setAdapter(contactAdapter);
+
+
     }
 
     @Override
