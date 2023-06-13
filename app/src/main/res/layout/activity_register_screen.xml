@@ -73,7 +73,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
                 android:baselineAligned="false"
                 android:gravity="start"
@@ -83,7 +83,7 @@
                     android:id="@+id/passwordInputLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/white"
                     app:passwordToggleEnabled="true">
@@ -104,15 +104,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
+                    android:contentDescription="@string/password_requirements"
                     android:scaleType="center"
                     android:src="@drawable/ic_info"
                     app:backgroundTint="@color/colormark"
                     app:fabCustomSize="56dp"
                     app:fabSize="auto"
-                    app:maxImageSize="17dp"
-                    android:contentDescription="@string/password_requirements"/>
+                    app:maxImageSize="17dp" />
 
             </LinearLayout>
+
 
 
         </LinearLayout>
