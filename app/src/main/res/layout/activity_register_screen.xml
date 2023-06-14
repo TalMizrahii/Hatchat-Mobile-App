@@ -26,11 +26,11 @@
             android:baselineAligned="false"
             android:orientation="horizontal">
 
-
             <EditText
                 android:id="@+id/companyName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
                 android:autofillHints=""
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/abeezee"
@@ -51,17 +51,16 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/usernameTextInputLayout"
+                android:id="@+id/fullnameTextInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="316dp"
-                android:layout_height="0dp"
+                android:layout_width="314.9dp"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@color/white">
 
-
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/usernameInputText"
+                    android:id="@+id/fullnameInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
@@ -83,7 +82,8 @@
                     android:id="@+id/passwordInputLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:background="@color/white"
                     app:passwordToggleEnabled="true">
@@ -99,26 +99,59 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <Button
                     android:id="@+id/passwordRequirementsButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
+                    android:layout_width="52dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11.3dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="@drawable/btn_drawable_selector"
                     android:contentDescription="@string/password_requirements"
                     android:scaleType="center"
-                    android:src="@drawable/ic_info"
-                    app:backgroundTint="@color/colormark"
-                    app:fabCustomSize="56dp"
-                    app:fabSize="auto"
-                    app:maxImageSize="17dp" />
+                    app:backgroundTint="@null"
+                    app:maxImageSize="10dp" />
 
             </LinearLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confirmPasswordInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="320dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@color/white">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confirmPasswordInputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints=""
+                    android:background="@color/white"
+                    android:hint="@string/confirm_password"
+                    android:inputType="textPassword" />
 
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="314.9dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/usernameInputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:background="@color/white"
+                    android:hint="@string/usernameHint"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
-    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
