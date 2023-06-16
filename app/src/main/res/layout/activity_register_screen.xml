@@ -132,6 +132,7 @@
                     android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/usernameTextInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -154,4 +155,8 @@
         </LinearLayout>
 
 
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
