@@ -8,16 +8,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import java.util.List;
 
 public class ContactListAdapter extends ArrayAdapter<ContactInList> {
 
     private LayoutInflater inflater;
     private int resourceId;
+    private List<ContactInList> contacts;
 
     public ContactListAdapter(Context context, int resourceId, List<ContactInList> contacts) {
         super(context, resourceId, contacts);
+        this.inflater = LayoutInflater.from(context);
+        this.resourceId = resourceId;
+        this.contacts = contacts;
+    }
+
+    public ContactListAdapter(Context context, int resourceId) {
+        super(context, resourceId);
         this.inflater = LayoutInflater.from(context);
         this.resourceId = resourceId;
     }
@@ -53,5 +60,10 @@ public class ContactListAdapter extends ArrayAdapter<ContactInList> {
         ImageView contactImage;
         TextView username;
         TextView bio;
+    }
+
+    public void setContacts(List<ContactInList> contacts) {
+        this.contacts = contacts;
+        notifyDataSetChanged();
     }
 }
