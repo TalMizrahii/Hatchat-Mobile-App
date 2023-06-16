@@ -1,6 +1,8 @@
 package com.example.hatchatmobile1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.room.Room;
 
 import android.content.Intent;
@@ -13,16 +15,18 @@ import com.example.hatchatmobile1.databinding.ActivityContactListBinding;
 import java.util.List;
 
 public class ContactListActivity extends AppCompatActivity {
-    List<ContactInList> contactsDataArray;
     private ActivityContactListBinding binding;
+
+    private ContactListAdapter contactAdapter;
+
+    private ListView lvContacts;
+
+    private ContactsViewModel contactsViewModel;
+
     // The contact's database.
     private AppDB contactDB;
     // The Dao interface to communicate using the queries.
     private ContactDao contactDao;
-
-    ContactListAdapter contactAdapter;
-
-    ListView lvContacts;
 
 
     @Override
@@ -30,38 +34,26 @@ public class ContactListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        // Set the transaction to the addContact activity by pressing the floating button.
-        binding.btnAddContact.setOnClickListener(view -> {
-            // Create the new intent of the add contact activity.
-            Intent addContactIntent = new Intent(this, AddContactActivity.class);
-            // Start it.
-            startActivity(addContactIntent);
-        });
+
         // Create a dataBase.
         contactDB = Room.databaseBuilder(getApplicationContext(), AppDB.class, "ContactsDB")
                 .allowMainThreadQueries()
                 .build();
         // Get the database that was built.
         contactDao = contactDB.contactDao();
-        // Get the array from the DB.
-        contactsDataArray = contactDao.index();
-        // Get the listView from the layout.
+
+        binding.btnAddContact.setOnClickListener(view -> {
+            Intent addContactIntent = new Intent(this, AddContactActivity.class);
+            startActivity(addContactIntent);
+        });
+
         lvContacts = binding.ContactListView;
-        // Set the contacts to the adapter.
-        contactAdapter = new ContactListAdapter(this,
-                R.layout.contact_in_list,
-                contactsDataArray);
-        // Insert all contacts to the ListView.
+        contactAdapter = new ContactListAdapter(this, R.layout.contact_in_list);
         lvContacts.setAdapter(contactAdapter);
-
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        contactsDataArray.clear();
-        contactsDataArray.addAll(contactDao.index());
-        contactAdapter.notifyDataSetChanged();
+        contactsViewModel = new ContactsViewModel(contactDao);
+        contactsViewModel.getContacts().observe(this, contactList -> {
+            contactAdapter.setContacts(contactList);
+            contactAdapter.notifyDataSetChanged();
+        });
     }
 }
