@@ -53,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
             }
         });
+
+        binding.linkToChat.setOnClickListener(v->{
+            Intent registerScreen = new Intent(this, RegisterScreenActivity.class);
+            startActivity(registerScreen);
+        });
     }
 
     /**

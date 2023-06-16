@@ -17,5 +17,9 @@
     <string name="disclaimer_click_here">Click here</string>
     <string name="disclaimer_to_register">to register.</string>
     <string name="_2023_hatchat_inc">© 2023 HatChat, Inc.</string>
+    <string name="full_name">Full name</string>
+    <string name="password_requirements">Password Requirements!</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="upload_image">Upload_image</string>
 
 </resources>
