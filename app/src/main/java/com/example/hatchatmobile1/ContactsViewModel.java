@@ -9,11 +9,9 @@ public class ContactsViewModel extends ViewModel {
     private ContactsRepository contactsRepository;
     private LiveData<List<ContactInList>> contacts;
 
-    private ContactDao contactDao;
 
-    public ContactsViewModel(ContactDao contactDao) {
-        this.contactDao = contactDao;
-        contactsRepository = new ContactsRepository(contactDao);
+    public ContactsViewModel() {
+        contactsRepository = new ContactsRepository();
         contacts = contactsRepository.getAll();
     }
 

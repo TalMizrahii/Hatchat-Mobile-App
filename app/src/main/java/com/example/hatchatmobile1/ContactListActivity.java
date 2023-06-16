@@ -1,18 +1,11 @@
 package com.example.hatchatmobile1;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.room.Room;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.hatchatmobile1.databinding.ActivityContactListBinding;
-
-import java.util.List;
 
 public class ContactListActivity extends AppCompatActivity {
     private ActivityContactListBinding binding;
@@ -24,7 +17,7 @@ public class ContactListActivity extends AppCompatActivity {
     private ContactsViewModel contactsViewModel;
 
     // The contact's database.
-    private AppDB contactDB;
+    private ContactDB contactDB;
     // The Dao interface to communicate using the queries.
     private ContactDao contactDao;
 
@@ -35,17 +28,17 @@ public class ContactListActivity extends AppCompatActivity {
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Create a dataBase.
-        contactDB = Room.databaseBuilder(getApplicationContext(), AppDB.class, "ContactsDB")
-                .allowMainThreadQueries()
-                .build();
-        // Get the database that was built.
-        contactDao = contactDB.contactDao();
-
-        binding.btnAddContact.setOnClickListener(view -> {
-            Intent addContactIntent = new Intent(this, AddContactActivity.class);
-            startActivity(addContactIntent);
-        });
+//        // Create a dataBase.
+//        contactDB = Room.databaseBuilder(getApplicationContext(), AppDB.class, "ContactsDB")
+//                .allowMainThreadQueries()
+//                .build();
+//        // Get the database that was built.
+//        contactDao = contactDB.contactDao();
+//
+//        binding.btnAddContact.setOnClickListener(view -> {
+//            Intent addContactIntent = new Intent(this, AddContactActivity.class);
+//            startActivity(addContactIntent);
+//        });
 
         lvContacts = binding.ContactListView;
         contactAdapter = new ContactListAdapter(this, R.layout.contact_in_list);

@@ -11,7 +11,7 @@ import com.example.hatchatmobile1.databinding.ActivityAddContactBinding;
  */
 public class AddContactActivity extends AppCompatActivity {
     // The contact's database.
-    private AppDB contactDB;
+    private ContactDB contactDB;
     // The Dao interface to communicate using the queries.
     private ContactDao contactDao;
     // The binding object to get the components from the layout.
@@ -32,7 +32,7 @@ public class AddContactActivity extends AppCompatActivity {
         binding = ActivityAddContactBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         // Create a dataBase.
-        contactDB = Room.databaseBuilder(getApplicationContext(), AppDB.class, "ContactsDB")
+        contactDB = Room.databaseBuilder(getApplicationContext(), ContactDB.class, "ContactsDB")
                 .allowMainThreadQueries()
                 .build();
         // Get the database that was built.

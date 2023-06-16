@@ -1,13 +1,17 @@
 package com.example.hatchatmobile1;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity
+import java.util.List;
+
+@Entity(tableName = "contacts", primaryKeys = {"id", "username"})
 public class ContactInList {
     @PrimaryKey(autoGenerate = true)
     int id = 0;
+    @NonNull
     private String username;
     private String displayName;
     private int profilePic;
@@ -15,7 +19,7 @@ public class ContactInList {
 
     //    private String bio;
     @Ignore
-    public ContactInList(int id, String username, String displayName, int profilePic, String password) {
+    public ContactInList(int id, @NonNull String username, String displayName, int profilePic, String password) {
         this.id = id;
         this.username = username;
         this.displayName = displayName;
@@ -25,7 +29,7 @@ public class ContactInList {
     }
 
     @Ignore
-    public ContactInList(int id, String username, String displayName, String password) {
+    public ContactInList(int id, @NonNull String username, String displayName, String password) {
         this.id = id;
         this.username = username;
         this.displayName = displayName;
@@ -35,7 +39,7 @@ public class ContactInList {
     }
 
     @Ignore
-    public ContactInList(int id, String username, String password) {
+    public ContactInList(int id, @NonNull String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -51,11 +55,12 @@ public class ContactInList {
 //        this.bio = "bio";
     }
 
+    @NonNull
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(@NonNull String username) {
         this.username = username;
     }
 
