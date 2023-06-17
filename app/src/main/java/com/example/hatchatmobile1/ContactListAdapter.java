@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.example.hatchatmobile1.DaoRelated.Contact;
 
 import java.util.List;
@@ -16,17 +17,9 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
 
     private LayoutInflater inflater;
     private int resourceId;
-    private List<Contact> contacts;
 
     public ContactListAdapter(Context context, int resourceId, List<Contact> contacts) {
         super(context, resourceId, contacts);
-        this.inflater = LayoutInflater.from(context);
-        this.resourceId = resourceId;
-        this.contacts = contacts;
-    }
-
-    public ContactListAdapter(Context context, int resourceId) {
-        super(context, resourceId);
         this.inflater = LayoutInflater.from(context);
         this.resourceId = resourceId;
     }
@@ -62,10 +55,5 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
         ImageView contactImage;
         TextView username;
         TextView bio;
-    }
-
-    public void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
-        notifyDataSetChanged();
     }
 }

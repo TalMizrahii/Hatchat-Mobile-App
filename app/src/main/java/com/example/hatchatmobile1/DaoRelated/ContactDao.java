@@ -11,11 +11,11 @@ import java.util.List;
 
 @Dao
 public interface ContactDao {
-    @Query("SELECT * FROM contact WHERE username = :username")
-    List<Contact> getContactsByUsername(String username);
+    @Query("SELECT * FROM contact")
+    List<Contact> getAllContacts();
 
-    @Query("SELECT * FROM contact WHERE username = :username AND displayName = :displayName")
-    Contact getContactByUsernameAndDisplayName(String username, String displayName);
+    @Query("SELECT * FROM contact WHERE username = :username")
+    Contact getContactByUsername(String username);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertContact(Contact contact);
@@ -24,5 +24,8 @@ public interface ContactDao {
     void deleteContact(Contact contact);
 
     @Query("DELETE FROM contact WHERE username = :username")
-    void deleteAllContactsByUsername(String username);
+    void deleteContactByUsername(String username);
+
+    @Query("DELETE FROM contact")
+    void deleteAllContacts();
 }

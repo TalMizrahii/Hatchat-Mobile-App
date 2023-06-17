@@ -12,7 +12,10 @@ public class ContactRepository {
     private ContactDao contactDao;
     private MutableLiveData<List<Contact>> contactListLiveData;
 
-    public ContactRepository(ContactDao contactDao) {
+    private String mainUsername;
+
+    public ContactRepository(ContactDao contactDao,String mainUsername) {
+        this.mainUsername = mainUsername;
         this.contactDao = contactDao;
         contactListLiveData = new MutableLiveData<>();
         loadContacts(); // Load the initial data
@@ -31,8 +34,17 @@ public class ContactRepository {
         loadContacts(); // Reload the data after insertion
     }
 
+    public Contact getContactByUsername(String username){
+        return contactDao.getContactByUsername(username);
+    }
+
+    public void deleteContactByUsername(String username){
+        contactDao.deleteContactByUsername(username);
+        loadContacts();
+    }
+
     public void deleteContact(Contact contact) {
         contactDao.deleteContact(contact);
-        loadContacts(); // Reload the data after deletion
+        loadContacts();
     }
 }

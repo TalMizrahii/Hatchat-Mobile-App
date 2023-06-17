@@ -1,12 +1,10 @@
 package com.example.hatchatmobile1.ViewModals;
 
-import android.app.Application;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.hatchatmobile1.DaoRelated.AppDatabase;
 import com.example.hatchatmobile1.DaoRelated.Contact;
+import com.example.hatchatmobile1.DaoRelated.ContactDao;
 import com.example.hatchatmobile1.Repositories.ContactRepository;
 
 import java.util.List;
@@ -15,13 +13,20 @@ public class ContactViewModel extends ViewModel {
     private ContactRepository contactRepository;
     private LiveData<List<Contact>> contactListLiveData;
 
-    public ContactViewModel(AppDatabase appDatabase) {
-        contactRepository = new ContactRepository(appDatabase.getContactDao());
+    public ContactViewModel(ContactDao contactDao, String mainUsername) {
+        contactRepository = new ContactRepository(contactDao, mainUsername);
         contactListLiveData = contactRepository.getContactListLiveData();
     }
-
     public LiveData<List<Contact>> getContactListLiveData() {
-        return contactListLiveData;
+        return contactRepository.getContactListLiveData();
+    }
+
+    public Contact getContactByUsername(String username){
+        return contactRepository.getContactByUsername(username);
+    }
+
+    public void deleteContactByUsername(String username){
+        contactRepository.deleteContactByUsername(username);
     }
 
     public void insertContact(Contact contact) {

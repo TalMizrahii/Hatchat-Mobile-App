@@ -2,20 +2,10 @@ package com.example.hatchatmobile1.DaoRelated;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.hatchatmobile1.R;
-
-import java.util.List;
-
-
-@Entity(tableName = "contact",
-        foreignKeys = @ForeignKey(entity = User.class,
-                parentColumns = "username",
-                childColumns = "username",
-                onDelete = ForeignKey.CASCADE))
+@Entity
 public class Contact {
     @PrimaryKey
     @NonNull
@@ -23,27 +13,24 @@ public class Contact {
     private String displayName;
     private int profilePic;
     private String bio;
-    // Remove the messages field from the Contact class.
 
-    public Contact(@NonNull String username, String displayName, int profilePic, String bio) {
+    private String mainUser;
+
+    @Ignore
+    public Contact(@NonNull String username, String displayName, int profilePic, String mainUser, String bio) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
         this.bio = bio;
+        this.mainUser = mainUser;
     }
 
-    public Contact(@NonNull String username, String displayName, int profilePic) {
+    public Contact(@NonNull String username, String displayName, int profilePic, String mainUser) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
         this.bio = "bio";
-    }
-
-    public Contact() {
-        this.username = "No Name";
-        this.displayName = "No Display Name";
-        this.profilePic = R.drawable.haticon;
-        this.bio = "bio";
+        this.mainUser = mainUser;
     }
 
     @NonNull
@@ -77,5 +64,13 @@ public class Contact {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getMainUser() {
+        return mainUser;
+    }
+
+    public void setMainUser(String mainUser) {
+        this.mainUser = mainUser;
     }
 }

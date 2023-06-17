@@ -6,11 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
-import com.example.hatchatmobile1.DaoRelated.AppDatabase;
-import com.example.hatchatmobile1.DaoRelated.User;
-import com.example.hatchatmobile1.DaoRelated.UserDao;
 import com.example.hatchatmobile1.databinding.ActivityMainBinding;
 
 import java.util.List;
@@ -20,10 +16,8 @@ import java.util.Objects;
  * The main activity to act as the login screen of the app.
  */
 public class MainActivity extends AppCompatActivity {
-
     private ActivityMainBinding binding;
-    AppDatabase appDatabase;
-    UserDao userDao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +25,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        appDatabase = Room.databaseBuilder(getApplicationContext(),
-                        AppDatabase.class,
-                        "AppDatabase").allowMainThreadQueries().build();
-        userDao = appDatabase.getUserDao();
-        // A test user.
-        userDao.insertUser(new User("admin", "displayTest", R.drawable.haticon));
 
         binding.loginBtn.setOnClickListener(v -> {
             String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
@@ -67,13 +55,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private boolean isValidCredentials(String username, String password) {
-        // Check the credentials in the userDao or any other logic
-        List<User> users = userDao.getAllUsers();
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
+        return (username.equals("admin") && password.equals("password"));
     }
 }
