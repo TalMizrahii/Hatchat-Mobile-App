@@ -1,54 +1,62 @@
-package com.example.hatchatmobile1;
+package com.example.hatchatmobile1.DaoRelated;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.example.hatchatmobile1.R;
+
 import java.util.List;
 
-@Entity(tableName = "contacts", primaryKeys = {"id", "username"})
-public class ContactInList {
-    @PrimaryKey(autoGenerate = true)
-    int id = 0;
+@Entity(tableName = "contacts",
+        foreignKeys = @ForeignKey(entity = User.class,
+                parentColumns = "username",
+                childColumns = "username",
+                onDelete = ForeignKey.CASCADE))
+public class Contact {
+    @PrimaryKey
     @NonNull
     private String username;
     private String displayName;
     private int profilePic;
-    private String password;
+    private String bio; // Will include time and date.
+    private List<Message> messages;
 
-    //    private String bio;
-    @Ignore
-    public ContactInList(int id, @NonNull String username, String displayName, int profilePic, String password) {
-        this.id = id;
+    public Contact(@NonNull String username, String displayName, int profilePic, String bio, List<Message> messages) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
-//        this.bio = "bio";
-        this.password = password;
+        this.bio = bio;
+        this.messages = messages;
     }
 
     @Ignore
-    public ContactInList(int id, @NonNull String username, String displayName, String password) {
-        this.id = id;
+    public Contact(@NonNull String username, String displayName, int profilePic, String password) {
         this.username = username;
         this.displayName = displayName;
-        this.password = password;
+        this.profilePic = profilePic;
+        this.bio = "bio";
+    }
+
+    @Ignore
+    public Contact(@NonNull String username, String displayName, String password) {
+        this.username = username;
+        this.displayName = displayName;
         this.profilePic = R.drawable.haticon;
 //        this.bio = "bio";
     }
 
     @Ignore
-    public ContactInList(int id, @NonNull String username, String password) {
-        this.id = id;
+    public Contact(int id, @NonNull String username, String password) {
         this.username = username;
-        this.password = password;
         this.displayName = "displayName";
         this.profilePic = R.drawable.haticon;
 //        this.bio = "bio";
     }
 
-    public ContactInList() {
+    public Contact() {
         this.username = "No Name";
         this.displayName = "No Display Name";
         this.profilePic = R.drawable.haticon;
@@ -80,11 +88,19 @@ public class ContactInList {
         this.profilePic = profilePic;
     }
 
-    public String getPassword() {
-        return password;
+    public String getBio() {
+        return bio;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 }
