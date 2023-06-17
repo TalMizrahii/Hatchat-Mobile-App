@@ -1,10 +1,16 @@
 package com.example.hatchatmobile1;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.TooltipCompat;
@@ -14,10 +20,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.IOException;
+
 public class RegisterScreenActivity extends AppCompatActivity {
     private ActivityRegisterScreenBinding binding;
     private TextInputEditText passwordInputText;
     private TextInputLayout passwordInputLayout;
+    private static final int REQUEST_IMAGE_GALLERY = 1;
+
+    private static final int REQUEST_IMAGE_CAPTURE = 2;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +41,10 @@ public class RegisterScreenActivity extends AppCompatActivity {
 
         passwordInputText = binding.passwordInputText;
         passwordInputLayout = binding.passwordInputLayout;
+        ImageView uploadImage = binding.uploadImage;
         View passwordRequirementsButton = binding.passwordRequirementsButton;
+        uploadImage.setOnClickListener(v -> openImageSelectionOptions());
+
 
         // Add tooltip to the password requirements button
         TooltipCompat.setTooltipText(passwordRequirementsButton, "Password Requirements!");
@@ -94,5 +110,55 @@ public class RegisterScreenActivity extends AppCompatActivity {
                 password.matches(regex3) &&
                 password.matches(regex4) &&
                 password.matches(regex5);
+    }
+    private void openImageSelectionOptions() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Image Source");
+        builder.setItems(new CharSequence[]{"Gallery", "Camera"}, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    openGallery();
+                    break;
+                case 1:
+                    openCamera();
+                    break;
+            }
+        });
+        builder.show();
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_IMAGE_GALLERY);
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                ImageView uploadImage = findViewById(R.id.uploadImage);
+                uploadImage.setImageBitmap(imageBitmap);
+            } else if (requestCode == REQUEST_IMAGE_GALLERY) {
+                Uri selectedImageUri = data.getData();
+                try {
+                    Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                    ImageView uploadImage = findViewById(R.id.uploadImage);
+                    uploadImage.setImageBitmap(imageBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

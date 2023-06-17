@@ -80,12 +80,11 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/passwordInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:background="@color/white"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -93,7 +92,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints=""
-                        android:background="@color/white"
+                        android:background="@drawable/text_fields_background"
                         android:hint="@string/passwordHint"
                         android:inputType="textPassword" />
 
@@ -154,6 +153,11 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/uploadImage"
+            android:layout_width="114dp"
+            android:layout_height="92dp"
+            android:background="@drawable/circle_background_image" />
 
     </LinearLayout>
 
