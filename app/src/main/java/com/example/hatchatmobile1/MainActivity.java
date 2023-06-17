@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
                 // Valid credentials, start ContactListActivity
                 Intent contactListIntent = new Intent(this, ContactListActivity.class);
+//                contactListIntent.putExtra(viewModal); //todo: add the view modal.
                 startActivity(contactListIntent);
             } else {
                 // Invalid credentials, show toast message
