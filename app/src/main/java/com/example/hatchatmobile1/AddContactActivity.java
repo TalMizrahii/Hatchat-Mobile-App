@@ -38,8 +38,8 @@ public class AddContactActivity extends AppCompatActivity {
 
         binding.btnSubmit.setOnClickListener(view -> {
             // Creating a new contact from the user's input.
-            Contact contact = new Contact(0, binding.etContent.getText().toString(), "123");
-            contactsViewModel.insertContact(contact);
+//            Contact contact = new Contact(binding.etContent.getText().toString(), "123");
+//            contactsViewModel.insertContact(contact);
             // Finish the activity back to the contacts lists.
             finish();
         });

@@ -80,7 +80,6 @@ public class RegisterScreenActivity extends AppCompatActivity {
         }
     }
 
-
     private boolean checkPasswordRequirements(String password) {
         // Add your password validation logic here using the provided regex patterns
         String regex1 = "^.{8,}$";

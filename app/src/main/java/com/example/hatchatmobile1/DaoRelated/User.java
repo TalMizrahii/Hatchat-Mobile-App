@@ -13,30 +13,29 @@ public class User {
     private String username;
     private String displayName;
     private int profilePic;
-    private String password;
     private String token;
 
     /**
      * A full constructor with all fields.
-     * @param username The username of the user.
+     *
+     * @param username    The username of the user.
      * @param displayName The display name of the user.
-     * @param profilePic The profile picture of the user.
-     * @param password The password of the user.
-     * @param token The token associated with the user.
+     * @param profilePic  The profile picture of the user.
+     * @param token       The token associated with the user.
      */
-    public User(@NonNull String username, String displayName, int profilePic, String password, String token) {
+    public User(@NonNull String username, String displayName, int profilePic, String token) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
-        this.password = password;
         this.token = token;
     }
 
     /**
      * A constructor with minimal fields, only the username, displayName, and profilePic.
-     * @param username The username of the user.
+     *
+     * @param username    The username of the user.
      * @param displayName The display name of the user.
-     * @param profilePic The profile picture of the user.
+     * @param profilePic  The profile picture of the user.
      */
     public User(@NonNull String username, String displayName, int profilePic) {
         this.username = username;
@@ -47,12 +46,13 @@ public class User {
     /**
      * A default constructor.
      */
-    public User(){
+    public User() {
 
     }
 
     /**
      * Getter for the username of the user.
+     *
      * @return The username of the user.
      */
     @NonNull
@@ -62,6 +62,7 @@ public class User {
 
     /**
      * Setter for the username of the user.
+     *
      * @param username The username of the user.
      */
     public void setUsername(@NonNull String username) {
@@ -70,6 +71,7 @@ public class User {
 
     /**
      * Getter for the display name of the user.
+     *
      * @return The display name of the user.
      */
     public String getDisplayName() {
@@ -78,6 +80,7 @@ public class User {
 
     /**
      * Setter for the display name of the user.
+     *
      * @param displayName The display name of the user.
      */
     public void setDisplayName(String displayName) {
@@ -86,6 +89,7 @@ public class User {
 
     /**
      * Getter for the profile picture of the user.
+     *
      * @return The profile picture of the user.
      */
     public int getProfilePic() {
@@ -94,6 +98,7 @@ public class User {
 
     /**
      * Setter for the profile picture of the user.
+     *
      * @param profilePic The profile picture of the user.
      */
     public void setProfilePic(int profilePic) {
@@ -101,23 +106,8 @@ public class User {
     }
 
     /**
-     * Getter for the password of the user.
-     * @return The password of the user.
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Setter for the password of the user.
-     * @param password The password of the user.
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
      * Getter for the token associated with the user.
+     *
      * @return The token associated with the user.
      */
     public String getToken() {
@@ -126,6 +116,7 @@ public class User {
 
     /**
      * Setter for the token associated with the user.
+     *
      * @param token The token associated with the user.
      */
     public void setToken(String token) {

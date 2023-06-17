@@ -16,6 +16,9 @@ public interface UserDao {
     @Query("SELECT * FROM users WHERE username = :username")
     User getUserByUsername(String username);
 
+    @Query("SELECT * FROM contact WHERE username = :username")
+    List<Contact> getContactsByUsername(String username);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUser(User user);
 
