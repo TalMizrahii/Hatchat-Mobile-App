@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(registerScreen);
         });
     }
-
     private boolean isValidCredentials(String username, String password) {
         // Check the credentials in the userDao or any other logic
         List<User> users = userDao.getAllUsers();
