@@ -39,7 +39,6 @@ public class ContactListActivity extends AppCompatActivity {
 //            Intent addContactIntent = new Intent(this, AddContactActivity.class);
 //            startActivity(addContactIntent);
 //        });
-
         lvContacts = binding.ContactListView;
         contactAdapter = new ContactListAdapter(this, R.layout.contact_in_list);
         lvContacts.setAdapter(contactAdapter);
