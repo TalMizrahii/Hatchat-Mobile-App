@@ -9,8 +9,11 @@ import android.os.Bundle;
 import com.example.hatchatmobile1.DaoRelated.AppDatabase;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
+import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.databinding.ActivityAddContactBinding;
+
+import java.util.ArrayList;
 
 /**
  * In this activity, the user can add a new contact to the list of contacts.
@@ -37,7 +40,7 @@ public class AddContactActivity extends AppCompatActivity {
             Contact contact = new Contact(binding.etContent.getText().toString(),
                     "NewContact",
                     R.drawable.haticon,
-                    mainUsername);
+                    mainUsername, new ArrayList<Message>());
             viewModel.addContact(contact);
             // Finish the activity and go back to the contacts list.
             finish();

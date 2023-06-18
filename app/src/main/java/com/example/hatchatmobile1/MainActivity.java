@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private boolean isValidCredentials(String username, String password) {
+
         return (username.equals("admin") && password.equals("password"));
     }
 }

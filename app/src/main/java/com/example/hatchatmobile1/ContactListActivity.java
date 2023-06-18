@@ -29,6 +29,7 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Get the current connected user from the previous activity.
         Intent intent = getIntent();
         mainUsername = intent.getStringExtra("username");
 
@@ -38,21 +39,30 @@ public class ContactListActivity extends AppCompatActivity {
 
         contactsViewModel = new ContactViewModel(getApplicationContext(), mainUsername);
 
-        // Open AddContactActivity when the Add Contact button is clicked
+        // Open AddContactActivity when the Add Contact button is clicked.
         binding.btnAddContact.setOnClickListener(view -> {
             Intent addContactIntent = new Intent(this, AddContactActivity.class);
+            addContactIntent.putExtra("username", mainUsername);
             startActivity(addContactIntent);
         });
 
+        // Initiating the contacts array.
         contacts = new ArrayList<>();
+        // Creating the adapter and setting it to the ListView.
         contactAdapter = new ContactListAdapter(this, R.layout.contact_in_list, contacts);
         lvContacts.setAdapter(contactAdapter);
 
-        // Observe the contact list live data and update the list view when the data changes
+        // Observe the contact list live data and update the list view when the data changes.
         contactsViewModel.getContactListLiveData().observe(this, contactList -> {
             contacts.clear();
             contacts.addAll(contactList);
             contactAdapter.notifyDataSetChanged();
+        });
+
+        // Delete a contact from the list.
+        lvContacts.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            contactsViewModel.deleteContact(contacts.get(i));
+            return true;
         });
     }
 }

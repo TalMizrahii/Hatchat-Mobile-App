@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
+import androidx.room.TypeConverters;
+
+import java.util.List;
 
 /**
  * Entity class representing a contact.
@@ -17,6 +21,8 @@ public class Contact {
     private int profilePic;
     private String bio;
     private String mainUser;
+    @TypeConverters(Converters.class)
+    private List<Message> messages;
 
     /**
      * Constructor for creating a Contact object.
@@ -26,14 +32,16 @@ public class Contact {
      * @param profilePic  The profile picture resource ID of the contact.
      * @param mainUser    The username of the main user.
      * @param bio         The biography of the contact.
+     * @param messages    The list of messages associated with the contact.
      */
     @Ignore
-    public Contact(@NonNull String username, String displayName, int profilePic, String mainUser, String bio) {
+    public Contact(@NonNull String username, String displayName, int profilePic, String mainUser, String bio, List<Message> messages) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
         this.bio = bio;
         this.mainUser = mainUser;
+        this.messages = messages;
     }
 
     /**
@@ -43,13 +51,15 @@ public class Contact {
      * @param displayName The display name of the contact.
      * @param profilePic  The profile picture resource ID of the contact.
      * @param mainUser    The username of the main user.
+     * @param messages    The list of messages associated with the contact.
      */
-    public Contact(@NonNull String username, String displayName, int profilePic, String mainUser) {
+    public Contact(@NonNull String username, String displayName, int profilePic, String mainUser, List<Message> messages) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
         this.bio = "bio";
         this.mainUser = mainUser;
+        this.messages = messages;
     }
 
     /**
@@ -141,5 +151,13 @@ public class Contact {
      */
     public void setMainUser(String mainUser) {
         this.mainUser = mainUser;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 }

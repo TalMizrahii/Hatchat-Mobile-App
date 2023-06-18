@@ -27,7 +27,6 @@ public class ContactRepository {
         contactDao = appDatabase.getContactDao();
 
         contactListData = new ContactListData();
-
     }
 
     /**
@@ -62,6 +61,7 @@ public class ContactRepository {
      * @param contact The contact to be added.
      */
     public void addContact(Contact contact) {
+        //
         contactDao.insertContact(contact);
         reload();
     }
