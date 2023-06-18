@@ -8,8 +8,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hatchatmobile1.databinding.ActivityMainBinding;
+import com.example.hatchatmobile1.ServerAPI.LoginUserAPI;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-
+    private LoginUserAPI loginUserAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,36 +26,49 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        loginUserAPI = new LoginUserAPI(getApplicationContext());
+
         binding.loginBtn.setOnClickListener(v -> {
             String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
             String password = Objects.requireNonNull(binding.passwordInputText.getText()).toString();
 
-            if (isValidCredentials(username, password)) {
-                CharSequence text = "Welcome back " + username + "!";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(this, text, duration);
-                toast.show();
+            loginUserAPI.getToken(username, password, new LoginUserAPI.TokenCallback() {
+                @Override
+                public void onTokenReceived(String token) {
+                    if (token != null && !token.isEmpty()) {
+                        CharSequence text = "Welcome back " + username + "!";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(MainActivity.this, text, duration);
+                        toast.show();
 
-                // Valid credentials, start ContactListActivity
-                Intent contactListIntent = new Intent(this, ContactListActivity.class);
-                contactListIntent.putExtra("username", username);
-                startActivity(contactListIntent);
-            } else {
-                // Invalid credentials, show toast message
-                CharSequence text = "Invalid Username/Password!";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(this, text, duration);
-                toast.show();
-            }
+                        // Valid token, start ContactListActivity
+                        Intent contactListIntent = new Intent(MainActivity.this, ContactListActivity.class);
+                        contactListIntent.putExtra("username", username);
+                        contactListIntent.putExtra("token", token);
+                        startActivity(contactListIntent);
+                    } else {
+                        // Token is null or empty, show toast message
+                        CharSequence text = "Invalid token";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(MainActivity.this, text, duration);
+                        toast.show();
+                    }
+                }
+
+                @Override
+                public void onTokenError(String error) {
+                    // Token retrieval error, show toast message
+                    CharSequence text = "Token retrieval error: " + error;
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(MainActivity.this, text, duration);
+                    toast.show();
+                }
+            });
         });
 
         binding.linkToChat.setOnClickListener(v -> {
             Intent registerScreen = new Intent(this, RegisterScreenActivity.class);
             startActivity(registerScreen);
         });
-    }
-    private boolean isValidCredentials(String username, String password) {
-
-        return (username.equals("admin") && password.equals("password"));
     }
 }
