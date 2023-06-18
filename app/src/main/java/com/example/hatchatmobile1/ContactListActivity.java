@@ -2,33 +2,29 @@ package com.example.hatchatmobile1;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
-import com.example.hatchatmobile1.DaoRelated.AppDatabase;
 import com.example.hatchatmobile1.DaoRelated.Contact;
-import com.example.hatchatmobile1.DaoRelated.ContactDao;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.databinding.ActivityContactListBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Activity for displaying the list of contacts.
+ */
 public class ContactListActivity extends AppCompatActivity {
     private ActivityContactListBinding binding;
-
     private ContactListAdapter contactAdapter;
-
     private ListView lvContacts;
-
     private ContactViewModel contactsViewModel;
-
-    private AppDatabase appDatabase;
-    private ContactDao contactDao;
     private String mainUsername;
+    private List<Contact> contacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,29 +35,24 @@ public class ContactListActivity extends AppCompatActivity {
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         lvContacts = binding.ContactListView;
-        contactAdapter = new ContactListAdapter(this, R.layout.contact_in_list);
 
-        createDatabase();
-        contactsViewModel = new ContactViewModel(contactDao, mainUsername);
+        contactsViewModel = new ContactViewModel(getApplicationContext(), mainUsername);
+
+        // Open AddContactActivity when the Add Contact button is clicked
         binding.btnAddContact.setOnClickListener(view -> {
             Intent addContactIntent = new Intent(this, AddContactActivity.class);
             startActivity(addContactIntent);
         });
 
+        contacts = new ArrayList<>();
+        contactAdapter = new ContactListAdapter(this, R.layout.contact_in_list, contacts);
         lvContacts.setAdapter(contactAdapter);
+
+        // Observe the contact list live data and update the list view when the data changes
         contactsViewModel.getContactListLiveData().observe(this, contactList -> {
-            contactAdapter.setContacts(contactList);
+            contacts.clear();
+            contacts.addAll(contactList);
             contactAdapter.notifyDataSetChanged();
         });
-
-    }
-
-    public void createDatabase(){
-        // Create a dataBase.
-        appDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "AppDatabase")
-                .allowMainThreadQueries()
-                .build();
-        // Get the database that was built.
-        contactDao = appDatabase.getContactDao();
     }
 }
