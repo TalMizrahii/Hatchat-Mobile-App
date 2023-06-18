@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hatchatmobile1.databinding.ActivityMainBinding;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
