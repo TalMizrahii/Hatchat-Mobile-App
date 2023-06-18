@@ -65,10 +65,11 @@ public class ContactListActivity extends AppCompatActivity {
             return true;
         });
 
-        lvContacts.setOnItemClickListener((adapterView, view, i, l) ->{
-            Intent intent = new Intent(getApplicationContext(), OtherActivity.class);
-            intent.putExtra("itemID", i + 1);
-            startActivity(intent);
+        lvContacts.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent chatScreenIntent = new Intent(getApplicationContext(), ChatScreenActivity.class);
+            chatScreenIntent.putExtra("username", contacts.get(i).getUsername());
+            chatScreenIntent.putExtra("mainUsername",mainUsername);
+            startActivity(chatScreenIntent);
         });
     }
 }
