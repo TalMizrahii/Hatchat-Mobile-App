@@ -64,5 +64,11 @@ public class ContactListActivity extends AppCompatActivity {
             contactsViewModel.deleteContact(contacts.get(i));
             return true;
         });
+
+        lvContacts.setOnItemClickListener((adapterView, view, i, l) ->{
+            Intent intent = new Intent(getApplicationContext(), OtherActivity.class);
+            intent.putExtra("itemID", i + 1);
+            startActivity(intent);
+        });
     }
 }
