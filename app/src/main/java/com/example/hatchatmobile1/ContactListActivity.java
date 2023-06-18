@@ -1,12 +1,10 @@
 package com.example.hatchatmobile1;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
@@ -24,6 +22,8 @@ public class ContactListActivity extends AppCompatActivity {
     private ListView lvContacts;
     private ContactViewModel contactsViewModel;
     private String mainUsername;
+
+    private String token;
     private List<Contact> contacts;
 
     @Override
@@ -32,6 +32,8 @@ public class ContactListActivity extends AppCompatActivity {
         // Get the current connected user from the previous activity.
         Intent intent = getIntent();
         mainUsername = intent.getStringExtra("username");
+        token = intent.getStringExtra("token");
+
 
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

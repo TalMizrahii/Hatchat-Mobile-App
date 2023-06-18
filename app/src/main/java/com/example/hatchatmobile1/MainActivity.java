@@ -58,9 +58,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onTokenError(String error) {
                     // Token retrieval error, show toast message
-                    CharSequence text = "Token retrieval error: " + error;
                     int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(MainActivity.this, text, duration);
+                    Toast toast = Toast.makeText(MainActivity.this, error, duration);
                     toast.show();
                 }
             });

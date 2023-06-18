@@ -53,7 +53,7 @@ public class LoginUserAPI {
                     }
                 } else {
                     // Handle unsuccessful response
-                    callback.onTokenError("Response unsuccessful");
+                    callback.onTokenError("Invalid username/password");
                 }
             }
 
