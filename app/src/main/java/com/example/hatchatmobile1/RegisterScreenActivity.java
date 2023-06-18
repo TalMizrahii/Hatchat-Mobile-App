@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,10 +29,9 @@ public class RegisterScreenActivity extends AppCompatActivity {
     private TextInputEditText passwordInputText;
     private TextInputLayout passwordInputLayout;
     private static final int REQUEST_IMAGE_GALLERY = 1;
-
     private static final int REQUEST_IMAGE_CAPTURE = 2;
-
-
+    private float rotationAngle = 0.0f;
+    private Bitmap uploadedImage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +42,17 @@ public class RegisterScreenActivity extends AppCompatActivity {
 
         passwordInputText = binding.passwordInputText;
         passwordInputLayout = binding.passwordInputLayout;
+        ImageButton rotateLeftButton = binding.rotateLeftButton;
+        ImageButton rotateRightButton = binding.rotateRightButton;
         ImageView uploadImage = binding.uploadImage;
-        View passwordRequirementsButton = binding.passwordRequirementsButton;
+
         uploadImage.setOnClickListener(v -> openImageSelectionOptions());
 
-
         // Add tooltip to the password requirements button
-        TooltipCompat.setTooltipText(passwordRequirementsButton, "Password Requirements!");
+        TooltipCompat.setTooltipText(binding.passwordRequirementsButton, "Password Requirements!");
 
         // Add click listener to show password requirements dialog
-        passwordRequirementsButton.setOnClickListener(v -> showPasswordRequirementsDialog());
+        binding.passwordRequirementsButton.setOnClickListener(v -> showPasswordRequirementsDialog());
 
         // Add text change listener to the password input field
         passwordInputText.addTextChangedListener(new TextWatcher() {
@@ -68,6 +70,9 @@ public class RegisterScreenActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
+        rotateLeftButton.setOnClickListener(v -> rotateImage(-90));
+        rotateRightButton.setOnClickListener(v -> rotateImage(90));
     }
 
     private void showPasswordRequirementsDialog() {
@@ -97,7 +102,6 @@ public class RegisterScreenActivity extends AppCompatActivity {
     }
 
     private boolean checkPasswordRequirements(String password) {
-        // Add your password validation logic here using the provided regex patterns
         String regex1 = "^.{8,}$";
         String regex2 = "^(?=.*[A-Z]).+$";
         String regex3 = "^(?=.*[a-z]).+$";
@@ -110,6 +114,7 @@ public class RegisterScreenActivity extends AppCompatActivity {
                 password.matches(regex4) &&
                 password.matches(regex5);
     }
+
     private void openImageSelectionOptions() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Image Source");
@@ -146,18 +151,28 @@ public class RegisterScreenActivity extends AppCompatActivity {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                ImageView uploadImage = findViewById(R.id.uploadImage);
-                uploadImage.setImageBitmap(imageBitmap);
+                uploadedImage = imageBitmap;
+                binding.uploadImage.setImageBitmap(imageBitmap);
             } else if (requestCode == REQUEST_IMAGE_GALLERY) {
                 Uri selectedImageUri = data.getData();
                 try {
                     Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    ImageView uploadImage = findViewById(R.id.uploadImage);
-                    uploadImage.setImageBitmap(imageBitmap);
+                    uploadedImage = imageBitmap;
+                    binding.uploadImage.setImageBitmap(imageBitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    private void rotateImage(float angle) {
+        if (uploadedImage != null) {
+            rotationAngle += angle;
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotationAngle);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(uploadedImage, 0, 0, uploadedImage.getWidth(), uploadedImage.getHeight(), matrix, true);
+            binding.uploadImage.setImageBitmap(rotatedBitmap);
         }
     }
 }

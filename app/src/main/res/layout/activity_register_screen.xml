@@ -53,18 +53,19 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/fullnameTextInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="314.9dp"
+                android:layout_width="308.2dp"
                 android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@color/white">
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fullnameInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
-                    android:background="@color/white"
+                    android:background="@drawable/text_fields_background"
                     android:hint="@string/full_name"
                     android:inputType="textPersonName" />
 
@@ -80,11 +81,12 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/passwordInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -102,8 +104,9 @@
                     android:id="@+id/passwordRequirementsButton"
                     android:layout_width="52dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="11.3dp"
-                    android:layout_marginEnd="2dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="3dp"
                     android:background="@drawable/btn_drawable_selector"
                     android:contentDescription="@string/password_requirements"
                     android:scaleType="center"
@@ -115,18 +118,18 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confirmPasswordInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="320dp"
+                android:layout_width="310dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_weight="1"
-                android:background="@color/white">
+                android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confirmPasswordInputText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autofillHints=""
-                    android:background="@color/white"
+                    android:background="@drawable/text_fields_background"
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword" />
 
@@ -135,29 +138,69 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/usernameTextInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="314.9dp"
+                android:layout_width="310.5dp"
                 android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@color/white">
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/usernameInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
-                    android:background="@color/white"
+                    android:background="@drawable/text_fields_background"
                     android:hint="@string/usernameHint"
                     android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/uploadImage"
-            android:layout_width="114dp"
-            android:layout_height="92dp"
-            android:background="@drawable/circle_background_image" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/rotateLeftButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/rotate_left"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/uploadImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/circle_background_image"
+                app:civ_border_color="#FFF"
+                app:civ_border_width="2dp"
+                android:padding="16dp"/>
+
+            <ImageButton
+                android:id="@+id/rotateRightButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/rotate_right"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="40dp"
+            android:backgroundTint="@color/cardview_shadow_start_color"
+            android:padding="15dp"
+            android:text="@string/submit"
+            android:textColor="#CCC6C6" />
+
 
     </LinearLayout>
 
