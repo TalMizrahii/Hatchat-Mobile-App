@@ -36,7 +36,7 @@ public class ContactListActivity extends AppCompatActivity {
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         lvContacts = binding.ContactListView;
-
+        binding.usernameInList.setText(mainUsername);
         contactsViewModel = new ContactViewModel(getApplicationContext(), mainUsername);
 
         // Open AddContactActivity when the Add Contact button is clicked.

@@ -3,35 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp">
+    android:layout_margin="20dp"
+    android:background="#eeeeee">
 
     <ImageView
         android:id="@+id/contact_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_height="71dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:contentDescription="@string/contactimage"
         android:scaleType="centerCrop"
-        android:src="@drawable/haticon"
-        android:contentDescription="@string/contactimage" />
+        android:src="@drawable/haticon" />
 
     <TextView
         android:id="@+id/usernameInList"
-        android:layout_width="170dp"
-        android:layout_height="21dp"
+        android:layout_width="177dp"
+        android:layout_height="33dp"
         android:layout_marginStart="7dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@id/contact_image"
         android:paddingStart="10dp"
         android:text="@string/default_name"
+        android:textSize="18sp"
         tools:ignore="RtlSymmetry" />
 
     <TextView
         android:id="@+id/bio"
-        android:layout_width="153dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/usernameInList"
+        android:layout_width="149dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/usernameInList"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="162dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="104dp"
         android:paddingStart="10dp"
         android:text="@string/bio"
         tools:ignore="RtlSymmetry" />
