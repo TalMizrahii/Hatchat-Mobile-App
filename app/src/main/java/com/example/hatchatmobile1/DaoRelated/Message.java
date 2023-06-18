@@ -1,11 +1,13 @@
 package com.example.hatchatmobile1.DaoRelated;
 
+import androidx.room.Entity;
+
 /**
  * The message class to contain a message between two users.
  */
 public class Message {
     private String content; // The content of the message.
-    private String TimeAndDate; // the time and date that the message was sent.
+    private String timeAndDate; // the time and date that the message was sent.
     private String sender; // The sender of the message.
 
     /**
@@ -16,7 +18,7 @@ public class Message {
      */
     public Message(String content, String timeAndDate, String sender) {
         this.content = content;
-        TimeAndDate = timeAndDate;
+        this.timeAndDate = timeAndDate;
         this.sender = sender;
     }
 
@@ -41,7 +43,7 @@ public class Message {
      * @return The time and date of the message.
      */
     public String getTimeAndDate() {
-        return TimeAndDate;
+        return timeAndDate;
     }
 
     /**
@@ -49,7 +51,7 @@ public class Message {
      * @param timeAndDate The time and date of the message.
      */
     public void setTimeAndDate(String timeAndDate) {
-        TimeAndDate = timeAndDate;
+        this.timeAndDate = timeAndDate;
     }
 
     /**
