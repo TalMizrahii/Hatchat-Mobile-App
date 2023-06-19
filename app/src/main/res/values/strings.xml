@@ -27,6 +27,14 @@
     <string name="this_is_a_message">This is a Message</string>
 
     <string name="base_url">http://10.0.2.2:5000/api/</string>
+    <string name="setting">Setting</string>
+    <string name="moon_icon">Moon Icon</string>
+    <string name="dark_mode">Dark Mode:</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="enter_ip">Enter IP:</string>
+    <string name="change_ip">Change IP:</string>
+    <string name="return_icon">Return Icon</string>
 
 
 </resources>
