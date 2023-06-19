@@ -9,5 +9,5 @@ public class LoginRequest {
         this.password = password;
     }
 
-    // Getters and setters if needed
+
 }
