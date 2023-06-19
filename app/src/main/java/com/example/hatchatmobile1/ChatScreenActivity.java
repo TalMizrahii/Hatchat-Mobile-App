@@ -31,5 +31,6 @@ public class ChatScreenActivity extends AppCompatActivity {
         viewModel = new ContactViewModel(getApplicationContext(), mainUsername);
         ListView messages = binding.ChatMessagesLV;
 
+
     }
 }
