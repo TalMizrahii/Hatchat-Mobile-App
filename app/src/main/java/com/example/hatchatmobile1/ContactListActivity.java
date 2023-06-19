@@ -26,6 +26,7 @@ public class ContactListActivity extends AppCompatActivity {
     private String token;
     private List<Contact> contacts;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
