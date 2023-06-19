@@ -21,6 +21,10 @@
     <string name="password_requirements">Password Requirements!</string>
     <string name="confirm_password">confirm password</string>
     <string name="upload_image">Upload_image</string>
+    <string name="message">Message</string>
+    <string name="send">Send</string>
+    <string name="enter_message">Enter message...</string>
+    <string name="this_is_a_message">This is a Message</string>
 
     <string name="base_url">http://10.0.2.2:5000/api/</string>
 

@@ -39,7 +39,7 @@ public class ContactListActivity extends AppCompatActivity {
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         lvContacts = binding.ContactListView;
-
+        binding.usernameInList.setText(mainUsername);
         contactsViewModel = new ContactViewModel(getApplicationContext(), mainUsername);
 
         // Open AddContactActivity when the Add Contact button is clicked.
@@ -66,6 +66,13 @@ public class ContactListActivity extends AppCompatActivity {
         lvContacts.setOnItemLongClickListener((adapterView, view, i, l) -> {
             contactsViewModel.deleteContact(contacts.get(i));
             return true;
+        });
+
+        lvContacts.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent chatScreenIntent = new Intent(getApplicationContext(), ChatScreenActivity.class);
+            chatScreenIntent.putExtra("username", contacts.get(i).getUsername());
+            chatScreenIntent.putExtra("mainUsername",mainUsername);
+            startActivity(chatScreenIntent);
         });
     }
 }
