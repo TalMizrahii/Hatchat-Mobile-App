@@ -45,17 +45,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ListView
-                android:id="@+id/ChatMessagesLV"
-                android:layout_width="393dp"
-                android:layout_height="557dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ChatMessagesRV"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/layout_gchat_chatbox"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints">
-
-            </ListView>
+                app:layout_constraintVertical_bias="1.0" />
 
             <RelativeLayout
                 android:id="@+id/layout_gchat_chatbox"
@@ -64,15 +60,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-
                 <EditText
-                    android:id="@+id/edit_gchat_message"
+                    android:id="@+id/messageInputBar"
                     android:layout_width="314dp"
                     android:layout_height="58dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_toStartOf="@+id/button_gchat_send"
+                    android:layout_toStartOf="@+id/sendBtn"
                     android:background="@android:color/transparent"
                     android:hint="Enter Message"
                     android:inputType="text"
@@ -80,20 +75,19 @@
                     tools:ignore="Autofill" />
 
                 <Button
-                    android:background="#2db83d"
-                    android:id="@+id/button_gchat_send"
-                    android:layout_width="68dp"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/sendBtn"
+                    android:layout_width="64dp"
+                    android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="34dp"
+                    android:layout_marginEnd="38dp"
                     android:layout_marginBottom="6dp"
-                    android:textColor="2db83d"
-                    android:text="Send"
-                    android:textSize="10sp" />
-
+                    android:background="#2db83d"
+                    android:text="@string/send"
+                    android:textColor="#000000"
+                    android:textSize="10sp"
+                    tools:ignore="SmallSp" />
             </RelativeLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

@@ -7,16 +7,6 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="16dp">
 
-    <ImageView
-        android:id="@+id/image_gchat_profile_other"
-        android:layout_width="3dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:contentDescription="User Icon"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="60dp" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/card_gchat_message_other"
         android:layout_width="wrap_content"
@@ -26,7 +16,6 @@
         app:cardElevation="0dp"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
-        app:layout_constraintStart_toEndOf="@+id/image_gchat_profile_other"
         tools:layout_editor_absoluteY="82dp"
         tools:ignore="MissingConstraints">
 
@@ -37,7 +26,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/text_gchat_message_other"
+                android:id="@+id/text_message_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -61,7 +50,8 @@
         android:textColor="#C0C0C0"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/card_gchat_message_other"
-        app:layout_constraintStart_toEndOf="@+id/card_gchat_message_other" />
+        app:layout_constraintStart_toEndOf="@+id/card_gchat_message_other"
+        tools:ignore="SmallSp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
