@@ -17,7 +17,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Setting"
+            android:name=".SettingActivity"
             android:exported="false" />
         <activity
             android:name=".ChatScreenActivity"

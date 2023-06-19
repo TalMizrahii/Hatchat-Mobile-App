@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.example.hatchatmobile1.databinding.ActivitySettingBinding;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class Setting extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
     private TextInputLayout IPLayout;
 
@@ -25,6 +25,7 @@ public class Setting extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        binding.returnButton.setOnClickListener(v -> finish());
         IPLayout = binding.IPLayout;
         binding.darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -69,8 +70,9 @@ public class Setting extends AppCompatActivity {
             binding.IPText.getText().clear();
         } else {
             // Invalid URL, show error
-            IPLayout.setError("Invalid URL");
+            binding.IPText.setError("Invalid URL");
             binding.IPSwitch.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            binding.IPSwitch.setChecked(false);
         }
     }
 
