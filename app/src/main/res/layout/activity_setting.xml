@@ -110,7 +110,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/abeezee"
-                android:text="@string/change_ip"
+                android:text="@string/change_url"
                 android:textColor="@android:color/black"
                 android:textSize="17sp"
                 android:textStyle="bold" />

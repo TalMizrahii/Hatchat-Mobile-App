@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -70,12 +71,14 @@ public class SettingActivity extends AppCompatActivity {
             IPLayout.setEndIconDrawable(R.drawable.ic_checkmark);
             IPLayout.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
 
-//            // Update the base URL dynamically
-//            getResources().getString(R.string.base_url);
-//            Resources res = getResources();
-//            res.getString(R.string.base_url, url);
+
 
             settingsViewModal.setSettings(new Settings(0,url,settingsViewModal.getSettings().isDayMode()));
+
+            CharSequence text = "The new URL is : " + url;
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+            toast.show();
 
             // Reset switch button and clear text field
             binding.IPSwitch.setChecked(false);
