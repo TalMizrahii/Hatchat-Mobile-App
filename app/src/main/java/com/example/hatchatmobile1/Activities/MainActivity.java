@@ -7,8 +7,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.hatchatmobile1.databinding.ActivityMainBinding;
 import com.example.hatchatmobile1.ServerAPI.LoginUserAPI;
+import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
+import com.example.hatchatmobile1.databinding.ActivityMainBinding;
 
 import java.util.Objects;
 
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private LoginUserAPI loginUserAPI;
 
+    private SettingsViewModal settingsViewModal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view);
 
         loginUserAPI = new LoginUserAPI(getApplicationContext());
+
+        settingsViewModal = new SettingsViewModal(getApplicationContext());
+
+        settingsViewModal.getSettingsLiveData().observe(this, settings -> {
+            loginUserAPI.setBaseUrl(settings.getBaseUrl());
+        });
+
 
         binding.loginBtn.setOnClickListener(v -> {
             String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();

@@ -90,12 +90,12 @@ public class RegisterScreenActivity extends AppCompatActivity {
 
         if (isPasswordValid) {
             passwordInputLayout.setErrorEnabled(false);
-            passwordInputLayout.setError(null);
+            passwordInputText.setError(null);
             passwordInputLayout.setEndIconCheckable(true);
             passwordInputLayout.setEndIconDrawable(R.drawable.ic_checkmark);
             passwordInputLayout.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
         } else {
-            passwordInputLayout.setError("Password requirements not met!");
+            passwordInputText.setError("Password requirements not met!");
             passwordInputLayout.setEndIconCheckable(false);
             passwordInputLayout.setEndIconDrawable(null);
             passwordInputLayout.setEndIconTintList(null);

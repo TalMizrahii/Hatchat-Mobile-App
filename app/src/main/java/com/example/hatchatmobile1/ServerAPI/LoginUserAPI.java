@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.hatchatmobile1.Entities.LoginRequest;
-import com.example.hatchatmobile1.R;
+import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -18,17 +18,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginUserAPI {
     private Retrofit retrofit;
     private UserWebServiceAPI userWebServiceAPI;
-    private final String BASE_URL;
+    private  String baseUrl;
+
+    private SettingsViewModal settingsViewModal;
+
+
 
     public LoginUserAPI(@NonNull Context context) {
-        BASE_URL = context.getString(R.string.base_url);
+
+        this.settingsViewModal = new SettingsViewModal(context);
+
+        baseUrl = settingsViewModal.getSettings().getBaseUrl();
+
+
+
 
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
@@ -63,6 +73,10 @@ public class LoginUserAPI {
                 callback.onTokenError(t.getMessage());
             }
         });
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     public interface TokenCallback {
