@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
                         int duration = Toast.LENGTH_SHORT;
                         Toast toast = Toast.makeText(MainActivity.this, text, duration);
                         toast.show();
-
                         // Valid token, start ContactListActivity
                         Intent contactListIntent = new Intent(MainActivity.this, ContactListActivity.class);
                         contactListIntent.putExtra("username", username);
