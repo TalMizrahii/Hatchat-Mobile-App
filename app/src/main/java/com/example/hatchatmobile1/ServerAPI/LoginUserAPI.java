@@ -18,10 +18,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginUserAPI {
     private Retrofit retrofit;
     private UserWebServiceAPI userWebServiceAPI;
-    private  String baseUrl;
-
+    private String baseUrl;
+    private Gson gson;
     private SettingsViewModal settingsViewModal;
-
 
 
     public LoginUserAPI(@NonNull Context context) {
@@ -30,10 +29,7 @@ public class LoginUserAPI {
 
         baseUrl = settingsViewModal.getSettings().getBaseUrl();
 
-
-
-
-        Gson gson = new GsonBuilder()
+        gson = new GsonBuilder()
                 .setLenient()
                 .create();
 
@@ -77,6 +73,12 @@ public class LoginUserAPI {
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+        retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        userWebServiceAPI = retrofit.create(UserWebServiceAPI.class);
+
     }
 
     public interface TokenCallback {
