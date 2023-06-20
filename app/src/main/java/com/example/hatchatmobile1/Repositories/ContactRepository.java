@@ -25,7 +25,6 @@ public class ContactRepository {
                 .build();
         // Get the database that was built.
         contactDao = appDatabase.getContactDao();
-
         contactListData = new ContactListData();
     }
 
