@@ -1,4 +1,4 @@
-package com.example.hatchatmobile1;
+package com.example.hatchatmobile1.Adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hatchatmobile1.DaoRelated.Message;
+import com.example.hatchatmobile1.R;
 
 import java.util.List;
 

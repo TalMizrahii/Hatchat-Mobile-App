@@ -27,6 +27,9 @@ public class SettingsViewModal {
     }
 
     public Settings getSettings() {
+        if(settingsRepository.getSettings() == null){
+            settingsRepository.setSettings(new Settings(0, "http://10.0.2.2:5000/api/", true));
+        }
         return settingsRepository.getSettings();
     }
 

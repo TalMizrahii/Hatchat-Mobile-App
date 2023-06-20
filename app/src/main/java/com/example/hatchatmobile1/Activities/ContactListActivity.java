@@ -1,4 +1,4 @@
-package com.example.hatchatmobile1;
+package com.example.hatchatmobile1.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,9 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.hatchatmobile1.Adapters.ContactListAdapter;
 import com.example.hatchatmobile1.DaoRelated.Contact;
+import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.databinding.ActivityContactListBinding;
 

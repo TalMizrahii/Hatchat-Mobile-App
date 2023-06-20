@@ -1,4 +1,4 @@
-package com.example.hatchatmobile1;
+package com.example.hatchatmobile1.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +16,7 @@ import android.widget.EditText;
 
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.Message;
+import com.example.hatchatmobile1.Adapters.MessageAdapter;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.databinding.ActivityChatScreenBinding;
 

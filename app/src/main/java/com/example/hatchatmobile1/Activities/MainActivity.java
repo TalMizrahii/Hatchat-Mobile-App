@@ -1,4 +1,4 @@
-package com.example.hatchatmobile1;
+package com.example.hatchatmobile1.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;

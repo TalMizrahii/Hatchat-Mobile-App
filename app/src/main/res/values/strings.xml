@@ -26,7 +26,7 @@
     <string name="enter_message">Enter message...</string>
     <string name="this_is_a_message">This is a Message</string>
 
-    <string name="base_url">http://10.0.2.2:5000/api/</string>
+<!--    <string name="base_url">http://10.0.2.2:5000/api/</string>-->
     <string name="setting">Setting</string>
     <string name="moon_icon">Moon Icon</string>
     <string name="dark_mode">Dark Mode:</string>
