@@ -39,6 +39,7 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         binding.IPSwitch.setOnClickListener(v -> validateIP());
+
     }
 
     private boolean isValidURL(String url) {
@@ -55,7 +56,7 @@ public class SettingActivity extends AppCompatActivity {
         if (isValidURL(url)) {
             // URL is valid, show green arrow icon
             IPLayout.setErrorEnabled(false);
-            IPLayout.setError(null);
+            binding.IPText.setError(null);
             IPLayout.setEndIconCheckable(true);
             IPLayout.setEndIconDrawable(R.drawable.ic_checkmark);
             IPLayout.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
