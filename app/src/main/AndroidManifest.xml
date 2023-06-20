@@ -17,22 +17,22 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".SettingActivity"
+            android:name=".Activities.SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".ChatScreenActivity"
+            android:name=".Activities.ChatScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterScreenActivity"
+            android:name=".Activities.RegisterScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".AddContactActivity"
+            android:name=".Activities.AddContactActivity"
             android:exported="false" />
         <activity
-            android:name=".ContactListActivity"
+            android:name=".Activities.ContactListActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

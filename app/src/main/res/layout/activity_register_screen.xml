@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/register_screen_background"
-    tools:context=".RegisterScreenActivity">
+    tools:context=".Activities.RegisterScreenActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

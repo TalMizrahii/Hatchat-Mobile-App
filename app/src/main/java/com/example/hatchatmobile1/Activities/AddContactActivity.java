@@ -1,4 +1,4 @@
-package com.example.hatchatmobile1;
+package com.example.hatchatmobile1.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -10,6 +10,7 @@ import com.example.hatchatmobile1.DaoRelated.AppDatabase;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
 import com.example.hatchatmobile1.DaoRelated.Message;
+import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.databinding.ActivityAddContactBinding;
 

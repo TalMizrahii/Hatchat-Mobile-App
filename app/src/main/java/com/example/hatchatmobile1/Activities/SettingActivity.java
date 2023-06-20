@@ -1,4 +1,4 @@
-package com.example.hatchatmobile1;
+package com.example.hatchatmobile1.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
@@ -11,6 +11,8 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.hatchatmobile1.R;
+import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivitySettingBinding;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -18,12 +20,19 @@ public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
     private TextInputLayout IPLayout;
 
+    private SettingsViewModal settingsViewModal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        settingsViewModal = new SettingsViewModal(getApplicationContext());
+        settingsViewModal.getSettingsLiveData().observe(this, settings -> {
+
+        });
 
         binding.returnButton.setOnClickListener(v -> finish());
         IPLayout = binding.IPLayout;
@@ -76,5 +85,4 @@ public class SettingActivity extends AppCompatActivity {
             binding.IPSwitch.setChecked(false);
         }
     }
-
 }
