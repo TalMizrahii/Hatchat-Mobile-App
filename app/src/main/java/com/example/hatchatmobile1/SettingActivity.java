@@ -76,5 +76,4 @@ public class SettingActivity extends AppCompatActivity {
             binding.IPSwitch.setChecked(false);
         }
     }
-
 }
