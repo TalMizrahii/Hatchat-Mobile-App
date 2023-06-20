@@ -65,9 +65,16 @@ public class MainActivity extends AppCompatActivity {
             });
         });
 
+        binding.settingsButton.setOnClickListener(v -> {
+            // Settings button click logic
+            Intent settingsIntent = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(settingsIntent);
+        });
         binding.linkToChat.setOnClickListener(v -> {
             Intent registerScreen = new Intent(this, RegisterScreenActivity.class);
             startActivity(registerScreen);
         });
     }
+
 }
+

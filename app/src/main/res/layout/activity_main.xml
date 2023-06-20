@@ -48,7 +48,7 @@
 
             <EditText
                 android:id="@+id/companyName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:autofillHints=""
                 android:background="@android:color/transparent"
@@ -57,6 +57,16 @@
                 android:inputType="none"
                 android:text="@string/app_name"
                 tools:ignore="LabelFor" />
+
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/setting_icon"
+                android:contentDescription="@string/settings_icon"
+                android:src="@drawable/setting_icon" />
 
         </LinearLayout>
 
