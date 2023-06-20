@@ -2,7 +2,6 @@ package com.example.hatchatmobile1.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -11,6 +10,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.hatchatmobile1.DaoRelated.Settings;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivitySettingBinding;
@@ -70,10 +70,12 @@ public class SettingActivity extends AppCompatActivity {
             IPLayout.setEndIconDrawable(R.drawable.ic_checkmark);
             IPLayout.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
 
-            // Update the base URL dynamically
-            getResources().getString(R.string.base_url);
-            Resources res = getResources();
-            res.getString(R.string.base_url, url);
+//            // Update the base URL dynamically
+//            getResources().getString(R.string.base_url);
+//            Resources res = getResources();
+//            res.getString(R.string.base_url, url);
+
+            settingsViewModal.setSettings(new Settings(0,url,settingsViewModal.getSettings().isDayMode()));
 
             // Reset switch button and clear text field
             binding.IPSwitch.setChecked(false);
