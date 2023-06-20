@@ -78,12 +78,10 @@ public class LoginUserAPI {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         userWebServiceAPI = retrofit.create(UserWebServiceAPI.class);
-
     }
 
     public interface TokenCallback {
         void onTokenReceived(String token);
-
         void onTokenError(String error);
     }
 }
