@@ -11,12 +11,15 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivitySettingBinding;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
     private TextInputLayout IPLayout;
+
+    private SettingsViewModal settingsViewModal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
