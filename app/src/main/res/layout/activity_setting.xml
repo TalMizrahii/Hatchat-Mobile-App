@@ -116,21 +116,20 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/IPLayout"
+                android:id="@+id/UrlLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="250dp"
+                android:layout_width="335dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/IPText"
+                    android:id="@+id/UrlText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autofillHints=""
                     android:background="@drawable/text_fields_background"
-                    android:hint="@string/enter_ip"
                     android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>

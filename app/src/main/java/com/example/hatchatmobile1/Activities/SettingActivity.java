@@ -1,7 +1,6 @@
 package com.example.hatchatmobile1.Activities;
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -15,12 +14,14 @@ import com.example.hatchatmobile1.DaoRelated.Settings;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivitySettingBinding;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
-    private TextInputLayout IPLayout;
+    private TextInputLayout urlLayout;
 
+    private TextInputEditText urlText;
     private SettingsViewModal settingsViewModal;
 
     @Override
@@ -34,22 +35,38 @@ public class SettingActivity extends AppCompatActivity {
         settingsViewModal.getSettingsLiveData().observe(this, settings -> {
 
         });
+        if (!settingsViewModal.getSettings().isDayMode()){
+            binding.darkModeSwitch.setChecked(true);
+            darkMode();
+        }
+
+       binding.darkModeSwitch.setOnClickListener(v -> {
+           if (binding.darkModeSwitch.isChecked()){
+               settingsViewModal.setSettings(new Settings(0, settingsViewModal.getSettings().getBaseUrl(), false));
+           }else {
+               settingsViewModal.setSettings(new Settings(0, settingsViewModal.getSettings().getBaseUrl(), true));
+
+           }
+           darkMode();
+       });
 
         binding.returnButton.setOnClickListener(v -> finish());
-        IPLayout = binding.IPLayout;
-        binding.darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                // Dark mode is enabled
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                // Dark mode is disabled
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-            recreate(); // Recreate the activity to apply the new theme
-        });
+        urlLayout = binding.UrlLayout;
+        urlText = binding.UrlText;
+
+
+        urlText.setHint("The current URL: " + settingsViewModal.getSettings().getBaseUrl());
 
         binding.IPSwitch.setOnClickListener(v -> validateIP());
 
+
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        darkMode();
     }
 
     private boolean isValidURL(String url) {
@@ -61,33 +78,47 @@ public class SettingActivity extends AppCompatActivity {
 
     @SuppressLint("StringFormatInvalid")
     private void validateIP() {
-        String url = binding.IPText.getText() != null ? binding.IPText.getText().toString().trim() : "";
+        String url = urlText.getText() != null ? urlText.getText().toString().trim() : "";
 
         if (isValidURL(url)) {
             // URL is valid, show green arrow icon
-            IPLayout.setErrorEnabled(false);
-            binding.IPText.setError(null);
-            IPLayout.setEndIconCheckable(true);
-            IPLayout.setEndIconDrawable(R.drawable.ic_checkmark);
-            IPLayout.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-
-
-
-            settingsViewModal.setSettings(new Settings(0,url,settingsViewModal.getSettings().isDayMode()));
-
-            CharSequence text = "The new URL is : " + url;
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-            toast.show();
+            urlLayout.setErrorEnabled(false);
+            urlText.setError(null);
+            settingsViewModal.setSettings(new Settings(0, url, settingsViewModal.getSettings().isDayMode()));
 
             // Reset switch button and clear text field
             binding.IPSwitch.setChecked(false);
-            binding.IPText.getText().clear();
+            urlText.getText().clear();
+            urlText.setHint("The current URL: " + settingsViewModal.getSettings().getBaseUrl());
+
+            CharSequence text = "The URL has changed to: " + settingsViewModal.getSettings().getBaseUrl();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+            toast.show();
         } else {
             // Invalid URL, show error
-            binding.IPText.setError("Invalid URL");
+            urlText.setError("Invalid URL");
             binding.IPSwitch.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             binding.IPSwitch.setChecked(false);
         }
     }
+
+    private void darkMode() {
+            if (!settingsViewModal.getSettings().isDayMode()) {
+
+                setTheme(R.style.Theme_night);
+                // Dark mode is enabled
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+
+
+                recreate();
+            } else {
+                setTheme(R.style.Theme_HatchatMobile1);
+                // Dark mode is disabled
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                recreate();
+            }
+    }
 }
+
