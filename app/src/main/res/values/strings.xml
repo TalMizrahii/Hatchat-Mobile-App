@@ -33,7 +33,7 @@
     <string name="off">Off</string>
     <string name="on">On</string>
     <string name="enter_ip">Enter IP:</string>
-    <string name="change_ip">Change IP:</string>
+    <string name="change_url">Change URL:</string>
     <string name="return_icon">Return Icon</string>
     <string name="settings_icon">settings_icon</string>
 

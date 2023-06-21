@@ -95,10 +95,10 @@ public class RegisterScreenActivity extends AppCompatActivity {
             passwordInputLayout.setEndIconDrawable(R.drawable.ic_checkmark);
             passwordInputLayout.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
         } else {
-            passwordInputText.setError("Password requirements not met!");
+            passwordInputText.setError("Password requirements not met!     Click me to see the password.");
             passwordInputLayout.setEndIconCheckable(false);
             passwordInputLayout.setEndIconDrawable(null);
-            passwordInputLayout.setEndIconTintList(null);
+//            passwordInputLayout.setEndIconTintList(null);
         }
     }
 

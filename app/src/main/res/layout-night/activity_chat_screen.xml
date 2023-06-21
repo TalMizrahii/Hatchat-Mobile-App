@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.ChatScreenActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:layout_marginBottom="2dp"
+            android:background="#aaaaaa"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ContactImageInChat"
+                android:layout_width="103dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="3dp"
+                android:contentDescription="@string/contactimage"
+                android:scaleType="centerCrop"
+                android:src="@drawable/haticon" />
+
+            <TextView
+                android:id="@+id/ContactInChatName"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="10dp"
+                android:paddingStart="10dp"
+                android:text="@string/default_name"
+                android:textSize="20sp"
+                tools:ignore="RtlSymmetry" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ChatMessagesRV"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/layout_gchat_chatbox"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <RelativeLayout
+                android:id="@+id/layout_gchat_chatbox"
+                android:layout_width="440dp"
+                android:layout_height="61dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <EditText
+                    android:id="@+id/messageInputBar"
+                    android:layout_width="314dp"
+                    android:layout_height="58dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@+id/sendBtn"
+                    android:background="@android:color/transparent"
+                    android:hint="Enter Message"
+                    android:inputType="text"
+                    android:maxLines="6"
+                    tools:ignore="Autofill" />
+
+                <Button
+                    android:id="@+id/sendBtn"
+                    android:layout_width="64dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="38dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="#2db83d"
+                    android:text="@string/send"
+                    android:textColor="#000000"
+                    android:textSize="10sp"
+                    tools:ignore="SmallSp" />
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.hatchatmobile1.ServerAPI.LoginUserAPI;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
@@ -35,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
         settingsViewModal.getSettingsLiveData().observe(this, settings -> {
             loginUserAPI.setBaseUrl(settings.getBaseUrl());
+            if (settings.isDayMode()) {
+                // Dark mode is disabled
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+
+            } else {
+                // Dark mode is enabled
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+            }
         });
 
 

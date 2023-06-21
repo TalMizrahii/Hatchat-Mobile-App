@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_screen_background"
+    android:background="@drawable/login_screen_background_night"
     tools:ignore="ExtraText">
     android:clipToPadding="false"
     android:padding="0dp"
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@color/white">
+            android:background="#77828E">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -94,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
-                android:background="@color/white"
+                android:background="#77828E"
                 android:hint="@string/usernameHint"
                 android:inputType="textPersonName" />
 
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
 
-            android:background="@color/white"
+            android:background="#77828E"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -115,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
-                android:background="@color/white"
+                android:background="#77828E"
                 android:hint="@string/passwordHint"
                 android:inputType="textPassword" />
 
@@ -128,10 +128,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="20dp"
-            android:backgroundTint="#5727AE"
+            android:backgroundTint="#B6BFE1"
             android:padding="15dp"
             android:text="@string/login"
-            android:textColor="#FFFFFF" />
+            android:textColor="#C840507A" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -163,7 +163,7 @@
                     android:paddingEnd="0dp"
                     android:paddingBottom="0dp"
                     android:text="@string/disclaimer_click_here"
-                    android:textColor="#5727AD"
+                    android:textColor="#B997A0C8"
                     android:textStyle="bold"
                     android:visibility="visible"
                     app:iconPadding="0dp" />
