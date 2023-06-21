@@ -95,7 +95,7 @@ public class ContactRepository {
                         contactChatResponse.getUser().getDisplayName(),
                         contactChatResponse.getUser().getProfilePic(),
                         mainUsername,
-                        messages));
+                        messages)); // todo: make the request to the server for the messages.
                 reload();
             }
 
@@ -107,7 +107,7 @@ public class ContactRepository {
     }
 
 
-    public void reEnterContact(Contact contact) {
+    public void reEnterContactMessageAdd(Contact contact) {
         contactDao.insertContact(contact);
         reload();
     }

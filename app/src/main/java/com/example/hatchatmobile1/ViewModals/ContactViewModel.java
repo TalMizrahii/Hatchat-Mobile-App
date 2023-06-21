@@ -46,8 +46,8 @@ public class ContactViewModel extends ViewModel {
         contactRepository.addContact(username);
     }
 
-    public void reEnterContact(Contact contact){
-        contactRepository.reEnterContact(contact);
+    public void reEnterContactMessageAdd(Contact contact){
+        contactRepository.reEnterContactMessageAdd(contact);
     }
 
     /**

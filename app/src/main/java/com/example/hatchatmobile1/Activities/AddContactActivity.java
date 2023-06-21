@@ -42,18 +42,6 @@ public class AddContactActivity extends AppCompatActivity {
 
 
         binding.btnSubmit.setOnClickListener(view -> {
-            // Delete!!!
-//            List<Message> messages = new ArrayList<>();
-//            Date date = new java.util.Date();
-//            DateFormat dateFormat = DateFormat.getDateInstance();
-//            String formattedDate = dateFormat.format(date);
-//            messages.add(new Message("hi from contact!", formattedDate, binding.etContent.getText().toString()));
-            // End Delete!!!!
-            // Create a new contact from the user's input.
-//            Contact contact = new Contact(binding.etContent.getText().toString(),
-//                    "NewContact",
-//                    R.drawable.haticon,
-//                    mainUsername, messages);
             viewModel.addContact(binding.etContent.getText().toString());
             // Finish the activity and go back to the contacts list.
             finish();

@@ -135,6 +135,6 @@ public class ChatScreenActivity extends AppCompatActivity {
         DateFormat dateFormat = DateFormat.getDateInstance();
         String formattedDate = dateFormat.format(date);
         contact.getMessages().add(new Message(textMessage, formattedDate, mainUsername));
-        viewModel.reEnterContact(contact);
+        viewModel.reEnterContactMessageAdd(contact);
     }
 }
