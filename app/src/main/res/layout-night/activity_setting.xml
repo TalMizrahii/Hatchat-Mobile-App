@@ -120,7 +120,7 @@
                 android:id="@+id/UrlLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="335dp"
-                android:layout_height="0dp"
+                android:layout_height="58dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"

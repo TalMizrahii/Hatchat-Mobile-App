@@ -25,12 +25,13 @@ public class SettingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        settingsViewModal = new SettingsViewModal(getApplicationContext());
-        darkMode();
+//        darkMode();
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        settingsViewModal = new SettingsViewModal(getApplicationContext());
 
         settingsViewModal.getSettingsLiveData().observe(this, settings -> {
             if (settings.isDayMode()) {
@@ -108,7 +109,10 @@ public class SettingActivity extends AppCompatActivity {
 
     private void darkMode() {
             if (settingsViewModal.getSettings().isDayMode()) {
-
+                CharSequence text = "Dark Mode Off!";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+                toast.show();
 
                 // Dark mode is disabled
 
@@ -119,6 +123,10 @@ public class SettingActivity extends AppCompatActivity {
 
             } else {
 
+                CharSequence text = "Dark Mode On!";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+                toast.show();
                 // Dark mode is enabled
 
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
