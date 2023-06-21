@@ -40,7 +40,10 @@ public class ContactRepository {
         SettingsViewModal settingsViewModal = new SettingsViewModal(context);
         contactsAPI = new ContactsAPI(settingsViewModal.getSettings().getBaseUrl(), token);
         contactListData = new ContactListData();
+        contactListData.setValue(contactDao.getAllContacts()); // Initialize with existing contacts
+        getAllChatsFromServer();
     }
+
 
     class ContactListData extends MutableLiveData<List<Contact>> {
 
@@ -59,78 +62,18 @@ public class ContactRepository {
             } else {
                 contactDao.deleteAllContacts();
                 postValue(new ArrayList<>());
-                getAllChatsFromServer();
             }
         }
-
-        private void getAllChatsFromServer() {
-            contactsAPI.getAllChats(new ContactsAPI.OnGetAllChatsResponseListener() {
-                @Override
-                public void onResponse(List<AllChatResponse> chats) {
-                    List<Contact> convertedChats = convertToContacts(chats);
-                    for (Contact contact : convertedChats) {
-                        getMessagesFromContactID(contact.getId(), new OnGetMessagesResponseListener() {
-                            @Override
-                            public void onResponse(List<Message> messages) {
-                                contact.setMessages(messages);
-                                executorService.execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        contactDao.insertContact(contact);
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onError(String error) {
-                                // Handle the error here
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onError(String error) {
-                    // Handle the error here
-                }
-            });
-        }
     }
-
-    public LiveData<List<Contact>> getAll() {
-        return contactListData;
-    }
-
-    public void addContact(String contactUsername) {
-        contactsAPI.postNewContactChat(contactUsername, new ContactsAPI.OnContactChatResponseListener() {
-
+    private void getAllChatsFromServer() {
+        contactsAPI.getAllChats(new ContactsAPI.OnGetAllChatsResponseListener() {
             @Override
-            public void onResponse(ContactChatResponse contactChatResponse) {
-                getMessagesFromContactID(contactChatResponse.getId(), new OnGetMessagesResponseListener() {
-                    @Override
-                    public void onResponse(List<Message> messages) {
-                        Contact contact = new Contact(
-                                contactChatResponse.getUser().getUsername(),
-                                contactChatResponse.getUser().getDisplayName(),
-                                contactChatResponse.getUser().getProfilePic(),
-                                mainUsername,
-                                "bio",
-                                contactChatResponse.getId(),
-                                messages
-                        );
-                        executorService.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                contactDao.insertContact(contact);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        // Handle the error here
-                    }
-                });
+            public void onResponse(List<AllChatResponse> chats) {
+                List<Contact> convertedChats = convertToContacts(chats);
+                for (Contact contact : convertedChats) {
+                    contactDao.insertContact(contact);
+                    reload();
+                }
             }
 
             @Override
@@ -138,6 +81,51 @@ public class ContactRepository {
                 // Handle the error here
             }
         });
+    }
+    public LiveData<List<Contact>> getAll() {
+        return contactListData;
+    }
+
+    public void addContact(String contactUsername) {
+        contactsAPI.postNewContactChat(contactUsername, new ContactsAPI.OnContactChatResponseListener() {
+            @Override
+            public void onResponse(ContactChatResponse contactChatResponse) {
+                contactDao.insertContact(new Contact(contactChatResponse.getUser().getUsername(),
+                        contactChatResponse.getUser().getDisplayName(),
+                        contactChatResponse.getUser().getProfilePic(),
+                        mainUsername,
+                        "bio",
+                        contactChatResponse.getId(),
+                        new ArrayList<>()
+                ));
+                reload();
+            }
+
+            @Override
+            public void onError(String error) {
+                // Handle the error here
+            }
+        });
+    }
+
+    public List<Message> getMessagesForContact(Contact contact) {
+        List<Message> messages = new ArrayList<>();
+        getMessagesFromContactID(contact.getId(), new OnGetMessagesResponseListener() {
+            @Override
+            public void onResponse(List<Message> retrievedMessages) {
+                messages.addAll(retrievedMessages);
+                // Update the Contact object in the database with the retrieved messages
+                contact.setMessages(messages);
+                executorService.execute(() -> contactDao.insertContact(contact));
+                reload();
+            }
+            @Override
+            public void onError(String error) {
+                // Handle the error here
+            }
+        });
+        reload();
+        return messages;
     }
 
     public void getMessagesFromContactID(int contactId, final OnGetMessagesResponseListener listener) {
@@ -153,6 +141,7 @@ public class ContactRepository {
                 listener.onError(error);
             }
         });
+
     }
 
     public interface OnGetMessagesResponseListener {
@@ -179,27 +168,16 @@ public class ContactRepository {
             @Override
             public void run() {
                 contactDao.insertContact(contact);
+                reload();
             }
         });
     }
 
     public void deleteContact(Contact contact) {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                contactDao.deleteContact(contact);
-            }
-        });
+        executorService.execute(() -> contactDao.deleteContact(contact));
     }
 
-    public void deleteContactByUsername(String username) {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                contactDao.deleteContactByUsername(username);
-            }
-        });
-    }
+
 
     public Contact getContactByUsername(String username) {
         return contactDao.getContactByUsername(username);
@@ -221,5 +199,20 @@ public class ContactRepository {
             convertedChats.add(contact);
         }
         return convertedChats;
+    }
+
+    public void reload(){
+        contactListData.setValue(contactDao.getAllContacts());
+    }
+
+
+    public void deleteContactByUsername(String username) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                contactDao.deleteContactByUsername(username);
+                reload();
+            }
+        });
     }
 }

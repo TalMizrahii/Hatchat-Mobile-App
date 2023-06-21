@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.hatchatmobile1.DaoRelated.Contact;
+import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.Repositories.ContactRepository;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class ContactViewModel extends ViewModel {
         contactRepository.addContact(username);
     }
 
-    public void reEnterContactMessageAdd(Contact contact){
+    public void reEnterContactMessageAdd(Contact contact) {
         contactRepository.reEnterContactMessageAdd(contact);
     }
 
@@ -67,5 +68,15 @@ public class ContactViewModel extends ViewModel {
      */
     public Contact getContactByUsername(String username) {
         return contactRepository.getContactByUsername(username);
+    }
+
+    /**
+     * Retrieves the list of messages for a contact.
+     *
+     * @param contact The contact.
+     * @return The list of messages for the contact.
+     */
+    public List<Message> getMessagesForContact(Contact contact) {
+        return contactRepository.getMessagesForContact(contact);
     }
 }

@@ -77,6 +77,7 @@ public class ContactListActivity extends AppCompatActivity {
             chatScreenIntent.putExtra("username", contacts.get(i).getUsername());
             chatScreenIntent.putExtra("mainUsername",mainUsername);
             chatScreenIntent.putExtra("token", token);
+            chatScreenIntent.putExtra("contactId", contacts.get(i).getId());
             startActivity(chatScreenIntent);
         });
 

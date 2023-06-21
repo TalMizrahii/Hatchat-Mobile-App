@@ -19,7 +19,6 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private LoginUserAPI loginUserAPI;
-
     private SettingsViewModal settingsViewModal;
 
     @Override
@@ -37,11 +36,9 @@ public class MainActivity extends AppCompatActivity {
             loginUserAPI.setBaseUrl(settings.getBaseUrl());
         });
 
-
         binding.loginBtn.setOnClickListener(v -> {
             String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
             String password = Objects.requireNonNull(binding.passwordInputText.getText()).toString();
-
             loginUserAPI.getToken(username, password, new LoginUserAPI.TokenCallback() {
                 @Override
                 public void onTokenReceived(String token) {
@@ -63,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                         toast.show();
                     }
                 }
-
                 @Override
                 public void onTokenError(String error) {
                     // Token retrieval error, show toast message
@@ -84,6 +80,5 @@ public class MainActivity extends AppCompatActivity {
             startActivity(registerScreen);
         });
     }
-
 }
 

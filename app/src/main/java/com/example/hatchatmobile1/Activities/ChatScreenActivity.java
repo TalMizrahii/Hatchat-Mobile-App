@@ -57,11 +57,12 @@ public class ChatScreenActivity extends AppCompatActivity {
         contactUsername = intent.getStringExtra("username");
         mainUsername = intent.getStringExtra("mainUsername");
         token = intent.getStringExtra("token");
+        int contactId = intent.getIntExtra("contactId", -1);
 
         // Create an instance of the ContactViewModel using the application context and the main user username.
         viewModel = new ContactViewModel(getApplicationContext(), mainUsername, token);
         contact = viewModel.getContactByUsername(contactUsername);
-        messages = contact.getMessages();
+        messages = viewModel.getMessagesForContact(contact);
 
         // Set up the RecyclerView for displaying the messages.
         RecyclerView recyclerView = binding.ChatMessagesRV;

@@ -21,7 +21,6 @@ public class Contact {
     private String profilePic;
     private String bio;
     private String mainUser;
-
     private int id;
     @TypeConverters(Converters.class)
     private List<Message> messages;

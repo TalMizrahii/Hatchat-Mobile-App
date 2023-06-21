@@ -27,4 +27,6 @@ public interface ContactsWebServiceAPI {
     @GET("Chats/")
     @Headers({"Content-Type: application/json"})
     Call<List<AllChatResponse>> GetAllChats(@retrofit2.http.Header("Authorization") String token);
+
+
 }

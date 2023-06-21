@@ -40,7 +40,6 @@ public class AddContactActivity extends AppCompatActivity {
 
         ContactViewModel viewModel = new ContactViewModel(getApplicationContext(), mainUsername, token);
 
-
         binding.btnSubmit.setOnClickListener(view -> {
             viewModel.addContact(binding.etContent.getText().toString());
             // Finish the activity and go back to the contacts list.
