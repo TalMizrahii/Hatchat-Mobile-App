@@ -47,7 +47,15 @@ public class ContactRepository {
 
         public ContactListData() {
             super();
-            setValue(contactDao.getAllContacts());
+            List<Contact> allContacts = contactDao.getAllContacts();
+            if (allContacts != null
+                    && !allContacts.isEmpty()
+                    && allContacts.get(0).getMainUser().equals(mainUsername)) {
+                setValue(contactDao.getAllContacts());
+            } else {
+                contactDao.deleteAllContacts();
+                setValue(contactDao.getAllContacts());
+            }
         }
 
         @Override
