@@ -3,6 +3,7 @@
     <style name="Base.Theme.HatchatMobile1" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="android:windowBackground">@drawable/register_screen_background</item>
+        <item name="android:textColorPrimary">@color/white</item>
 
     </style>
 

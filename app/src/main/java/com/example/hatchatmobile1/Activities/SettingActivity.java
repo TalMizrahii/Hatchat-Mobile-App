@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.hatchatmobile1.DaoRelated.Settings;
-import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivitySettingBinding;
 import com.google.android.material.textfield.TextInputEditText;
@@ -26,14 +25,24 @@ public class SettingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        settingsViewModal = new SettingsViewModal(getApplicationContext());
+        darkMode();
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        settingsViewModal = new SettingsViewModal(getApplicationContext());
         settingsViewModal.getSettingsLiveData().observe(this, settings -> {
+            if (settings.isDayMode()) {
+                // Dark mode is disabled
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+
+            } else {
+                // Dark mode is enabled
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+            }
         });
         if (!settingsViewModal.getSettings().isDayMode()){
             binding.darkModeSwitch.setChecked(true);
@@ -62,12 +71,6 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        darkMode();
-    }
 
     private boolean isValidURL(String url) {
         if (!TextUtils.isEmpty(url)) {
@@ -104,20 +107,22 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void darkMode() {
-            if (!settingsViewModal.getSettings().isDayMode()) {
+            if (settingsViewModal.getSettings().isDayMode()) {
 
-                setTheme(R.style.Theme_night);
+
+                // Dark mode is disabled
+
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+
+
+
+            } else {
+
                 // Dark mode is enabled
+
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
-
-
-                recreate();
-            } else {
-                setTheme(R.style.Theme_HatchatMobile1);
-                // Dark mode is disabled
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                recreate();
             }
     }
 }

@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/haticon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HatchatMobile1"
+        android:theme="@style/Base.Theme.HatchatMobile1"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
