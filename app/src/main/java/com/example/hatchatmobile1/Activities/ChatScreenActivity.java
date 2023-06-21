@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
 import android.view.KeyEvent;
 
 import android.widget.Button;
@@ -39,6 +42,8 @@ public class ChatScreenActivity extends AppCompatActivity {
     private List<Message> messages;
     private MessageAdapter messageAdapter;
 
+    private String token;
+
     @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +56,10 @@ public class ChatScreenActivity extends AppCompatActivity {
         Intent intent = getIntent();
         contactUsername = intent.getStringExtra("username");
         mainUsername = intent.getStringExtra("mainUsername");
+        token = intent.getStringExtra("token");
 
         // Create an instance of the ContactViewModel using the application context and the main user username.
-        viewModel = new ContactViewModel(getApplicationContext(), mainUsername);
+        viewModel = new ContactViewModel(getApplicationContext(), mainUsername, token);
         contact = viewModel.getContactByUsername(contactUsername);
         messages = contact.getMessages();
 
@@ -68,8 +74,13 @@ public class ChatScreenActivity extends AppCompatActivity {
 
         // Set the contact's username as the title of the chat screen.
         binding.ContactInChatName.setText(contactUsername);
+
+        // Convert the base64 string to a bitmap
+        byte[] decodedBytes = Base64.decode(contact.getProfilePic(), Base64.DEFAULT);
+        Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+
         // Set the contact's profile picture.
-        binding.ContactImageInChat.setImageAlpha(contact.getProfilePic());
+        binding.ContactImageInChat.setImageBitmap(decodedBitmap);
 
         // Send a message when the user presses the Enter key.
         messageInputBar.setOnKeyListener((v, keyCode, event) -> {
@@ -96,7 +107,7 @@ public class ChatScreenActivity extends AppCompatActivity {
         });
 
         // Observe changes in the contact list and update the messages if the current contact has new messages.
-        viewModel.getContactListLiveData().observe(this, updatedContacts ->{
+        viewModel.getContactListLiveData().observe(this, updatedContacts -> {
             for (Contact updatedContact : updatedContacts) {
                 if (updatedContact.getUsername().equals(contactUsername)) {
                     messages.clear();
@@ -124,6 +135,6 @@ public class ChatScreenActivity extends AppCompatActivity {
         DateFormat dateFormat = DateFormat.getDateInstance();
         String formattedDate = dateFormat.format(date);
         contact.getMessages().add(new Message(textMessage, formattedDate, mainUsername));
-        viewModel.addContact(contact);
+        viewModel.reEnterContact(contact);
     }
 }

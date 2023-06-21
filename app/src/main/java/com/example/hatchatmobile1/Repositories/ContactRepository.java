@@ -9,23 +9,35 @@ import androidx.room.Room;
 import com.example.hatchatmobile1.DaoRelated.AppDatabase;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
+import com.example.hatchatmobile1.DaoRelated.Message;
+import com.example.hatchatmobile1.Entities.ContactChatResponse;
+import com.example.hatchatmobile1.ServerAPI.ContactsAPI;
+import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ContactRepository {
     private ContactDao contactDao;
     private ContactListData contactListData;
     private String mainUsername;
+    private ContactsAPI contactsAPI;
+    private String token;
 
-    public ContactRepository(Context context, String mainUsername) {
+    public ContactRepository(Context context, String mainUsername, String token) {
         this.mainUsername = mainUsername;
-        // Create a database.
+        this.token = token;
         AppDatabase appDatabase = Room.databaseBuilder(context, AppDatabase.class, "AppDatabase")
                 .allowMainThreadQueries()
                 .build();
-        // Get the database that was built.
+
         contactDao = appDatabase.getContactDao();
         contactListData = new ContactListData();
+        SettingsViewModal settingsViewModal = new SettingsViewModal(context);
+
+        contactsAPI = new ContactsAPI(settingsViewModal.getSettings().getBaseUrl(), token);
     }
 
     /**
@@ -57,10 +69,37 @@ public class ContactRepository {
     /**
      * Adds a new contact to the database and reloads the contact list.
      *
-     * @param contact The contact to be added.
+     * @param contactUsername The contact's username to be added.
      */
-    public void addContact(Contact contact) {
-        //
+    public void addContact(String contactUsername) {
+        contactsAPI.postNewContactChat(contactUsername, new ContactsAPI.OnContactChatResponseListener() {
+            @Override
+            public void onResponse(ContactChatResponse contactChatResponse) {
+                List<Message> messages = new ArrayList<>();
+                Date date = new java.util.Date();
+                DateFormat dateFormat = DateFormat.getDateInstance();
+                String formattedDate = dateFormat.format(date);
+                messages.add(new Message("hi from contact!", formattedDate, contactChatResponse.getUser().getUsername()));
+
+                // Handle the response here
+                // Insert the new contact into the database
+                contactDao.insertContact(new Contact(contactChatResponse.getUser().getUsername(),
+                        contactChatResponse.getUser().getDisplayName(),
+                        contactChatResponse.getUser().getProfilePic(),
+                        mainUsername,
+                        messages));
+                reload();
+            }
+
+            @Override
+            public void onError(String error) {
+                // Handle the error here
+            }
+        });
+    }
+
+
+    public void reEnterContact(Contact contact) {
         contactDao.insertContact(contact);
         reload();
     }

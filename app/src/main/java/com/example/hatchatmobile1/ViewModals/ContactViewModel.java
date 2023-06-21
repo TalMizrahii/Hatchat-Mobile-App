@@ -23,8 +23,8 @@ public class ContactViewModel extends ViewModel {
      * @param context      The current context.
      * @param mainUsername The main username associated with the contacts.
      */
-    public ContactViewModel(Context context, String mainUsername) {
-        contactRepository = new ContactRepository(context, mainUsername);
+    public ContactViewModel(Context context, String mainUsername, String token) {
+        contactRepository = new ContactRepository(context, mainUsername, token);
         contactListLiveData = contactRepository.getAll();
     }
 
@@ -40,10 +40,14 @@ public class ContactViewModel extends ViewModel {
     /**
      * Adds a new contact.
      *
-     * @param contact The contact to be added.
+     * @param username The contact's username to be added.
      */
-    public void addContact(Contact contact) {
-        contactRepository.addContact(contact);
+    public void addContact(String username) {
+        contactRepository.addContact(username);
+    }
+
+    public void reEnterContact(Contact contact){
+        contactRepository.reEnterContact(contact);
     }
 
     /**

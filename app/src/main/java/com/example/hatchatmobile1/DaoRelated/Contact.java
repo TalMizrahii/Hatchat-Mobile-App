@@ -18,7 +18,7 @@ public class Contact {
     @NonNull
     private String username;
     private String displayName;
-    private int profilePic;
+    private String profilePic;
     private String bio;
     private String mainUser;
     @TypeConverters(Converters.class)
@@ -35,7 +35,7 @@ public class Contact {
      * @param messages    The list of messages associated with the contact.
      */
     @Ignore
-    public Contact(@NonNull String username, String displayName, int profilePic, String mainUser, String bio, List<Message> messages) {
+    public Contact(@NonNull String username, String displayName, String profilePic, String mainUser, String bio, List<Message> messages) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
@@ -53,7 +53,7 @@ public class Contact {
      * @param mainUser    The username of the main user.
      * @param messages    The list of messages associated with the contact.
      */
-    public Contact(@NonNull String username, String displayName, int profilePic, String mainUser, List<Message> messages) {
+    public Contact(@NonNull String username, String displayName, String profilePic, String mainUser, List<Message> messages) {
         this.username = username;
         this.displayName = displayName;
         this.profilePic = profilePic;
@@ -104,7 +104,7 @@ public class Contact {
      *
      * @return The profile picture resource ID of the contact.
      */
-    public int getProfilePic() {
+    public String getProfilePic() {
         return profilePic;
     }
 
@@ -113,7 +113,7 @@ public class Contact {
      *
      * @param profilePic The profile picture resource ID of the contact.
      */
-    public void setProfilePic(int profilePic) {
+    public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
 

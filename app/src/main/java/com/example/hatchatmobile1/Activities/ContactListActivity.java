@@ -36,18 +36,20 @@ public class ContactListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mainUsername = intent.getStringExtra("username");
         token = intent.getStringExtra("token");
+        token = "Bearer " + token;
 
 
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         lvContacts = binding.ContactListView;
         binding.usernameInList.setText(mainUsername);
-        contactsViewModel = new ContactViewModel(getApplicationContext(), mainUsername);
+        contactsViewModel = new ContactViewModel(getApplicationContext(), mainUsername, token);
 
         // Open AddContactActivity when the Add Contact button is clicked.
         binding.btnAddContact.setOnClickListener(view -> {
             Intent addContactIntent = new Intent(this, AddContactActivity.class);
             addContactIntent.putExtra("username", mainUsername);
+            addContactIntent.putExtra("token", token);
             startActivity(addContactIntent);
         });
 
@@ -74,6 +76,7 @@ public class ContactListActivity extends AppCompatActivity {
             Intent chatScreenIntent = new Intent(getApplicationContext(), ChatScreenActivity.class);
             chatScreenIntent.putExtra("username", contacts.get(i).getUsername());
             chatScreenIntent.putExtra("mainUsername",mainUsername);
+            chatScreenIntent.putExtra("token", token);
             startActivity(chatScreenIntent);
         });
 
