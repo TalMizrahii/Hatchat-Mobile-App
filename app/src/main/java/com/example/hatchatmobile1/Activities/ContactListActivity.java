@@ -76,5 +76,11 @@ public class ContactListActivity extends AppCompatActivity {
             chatScreenIntent.putExtra("mainUsername",mainUsername);
             startActivity(chatScreenIntent);
         });
+
+        binding.settingsButton.setOnClickListener(v -> {
+            // Settings button click logic
+            Intent settingsIntent = new Intent(getApplicationContext(), SettingActivity.class);
+            startActivity(settingsIntent);
+        });
     }
 }

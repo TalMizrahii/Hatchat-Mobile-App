@@ -106,6 +106,12 @@ public class ChatScreenActivity extends AppCompatActivity {
                 }
             }
         });
+
+        binding.settingsButton.setOnClickListener(v -> {
+            // Settings button click logic
+            Intent settingsIntent = new Intent(getApplicationContext(), SettingActivity.class);
+            startActivity(settingsIntent);
+        });
     }
 
     /**
