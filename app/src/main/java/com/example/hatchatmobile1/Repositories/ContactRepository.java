@@ -10,14 +10,16 @@ import com.example.hatchatmobile1.DaoRelated.AppDatabase;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
 import com.example.hatchatmobile1.DaoRelated.Message;
+import com.example.hatchatmobile1.Entities.AllChatResponse;
 import com.example.hatchatmobile1.Entities.ContactChatResponse;
+import com.example.hatchatmobile1.Entities.MessageResponse;
 import com.example.hatchatmobile1.ServerAPI.ContactsAPI;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ContactRepository {
     private ContactDao contactDao;
@@ -25,6 +27,7 @@ public class ContactRepository {
     private String mainUsername;
     private ContactsAPI contactsAPI;
     private String token;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public ContactRepository(Context context, String mainUsername, String token) {
         this.mainUsername = mainUsername;
@@ -34,69 +37,100 @@ public class ContactRepository {
                 .build();
 
         contactDao = appDatabase.getContactDao();
-        contactListData = new ContactListData();
         SettingsViewModal settingsViewModal = new SettingsViewModal(context);
-
         contactsAPI = new ContactsAPI(settingsViewModal.getSettings().getBaseUrl(), token);
+        contactListData = new ContactListData();
     }
 
-    /**
-     * LiveData class that holds a list of contacts.
-     */
     class ContactListData extends MutableLiveData<List<Contact>> {
 
         public ContactListData() {
             super();
+            loadChatsFromDatabase();
+        }
+
+        private void loadChatsFromDatabase() {
             List<Contact> allContacts = contactDao.getAllContacts();
             if (allContacts != null
                     && !allContacts.isEmpty()
                     && allContacts.get(0).getMainUser().equals(mainUsername)) {
-                setValue(contactDao.getAllContacts());
+                postValue(allContacts);
+                getAllChatsFromServer();
             } else {
                 contactDao.deleteAllContacts();
-                setValue(contactDao.getAllContacts());
+                postValue(new ArrayList<>());
+                getAllChatsFromServer();
             }
         }
 
-        @Override
-        protected void onActive() {
-            super.onActive();
-            new Thread(() -> contactListData.postValue(contactDao.getAllContacts())).start();
+        private void getAllChatsFromServer() {
+            contactsAPI.getAllChats(new ContactsAPI.OnGetAllChatsResponseListener() {
+                @Override
+                public void onResponse(List<AllChatResponse> chats) {
+                    List<Contact> convertedChats = convertToContacts(chats);
+                    for (Contact contact : convertedChats) {
+                        getMessagesFromContactID(contact.getId(), new OnGetMessagesResponseListener() {
+                            @Override
+                            public void onResponse(List<Message> messages) {
+                                contact.setMessages(messages);
+                                executorService.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        contactDao.insertContact(contact);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                // Handle the error here
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    // Handle the error here
+                }
+            });
         }
     }
 
-    /**
-     * Retrieves all contacts as LiveData.
-     *
-     * @return LiveData object holding a list of contacts.
-     */
     public LiveData<List<Contact>> getAll() {
         return contactListData;
     }
 
-    /**
-     * Adds a new contact to the database and reloads the contact list.
-     *
-     * @param contactUsername The contact's username to be added.
-     */
     public void addContact(String contactUsername) {
         contactsAPI.postNewContactChat(contactUsername, new ContactsAPI.OnContactChatResponseListener() {
+
             @Override
             public void onResponse(ContactChatResponse contactChatResponse) {
-                List<Message> messages = new ArrayList<>();
-                Date date = new java.util.Date();
-                DateFormat dateFormat = DateFormat.getDateInstance();
-                String formattedDate = dateFormat.format(date);
-                messages.add(new Message("hi from contact!", formattedDate, contactChatResponse.getUser().getUsername()));
+                getMessagesFromContactID(contactChatResponse.getId(), new OnGetMessagesResponseListener() {
+                    @Override
+                    public void onResponse(List<Message> messages) {
+                        Contact contact = new Contact(
+                                contactChatResponse.getUser().getUsername(),
+                                contactChatResponse.getUser().getDisplayName(),
+                                contactChatResponse.getUser().getProfilePic(),
+                                mainUsername,
+                                "bio",
+                                contactChatResponse.getId(),
+                                messages
+                        );
+                        executorService.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                contactDao.insertContact(contact);
+                            }
+                        });
+                    }
 
-                // Handle the response here
-                // Insert the new contact into the database
-                contactDao.insertContact(new Contact(contactChatResponse.getUser().getUsername(),
-                        contactChatResponse.getUser().getDisplayName(),
-                        contactChatResponse.getUser().getProfilePic(),
-                        mainUsername,
-                        messages)); // todo: make the request to the server for the messages.
-                reload();
+                    @Override
+                    public void onError(String error) {
+                        // Handle the error here
+                    }
+                });
             }
 
             @Override
@@ -106,46 +140,86 @@ public class ContactRepository {
         });
     }
 
+    public void getMessagesFromContactID(int contactId, final OnGetMessagesResponseListener listener) {
+        contactsAPI.getMessagesForContact(contactId, new ContactsAPI.OnGetMessagesResponseListener() {
+            @Override
+            public void onResponse(List<MessageResponse> messages) {
+                List<Message> convertedMessages = convertToMessages(messages);
+                listener.onResponse(convertedMessages);
+            }
+
+            @Override
+            public void onError(String error) {
+                listener.onError(error);
+            }
+        });
+    }
+
+    public interface OnGetMessagesResponseListener {
+        void onResponse(List<Message> messages);
+
+        void onError(String error);
+    }
+
+    private List<Message> convertToMessages(List<MessageResponse> messageResponses) {
+        List<Message> convertedMessages = new ArrayList<>();
+        for (MessageResponse msgResponse : messageResponses) {
+            String content = msgResponse.getContent();
+            String timeAndDate = msgResponse.getCreated();
+            String sender = msgResponse.getSender().getUsername();
+
+            Message message = new Message(content, timeAndDate, sender);
+            convertedMessages.add(message);
+        }
+        return convertedMessages;
+    }
 
     public void reEnterContactMessageAdd(Contact contact) {
-        contactDao.insertContact(contact);
-        reload();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                contactDao.insertContact(contact);
+            }
+        });
     }
 
-    /**
-     * Deletes a contact from the database and reloads the contact list.
-     *
-     * @param contact The contact to be deleted.
-     */
     public void deleteContact(Contact contact) {
-        contactDao.deleteContact(contact);
-        reload();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                contactDao.deleteContact(contact);
+            }
+        });
     }
 
-    /**
-     * Deletes a contact from the database by their username and reloads the contact list.
-     *
-     * @param username The username of the contact to be deleted.
-     */
     public void deleteContactByUsername(String username) {
-        contactDao.deleteContactByUsername(username);
-        reload();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                contactDao.deleteContactByUsername(username);
+            }
+        });
     }
 
-    /**
-     * Retrieves a contact from the database by their username.
-     *
-     * @param username The username of the contact to be retrieved.
-     * @return The contact object if found, null otherwise.
-     */
     public Contact getContactByUsername(String username) {
         return contactDao.getContactByUsername(username);
     }
 
-    /**
-     * Reloads the contact list by updating the LiveData object with the latest data from the database.
-     */
-    public void reload() {
-        contactListData.setValue(contactDao.getAllContacts());
+    private List<Contact> convertToContacts(List<AllChatResponse> chats) {
+        List<Contact> convertedChats = new ArrayList<>();
+        for (AllChatResponse chat : chats) {
+            // Convert AllChatResponse to Contact if needed
+            Contact contact = new Contact(
+                    chat.getUser().getUsername(),
+                    chat.getUser().getDisplayName(),
+                    chat.getUser().getProfilePic(),
+                    mainUsername,
+                    "bio",
+                    chat.getId(),
+                    new ArrayList<>()
+            );
+            convertedChats.add(contact);
+        }
+        return convertedChats;
     }
 }
