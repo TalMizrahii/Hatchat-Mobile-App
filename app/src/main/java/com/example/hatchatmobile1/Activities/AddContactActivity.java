@@ -44,6 +44,6 @@ public class AddContactActivity extends AppCompatActivity {
             viewModel.addContact(binding.etContent.getText().toString());
             // Finish the activity and go back to the contacts list.
             finish();
-        });
+         });
     }
 }

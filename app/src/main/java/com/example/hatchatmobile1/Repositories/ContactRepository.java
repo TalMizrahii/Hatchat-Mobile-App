@@ -1,11 +1,13 @@
 package com.example.hatchatmobile1.Repositories;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
+import com.example.hatchatmobile1.Activities.MainActivity;
 import com.example.hatchatmobile1.DaoRelated.AppDatabase;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
@@ -28,8 +30,10 @@ public class ContactRepository {
     private ContactsAPI contactsAPI;
     private String token;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private Context context;
 
     public ContactRepository(Context context, String mainUsername, String token) {
+        this.context = context;
         this.mainUsername = mainUsername;
         this.token = token;
         AppDatabase appDatabase = Room.databaseBuilder(context, AppDatabase.class, "AppDatabase")
@@ -40,7 +44,6 @@ public class ContactRepository {
         SettingsViewModal settingsViewModal = new SettingsViewModal(context);
         contactsAPI = new ContactsAPI(settingsViewModal.getSettings().getBaseUrl(), token);
         contactListData = new ContactListData();
-        contactListData.setValue(contactDao.getAllContacts()); // Initialize with existing contacts
         getAllChatsFromServer();
     }
 
@@ -57,14 +60,21 @@ public class ContactRepository {
             if (allContacts != null
                     && !allContacts.isEmpty()
                     && allContacts.get(0).getMainUser().equals(mainUsername)) {
-                postValue(allContacts);
-                getAllChatsFromServer();
+                setValue(allContacts);
             } else {
                 contactDao.deleteAllContacts();
-                postValue(new ArrayList<>());
+                setValue(new ArrayList<>());
             }
         }
+
+        public void postDataValue(List<Contact> contacts){
+            postValue(contacts);
+        }
+        public void SetDataValue(List<Contact> contacts){
+            setValue(contacts);
+        }
     }
+
     private void getAllChatsFromServer() {
         contactsAPI.getAllChats(new ContactsAPI.OnGetAllChatsResponseListener() {
             @Override
@@ -72,8 +82,8 @@ public class ContactRepository {
                 List<Contact> convertedChats = convertToContacts(chats);
                 for (Contact contact : convertedChats) {
                     contactDao.insertContact(contact);
-                    reload();
                 }
+                reloadPost();
             }
 
             @Override
@@ -82,6 +92,7 @@ public class ContactRepository {
             }
         });
     }
+
     public LiveData<List<Contact>> getAll() {
         return contactListData;
     }
@@ -90,23 +101,30 @@ public class ContactRepository {
         contactsAPI.postNewContactChat(contactUsername, new ContactsAPI.OnContactChatResponseListener() {
             @Override
             public void onResponse(ContactChatResponse contactChatResponse) {
-                contactDao.insertContact(new Contact(contactChatResponse.getUser().getUsername(),
+                Contact newContact = new Contact(
+                        contactChatResponse.getUser().getUsername(),
                         contactChatResponse.getUser().getDisplayName(),
                         contactChatResponse.getUser().getProfilePic(),
                         mainUsername,
                         "bio",
                         contactChatResponse.getId(),
                         new ArrayList<>()
-                ));
-                reload();
+                );
+                contactDao.insertContact(newContact);
+                contactListData.postValue(contactDao.getAllContacts());
+                reloadPost();
             }
 
             @Override
             public void onError(String error) {
-                // Handle the error here
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, error, duration);
+                toast.show();
             }
         });
+        reloadSet();
     }
+
 
     public List<Message> getMessagesForContact(Contact contact) {
         List<Message> messages = new ArrayList<>();
@@ -117,14 +135,17 @@ public class ContactRepository {
                 // Update the Contact object in the database with the retrieved messages
                 contact.setMessages(messages);
                 executorService.execute(() -> contactDao.insertContact(contact));
-                reload();
+                reloadPost();
             }
+
             @Override
             public void onError(String error) {
-                // Handle the error here
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, error, duration);
+                toast.show();
             }
         });
-        reload();
+        reloadSet();
         return messages;
     }
 
@@ -138,6 +159,9 @@ public class ContactRepository {
 
             @Override
             public void onError(String error) {
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, error, duration);
+                toast.show();
                 listener.onError(error);
             }
         });
@@ -164,19 +188,15 @@ public class ContactRepository {
     }
 
     public void reEnterContactMessageAdd(Contact contact) {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                contactDao.insertContact(contact);
-                reload();
-            }
+        executorService.execute(() -> {
+            contactDao.insertContact(contact);
+            reloadSet();
         });
     }
 
     public void deleteContact(Contact contact) {
         executorService.execute(() -> contactDao.deleteContact(contact));
     }
-
 
 
     public Contact getContactByUsername(String username) {
@@ -201,18 +221,18 @@ public class ContactRepository {
         return convertedChats;
     }
 
-    public void reload(){
-        contactListData.setValue(contactDao.getAllContacts());
+    public void reloadPost() {
+        contactListData.postDataValue(contactDao.getAllContacts());
     }
 
+    public void reloadSet(){
+        contactListData.SetDataValue(contactDao.getAllContacts());
+    }
 
     public void deleteContactByUsername(String username) {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                contactDao.deleteContactByUsername(username);
-                reload();
-            }
+        executorService.execute(() -> {
+            contactDao.deleteContactByUsername(username);
+            reloadSet();
         });
     }
 }

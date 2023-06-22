@@ -2,6 +2,7 @@ package com.example.hatchatmobile1.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +62,7 @@ public class ContactListActivity extends AppCompatActivity {
 
         // Observe the contact list live data and update the list view when the data changes.
         contactsViewModel.getContactListLiveData().observe(this, contactList -> {
+            Log.d("CREATION", "onCreate: observe!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
             contacts.clear();
             contacts.addAll(contactList);
             contactAdapter.notifyDataSetChanged();
