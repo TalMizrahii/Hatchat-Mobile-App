@@ -25,7 +25,6 @@ public class SettingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        darkMode();
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();

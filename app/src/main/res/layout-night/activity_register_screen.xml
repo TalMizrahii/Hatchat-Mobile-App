@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     android:background="@drawable/dark_mode"
     tools:context=".Activities.RegisterScreenActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="right">
+
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/setting_icon"
+            android:contentDescription="@string/settings_icon"
+            android:foregroundGravity="left"
+            android:src="@drawable/setting_icon"
+            tools:ignore="MissingConstraints" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -121,18 +121,6 @@ public class RegisterScreenActivity extends AppCompatActivity {
 
         UsersAPI usersAPI = new UsersAPI(getApplicationContext());
 
-//        settingsViewModal.getSettingsLiveData().observe(this, settings -> {
-//            if (settings.isDayMode()) {
-//                // Dark mode is disabled
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//
-//
-//            } else {
-//                // Dark mode is enabled
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//
-//            }
-//        });
 
         binding.loginBtn.setOnClickListener(v -> {
             if (validFields()) {
@@ -145,7 +133,7 @@ public class RegisterScreenActivity extends AppCompatActivity {
             }
         });
 
-        assert binding.settingsButton != null;
+
         binding.settingsButton.setOnClickListener(v -> {
             // Settings button click logic
             Intent settingsIntent = new Intent(RegisterScreenActivity.this, SettingActivity.class);
