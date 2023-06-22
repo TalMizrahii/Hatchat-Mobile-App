@@ -139,6 +139,7 @@ public class RegisterScreenActivity extends AppCompatActivity {
         binding.settingsButton.setOnClickListener(v -> {
             // Settings button click logic
             Intent settingsIntent = new Intent(RegisterScreenActivity.this, SettingActivity.class);
+            settingsIntent.putExtra("logoutBtnViability", false);
             startActivity(settingsIntent);
         });
 

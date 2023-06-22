@@ -145,6 +145,16 @@
                 android:layout_marginBottom="5dp"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="42dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/logout_icon"
+                android:contentDescription="@string/logoutButton" />
+
         </LinearLayout>
 
 

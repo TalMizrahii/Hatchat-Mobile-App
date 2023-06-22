@@ -1,10 +1,12 @@
 package com.example.hatchatmobile1.Activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -24,12 +26,17 @@ public class SettingActivity extends AppCompatActivity {
     private TextInputEditText urlText;
     private SettingsViewModal settingsViewModal;
 
+    private Button logoutBtn;
+
+    Boolean logoutBtnVisible;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        logoutBtnVisible = getIntent().getExtras().getBoolean("logoutBtnViability");
 
         Slidr.attach(this);
 
@@ -72,7 +79,18 @@ public class SettingActivity extends AppCompatActivity {
 
         binding.IPSwitch.setOnClickListener(v -> validateIP());
 
+        logoutBtn = binding.logoutButton;
 
+        if (this.logoutBtnVisible){
+            logoutBtn.setVisibility(View.VISIBLE);
+        }else {
+            logoutBtn.setVisibility(View.GONE);
+        }
+
+        logoutBtn.setOnClickListener(v ->{
+            Intent settingsIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(settingsIntent);
+        });
     }
 
 

@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         binding.settingsButton.setOnClickListener(v -> {
             // Settings button click logic
             Intent settingsIntent = new Intent(MainActivity.this, SettingActivity.class);
+            settingsIntent.putExtra("logoutBtnViability", false);
             startActivity(settingsIntent);
         });
         binding.linkToChat.setOnClickListener(v -> {
