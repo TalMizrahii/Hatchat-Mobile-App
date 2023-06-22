@@ -56,7 +56,7 @@ public class ContactRepository {
         }
 
         private void loadChatsFromDatabase() {
-            List<Contact> allContacts = contactDao.getAllContacts();
+            List<Contact> allContacts = contactDao.index();
             if (allContacts != null
                     && !allContacts.isEmpty()
                     && allContacts.get(0).getMainUser().equals(mainUsername)) {
@@ -67,12 +67,12 @@ public class ContactRepository {
             }
         }
 
-        public void postDataValue(List<Contact> contacts){
-            postValue(contacts);
+        @Override
+        protected void onActive() {
+            super.onActive();
+            new Thread(() -> contactListData.postValue(contactDao.index())).start();
         }
-        public void SetDataValue(List<Contact> contacts){
-            setValue(contacts);
-        }
+
     }
 
     private void getAllChatsFromServer() {
@@ -111,7 +111,6 @@ public class ContactRepository {
                         new ArrayList<>()
                 );
                 contactDao.insertContact(newContact);
-                contactListData.postValue(contactDao.getAllContacts());
                 reloadPost();
             }
 
@@ -122,7 +121,7 @@ public class ContactRepository {
                 toast.show();
             }
         });
-        reloadSet();
+        reloadPost();
     }
 
 
@@ -145,7 +144,7 @@ public class ContactRepository {
                 toast.show();
             }
         });
-        reloadSet();
+        reloadPost();
         return messages;
     }
 
@@ -190,7 +189,7 @@ public class ContactRepository {
     public void reEnterContactMessageAdd(Contact contact) {
         executorService.execute(() -> {
             contactDao.insertContact(contact);
-            reloadSet();
+            reloadPost();
         });
     }
 
@@ -222,17 +221,14 @@ public class ContactRepository {
     }
 
     public void reloadPost() {
-        contactListData.postDataValue(contactDao.getAllContacts());
-    }
-
-    public void reloadSet(){
-        contactListData.SetDataValue(contactDao.getAllContacts());
+        List<Contact> allContacts = contactDao.index();
+        contactListData.postValue(allContacts);
     }
 
     public void deleteContactByUsername(String username) {
         executorService.execute(() -> {
             contactDao.deleteContactByUsername(username);
-            reloadSet();
+            reloadPost();
         });
     }
 }

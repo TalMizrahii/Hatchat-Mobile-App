@@ -14,7 +14,6 @@ import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -51,22 +50,24 @@ public class ContactsAPI {
     }
 
     public void postNewContactChat(String username, final OnContactChatResponseListener listener) {
-        new Thread(() -> {
-            try {
-                Response<ContactChatResponse> response = contactsWebServiceAPI.AddContactChat(new NewContactChatRequest(username), token).execute();
-
+        Call<ContactChatResponse> call = contactsWebServiceAPI.AddContactChat(new NewContactChatRequest(username), token);
+        call.enqueue(new Callback<ContactChatResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ContactChatResponse> call, @NonNull Response<ContactChatResponse> response) {
                 if (response.isSuccessful()) {
                     ContactChatResponse contactChatResponse = response.body();
                     listener.onResponse(contactChatResponse); // Pass the response to the listener
                 } else {
                     listener.onError("Request failed with code: " + response.code());
                 }
-            } catch (IOException e) {
-                listener.onError(e.getMessage());
             }
-        }).start();
-    }
 
+            @Override
+            public void onFailure(@NonNull Call<ContactChatResponse> call, @NonNull Throwable t) {
+                listener.onError(t.getMessage());
+            }
+        });
+    }
 
     public void getMessagesForContact(int contactId, final OnGetMessagesResponseListener listener) {
         Call<List<MessageResponse>> call = contactsWebServiceAPI.GetMessagesForContact(token, contactId);
