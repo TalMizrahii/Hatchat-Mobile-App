@@ -13,19 +13,21 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.TooltipCompat;
 
+import com.example.hatchatmobile1.Adapters.ToastUtils;
 import com.example.hatchatmobile1.Entities.PostUserResponse;
 import com.example.hatchatmobile1.R;
+import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 import com.example.hatchatmobile1.ServerAPI.UsersAPI;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivityRegisterScreenBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.r0adkll.slidr.Slidr;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -58,6 +60,8 @@ public class RegisterScreenActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        Slidr.attach(this);
+
         passwordInputText = binding.passwordInputText;
         passwordInputLayout = binding.passwordInputLayout;
 
@@ -80,7 +84,6 @@ public class RegisterScreenActivity extends AppCompatActivity {
         binding.passwordRequirementsButton.setOnClickListener(v -> showPasswordRequirementsDialog());
 
         settingsViewModal = new SettingsViewModal(getApplicationContext());
-
 
 
         // Add text change listener to the password input field
@@ -127,9 +130,8 @@ public class RegisterScreenActivity extends AppCompatActivity {
                 serverResponse(usersAPI);
             } else {
                 CharSequence text = "Please fill all the fields";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-                toast.show();
+                ToastUtils.showShortToast(getApplicationContext(), text);
+
             }
         });
 
@@ -164,7 +166,6 @@ public class RegisterScreenActivity extends AppCompatActivity {
             passwordInputText.setError("Password requirements not met!     Click me to see the password.");
             passwordInputLayout.setEndIconCheckable(false);
             passwordInputLayout.setEndIconDrawable(null);
-//            passwordInputLayout.setEndIconTintList(null);
         }
     }
 
@@ -277,22 +278,22 @@ public class RegisterScreenActivity extends AppCompatActivity {
         }
         String displayName = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
 
-        usersAPI.postNewUser(username, password, displayName, profilePic, new UsersAPI.UsersResponse() {
+        usersAPI.postNewUser(username, password, displayName, profilePic, new ServerResponse<PostUserResponse, String>() {
             @Override
-            public void onUserResponse(PostUserResponse userResponse) {
+            public void onServerResponse(PostUserResponse userResponse) {
                 CharSequence text = "User created successfully : " + userResponse.getDisplayName();
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(RegisterScreenActivity.this, text, duration);
-                toast.show();
-                // User created, proceed to the next screen
+                ToastUtils.showShortToast(getApplicationContext(), text);
+
+                // User created, finish this activity and return to the previous activity
+                finish();
+
             }
 
             @Override
-            public void onUserError(String error) {
+            public void onServerErrorResponse(String error) {
                 // User creation error, show toast message
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(RegisterScreenActivity.this, error, duration);
-                toast.show();
+                ToastUtils.showShortToast(getApplicationContext(), error);
+
             }
         });
     }

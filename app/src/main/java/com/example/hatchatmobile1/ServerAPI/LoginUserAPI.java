@@ -41,7 +41,7 @@ public class LoginUserAPI {
         userWebServiceAPI = retrofit.create(TokenWebServiceAPI.class);
     }
 
-    public void getToken(String username, String password, final TokenCallback callback) {
+    public void getToken(String username, String password, final ServerResponse<String, String> callback) {
         LoginRequest request = new LoginRequest(username, password);
 
         Call<String> call = userWebServiceAPI.getToken(request);
@@ -52,24 +52,25 @@ public class LoginUserAPI {
                     String token = response.body();
                     if (token != null) {
                         // Token retrieval successful
-                        callback.onTokenReceived(token);
+                        callback.onServerResponse(token);
                     } else {
                         // Handle null response
-                        callback.onTokenError("Null response");
+                        callback.onServerErrorResponse("Null response");
                     }
                 } else {
                     // Handle unsuccessful response
-                    callback.onTokenError("Invalid username/password");
+                    callback.onServerErrorResponse("Invalid username/password");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 // Handle failure
-                callback.onTokenError(t.getMessage());
+                callback.onServerErrorResponse(t.getMessage());
             }
         });
     }
+
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -81,9 +82,5 @@ public class LoginUserAPI {
 
     }
 
-    public interface TokenCallback {
-        void onTokenReceived(String token);
 
-        void onTokenError(String error);
-    }
 }

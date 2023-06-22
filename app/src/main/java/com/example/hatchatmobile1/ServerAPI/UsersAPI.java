@@ -46,7 +46,7 @@ public class UsersAPI {
         userWebServiceAPI = retrofit.create(UsersWebServiceAPI.class);
     }
 
-    public void postNewUser(String username, String password, String displayName, String profilePic, final UsersResponse callback) {
+    public void postNewUser(String username, String password, String displayName, String profilePic, final ServerResponse<PostUserResponse, String> callback) {
         PostUserRequest request = new PostUserRequest(username, password, displayName, profilePic);
         Call<PostUserResponse> call = userWebServiceAPI.postNewUser(request);
         call.enqueue(new Callback<PostUserResponse>() {
@@ -55,26 +55,23 @@ public class UsersAPI {
                 if (response.isSuccessful()) {
                     // Process the successful response
                     PostUserResponse userResponse = response.body();
-                    callback.onUserResponse(userResponse);
+                    callback.onServerResponse(userResponse);
                 } else {
                     // Handle unsuccessful response
-                    callback.onUserError("Conflict detected!");
+                    callback.onServerErrorResponse("Conflict detected!");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<PostUserResponse> call, @NonNull Throwable t) {
                 // Handle failure
-                callback.onUserError(t.getMessage());
+                callback.onServerErrorResponse(t.getMessage());
             }
         });
     }
 
 
-    public interface UsersResponse {
-        void onUserResponse(PostUserResponse userResponse);
 
-        void onUserError(String error);
-    }
+
 
 }
