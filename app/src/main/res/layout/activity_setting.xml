@@ -130,7 +130,8 @@
                     android:layout_height="match_parent"
                     android:autofillHints=""
                     android:background="@drawable/text_fields_background"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textColor="#000000" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
