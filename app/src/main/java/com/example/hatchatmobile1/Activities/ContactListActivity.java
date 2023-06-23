@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Activity for displaying the list of contacts.
+ * This activity provides a user interface to view, add, and delete contacts.
  */
 public class ContactListActivity extends AppCompatActivity {
     private ActivityContactListBinding binding;
@@ -33,18 +34,19 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Get the current connected user from the previous activity.
         Intent intent = getIntent();
         mainUsername = intent.getStringExtra("username");
         token = intent.getStringExtra("token");
         token = "Bearer " + token;
 
-
+        // Inflate the layout using view binding.
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         lvContacts = binding.ContactListView;
         binding.usernameInList.setText(mainUsername);
-        contactsViewModel = new ContactViewModel(getApplicationContext(), mainUsername, token);
+        contactsViewModel = ContactViewModel.getInstance(getApplicationContext(), mainUsername, token);
 
         // Open AddContactActivity when the Add Contact button is clicked.
         binding.btnAddContact.setOnClickListener(view -> {
@@ -75,6 +77,7 @@ public class ContactListActivity extends AppCompatActivity {
         });
 
         lvContacts.setOnItemClickListener((adapterView, view, i, l) -> {
+            // Open the chat screen when a contact is clicked.
             Intent chatScreenIntent = new Intent(getApplicationContext(), ChatScreenActivity.class);
             chatScreenIntent.putExtra("username", contacts.get(i).getUsername());
             chatScreenIntent.putExtra("mainUsername",mainUsername);
@@ -84,7 +87,7 @@ public class ContactListActivity extends AppCompatActivity {
         });
 
         binding.settingsButton.setOnClickListener(v -> {
-            // Settings button click logic
+            // Open the settings activity when the settings button is clicked.
             Intent settingsIntent = new Intent(getApplicationContext(), SettingActivity.class);
             startActivity(settingsIntent);
         });

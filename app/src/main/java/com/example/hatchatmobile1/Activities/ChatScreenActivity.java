@@ -60,7 +60,7 @@ public class ChatScreenActivity extends AppCompatActivity {
         int contactId = intent.getIntExtra("contactId", -1);
 
         // Create an instance of the ContactViewModel using the application context and the main user username.
-        viewModel = new ContactViewModel(getApplicationContext(), mainUsername, token);
+        viewModel = ContactViewModel.getInstance(getApplicationContext(), mainUsername, token);
         contact = viewModel.getContactByUsername(contactUsername);
         messages = viewModel.getMessagesForContact(contact);
 

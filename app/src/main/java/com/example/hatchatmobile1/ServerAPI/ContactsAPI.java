@@ -1,20 +1,20 @@
 package com.example.hatchatmobile1.ServerAPI;
 
-import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModel;
 
 import com.example.hatchatmobile1.Entities.AllChatResponse;
 import com.example.hatchatmobile1.Entities.ContactChatResponse;
 import com.example.hatchatmobile1.Entities.MessageResponse;
 import com.example.hatchatmobile1.Entities.NewContactChatRequest;
-import com.example.hatchatmobile1.Entities.User;
-import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,15 +25,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ContactsAPI {
 
     private Retrofit retrofit;
-
-    private SettingsViewModal settingsViewModal;
-
     private ContactsWebServiceAPI contactsWebServiceAPI;
-
     private String baseUrl;
-
     private Gson gson;
-
     private String token;
 
     public ContactsAPI(String baseUrl, String token) {
@@ -49,25 +43,26 @@ public class ContactsAPI {
         contactsWebServiceAPI = retrofit.create(ContactsWebServiceAPI.class);
     }
 
-    public void postNewContactChat(String username, final OnContactChatResponseListener listener) {
-        Call<ContactChatResponse> call = contactsWebServiceAPI.AddContactChat(new NewContactChatRequest(username), token);
-        call.enqueue(new Callback<ContactChatResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<ContactChatResponse> call, @NonNull Response<ContactChatResponse> response) {
-                if (response.isSuccessful()) {
-                    ContactChatResponse contactChatResponse = response.body();
-                    listener.onResponse(contactChatResponse); // Pass the response to the listener
-                } else {
-                    listener.onError("Request failed with code: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ContactChatResponse> call, @NonNull Throwable t) {
-                listener.onError(t.getMessage());
-            }
+    public ContactChatResponse postNewContactChat(String username) throws IOException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Response<ContactChatResponse>> future = executor.submit(() -> {
+            Call<ContactChatResponse> call = contactsWebServiceAPI.AddContactChat(new NewContactChatRequest(username), token);
+            return call.execute();
         });
+        try {
+            Response<ContactChatResponse> response = future.get();
+            if (response != null && response.isSuccessful()) {
+                return response.body();
+            } else {
+                throw new IOException("Request failed with code: " + response.code());
+            }
+        } catch (Exception e) {
+            throw new IOException("Error executing the request: " + e.getMessage());
+        } finally {
+            executor.shutdown();
+        }
     }
+
 
     public void getMessagesForContact(int contactId, final OnGetMessagesResponseListener listener) {
         Call<List<MessageResponse>> call = contactsWebServiceAPI.GetMessagesForContact(token, contactId);
@@ -133,15 +128,11 @@ public class ContactsAPI {
         contactsWebServiceAPI = retrofit.create(ContactsWebServiceAPI.class);
     }
 
-    public interface OnContactChatResponseListener {
-        void onResponse(ContactChatResponse contactChatResponse);
-
-        void onError(String error);
-    }
 
     public interface OnGetMessagesResponseListener {
         void onResponse(List<MessageResponse> messages);
 
         void onError(String error);
     }
+
 }

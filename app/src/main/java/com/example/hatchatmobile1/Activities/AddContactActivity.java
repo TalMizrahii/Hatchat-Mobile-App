@@ -26,24 +26,25 @@ public class AddContactActivity extends AppCompatActivity {
     // The binding object to get the components from the layout.
     private ActivityAddContactBinding binding;
 
+    private ContactViewModel contactViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // Get the username and token from the previous activity.
         Intent intent = getIntent();
         String mainUsername = intent.getStringExtra("username");
         String token = intent.getStringExtra("token");
-
         // Inflate the layout for this activity.
         binding = ActivityAddContactBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        ContactViewModel viewModel = new ContactViewModel(getApplicationContext(), mainUsername, token);
-
+        // Get the instance of the contactViewModal.
+        contactViewModel = ContactViewModel.getInstance(getApplicationContext(), mainUsername, token);
+        // Set the click listener for the submit button.
         binding.btnSubmit.setOnClickListener(view -> {
-            viewModel.addContact(binding.etContent.getText().toString());
+            contactViewModel.addContact(binding.etContent.getText().toString());
             // Finish the activity and go back to the contacts list.
             finish();
-         });
+        });
     }
 }
