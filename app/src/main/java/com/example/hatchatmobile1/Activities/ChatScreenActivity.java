@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
+import com.r0adkll.slidr.Slidr;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,7 +51,7 @@ public class ChatScreenActivity extends AppCompatActivity {
 
         binding = ActivityChatScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Slidr.attach(this);
         // Retrieve the contact username and the main user username from the intent.
         Intent intent = getIntent();
         contactUsername = intent.getStringExtra("username");
@@ -122,6 +122,7 @@ public class ChatScreenActivity extends AppCompatActivity {
         binding.settingsButton.setOnClickListener(v -> {
             // Settings button click logic
             Intent settingsIntent = new Intent(getApplicationContext(), SettingActivity.class);
+            settingsIntent.putExtra("logoutBtnViability", true);
             startActivity(settingsIntent);
         });
     }

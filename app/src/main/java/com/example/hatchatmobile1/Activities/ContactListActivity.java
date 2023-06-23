@@ -1,7 +1,10 @@
 package com.example.hatchatmobile1.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -12,6 +15,7 @@ import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.databinding.ActivityContactListBinding;
+import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,27 +34,33 @@ public class ContactListActivity extends AppCompatActivity {
     private String token;
     private List<Contact> contacts;
 
+    private String displayName;
+    private String profilePic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Slidr.attach(this);
         // Get the current connected user from the previous activity.
         Intent intent = getIntent();
         mainUsername = intent.getStringExtra("username");
         token = intent.getStringExtra("token");
-        token = "Bearer " + token;
-        String displayName = intent.getStringExtra("displayName");
-        String profilePic = intent.getStringExtra("profilePic");
-
-
-        // Inflate the layout using view binding.
+        displayName = intent.getStringExtra("displayName");
+        profilePic = trimString(intent.getStringExtra("profilePic"));
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        // Decode the image.
+        byte[] decodedBytes = Base64.decode(profilePic, Base64.DEFAULT);
+        Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        // Set it to the top screen bar.
+        binding.userImageInList.setImageBitmap(decodedBitmap);
+        // Inflate the layout using view binding.
+
         lvContacts = binding.ContactListView;
+        // Set the values about the user to the top screen bar.
         binding.usernameInList.setText(mainUsername);
         contactsViewModel = ContactViewModel.getInstance(getApplicationContext(), mainUsername, token);
-
         // Open AddContactActivity when the Add Contact button is clicked.
         binding.btnAddContact.setOnClickListener(view -> {
             Intent addContactIntent = new Intent(this, AddContactActivity.class);
@@ -83,7 +93,7 @@ public class ContactListActivity extends AppCompatActivity {
             // Open the chat screen when a contact is clicked.
             Intent chatScreenIntent = new Intent(getApplicationContext(), ChatScreenActivity.class);
             chatScreenIntent.putExtra("username", contacts.get(i).getUsername());
-            chatScreenIntent.putExtra("mainUsername",mainUsername);
+            chatScreenIntent.putExtra("mainUsername", mainUsername);
             chatScreenIntent.putExtra("token", token);
             chatScreenIntent.putExtra("contactId", contacts.get(i).getId());
             startActivity(chatScreenIntent);
@@ -92,7 +102,24 @@ public class ContactListActivity extends AppCompatActivity {
         binding.settingsButton.setOnClickListener(v -> {
             // Open the settings activity when the settings button is clicked.
             Intent settingsIntent = new Intent(getApplicationContext(), SettingActivity.class);
+            settingsIntent.putExtra("logoutBtnViability", true);
             startActivity(settingsIntent);
         });
+    }
+
+    /**
+     * Trimming a string for the profile picture.
+     *
+     * @param input The string to trim.
+     * @return The trimmed string.
+     */
+    public String trimString(String input) {
+        int startIndex = input.indexOf(',');
+        if (startIndex != -1) {
+            return input.substring(startIndex + 1);
+        } else {
+            // Return the input string as is if '/' is not found
+            return input;
+        }
     }
 }

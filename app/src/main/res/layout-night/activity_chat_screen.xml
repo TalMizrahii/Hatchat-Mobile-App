@@ -31,14 +31,24 @@
 
             <TextView
                 android:id="@+id/ContactInChatName"
-                android:layout_width="250dp"
-                android:layout_height="50dp"
+                android:layout_width="186dp"
+                android:layout_height="64dp"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
                 android:paddingStart="10dp"
                 android:text="@string/default_name"
                 android:textSize="20sp"
                 tools:ignore="RtlSymmetry" />
+
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/setting_icon"
+                android:contentDescription="@string/settings_icon"
+                android:src="@drawable/setting_icon" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
