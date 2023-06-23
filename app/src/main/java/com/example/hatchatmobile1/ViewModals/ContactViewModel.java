@@ -1,6 +1,7 @@
 package com.example.hatchatmobile1.ViewModals;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -31,6 +32,23 @@ public class ContactViewModel extends ViewModel {
         this.mainUsername = mainUsername;
         contactRepository = new ContactRepository(context, mainUsername, token);
         contactListData = new ContactListData();
+        getAllChatsFromServer();
+
+    }
+
+    public void getAllChatsFromServer(){
+        contactRepository.getAllChatsFromServer(new ContactRepository.OnGetAllChatsResponseListener() {
+            @Override
+            public void onResponse() {
+                List<Contact> contacts = contactRepository.getIndex();
+                contactListData.setValue(contacts);
+            }
+
+            @Override
+            public void onError(String error) {
+                // Handle error
+            }
+        });
     }
 
     /**

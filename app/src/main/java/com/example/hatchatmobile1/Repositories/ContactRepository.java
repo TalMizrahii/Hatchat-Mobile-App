@@ -1,6 +1,7 @@
 package com.example.hatchatmobile1.Repositories;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.room.Room;
@@ -70,7 +71,6 @@ public class ContactRepository {
                 contactsAPI.setBaseUrl(settings.getBaseUrl());
             }
         });
-        getAllChatsFromServer();
     }
 
     /**
@@ -94,7 +94,7 @@ public class ContactRepository {
     /**
      * Retrieves all chats from the server and inserts them into the local database.
      */
-    private void getAllChatsFromServer() {
+    public void getAllChatsFromServer(final OnGetAllChatsResponseListener listener) {
         contactsAPI.getAllChats(new ContactsAPI.OnGetAllChatsResponseListener() {
             @Override
             public void onResponse(List<AllChatResponse> chats) {
@@ -102,13 +102,28 @@ public class ContactRepository {
                 for (Contact contact : convertedChats) {
                     contactDao.insertContact(contact);
                 }
+
+                if (listener != null) {
+                    listener.onResponse();
+                }
             }
 
             @Override
             public void onError(String error) {
-                // Handle the error here
+                if (listener != null) {
+                    listener.onError(error);
+                }
             }
         });
+    }
+
+
+    /**
+     * Listener interface for getAllChatsFromServer method.
+     */
+    public interface OnGetAllChatsResponseListener {
+        void onResponse();
+        void onError(String error);
     }
 
     /**
