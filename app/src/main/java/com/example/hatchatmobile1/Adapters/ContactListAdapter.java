@@ -1,6 +1,9 @@
 package com.example.hatchatmobile1.Adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +71,12 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
         Contact contact = getItem(position);
 
         if (contact != null) {
-            // Set the data from the Contact object to the views
-            viewHolder.contactImage.setImageResource(contact.getProfilePic());
+            // Convert the base64 string to a bitmap
+            byte[] decodedBytes = Base64.decode(contact.getProfilePic(), Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+
+            // Set the bitmap to the ImageView
+            viewHolder.contactImage.setImageBitmap(decodedBitmap);
             viewHolder.username.setText(contact.getUsername());
             viewHolder.bio.setText(contact.getDisplayName());
         }

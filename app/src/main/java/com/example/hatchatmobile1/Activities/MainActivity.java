@@ -23,9 +23,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private LoginUserAPI loginUserAPI;
-
     private UsersAPI usersAPI;
-
     private SettingsViewModal settingsViewModal;
 
     @Override
@@ -55,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         binding.loginBtn.setOnClickListener(v -> {
             serverResponse(loginUserAPI);
         });
@@ -71,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(registerScreen);
         });
     }
+
 
     private void serverResponse(LoginUserAPI loginUserAPI) {
         String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
@@ -123,6 +121,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
 

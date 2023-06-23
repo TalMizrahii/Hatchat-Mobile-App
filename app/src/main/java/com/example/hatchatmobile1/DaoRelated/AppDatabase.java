@@ -7,7 +7,7 @@ import androidx.room.TypeConverters;
 /**
  * AppDatabase class for defining the database and its associated DAOs.
  */
-@Database(entities = {Contact.class, Settings.class}, version = 1, exportSchema = false)
+@Database(entities = {Contact.class, Settings.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     /**

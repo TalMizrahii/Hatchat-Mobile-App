@@ -26,34 +26,23 @@ public class AddContactActivity extends AppCompatActivity {
     // The binding object to get the components from the layout.
     private ActivityAddContactBinding binding;
 
+    private ContactViewModel contactViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // Get the username and token from the previous activity.
         Intent intent = getIntent();
         String mainUsername = intent.getStringExtra("username");
-
+        String token = intent.getStringExtra("token");
         // Inflate the layout for this activity.
         binding = ActivityAddContactBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        ContactViewModel viewModel = new ContactViewModel(getApplicationContext(), mainUsername);
-
-
+        // Get the instance of the contactViewModal.
+        contactViewModel = ContactViewModel.getInstance(getApplicationContext(), mainUsername, token);
+        // Set the click listener for the submit button.
         binding.btnSubmit.setOnClickListener(view -> {
-            // Delete!!!
-            List<Message> messages = new ArrayList<>();
-            Date date = new java.util.Date();
-            DateFormat dateFormat = DateFormat.getDateInstance();
-            String formattedDate = dateFormat.format(date);
-            messages.add(new Message("hi from contact!", formattedDate, binding.etContent.getText().toString()));
-            // End Delete!!!!
-            // Create a new contact from the user's input.
-            Contact contact = new Contact(binding.etContent.getText().toString(),
-                    "NewContact",
-                    R.drawable.haticon,
-                    mainUsername, messages);
-            viewModel.addContact(contact);
+            contactViewModel.addContact(binding.etContent.getText().toString());
             // Finish the activity and go back to the contacts list.
             finish();
         });

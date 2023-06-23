@@ -2,6 +2,7 @@ package com.example.hatchatmobile1.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import java.util.List;
 
 /**
  * Activity for displaying the list of contacts.
+ * This activity provides a user interface to view, add, and delete contacts.
  */
 public class ContactListActivity extends AppCompatActivity {
     private ActivityContactListBinding binding;
@@ -32,24 +34,28 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Get the current connected user from the previous activity.
         Intent intent = getIntent();
         mainUsername = intent.getStringExtra("username");
         token = intent.getStringExtra("token");
+        token = "Bearer " + token;
         String displayName = intent.getStringExtra("displayName");
         String profilePic = intent.getStringExtra("profilePic");
 
 
+        // Inflate the layout using view binding.
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         lvContacts = binding.ContactListView;
         binding.usernameInList.setText(mainUsername);
-        contactsViewModel = new ContactViewModel(getApplicationContext(), mainUsername);
+        contactsViewModel = ContactViewModel.getInstance(getApplicationContext(), mainUsername, token);
 
         // Open AddContactActivity when the Add Contact button is clicked.
         binding.btnAddContact.setOnClickListener(view -> {
             Intent addContactIntent = new Intent(this, AddContactActivity.class);
             addContactIntent.putExtra("username", mainUsername);
+            addContactIntent.putExtra("token", token);
             startActivity(addContactIntent);
         });
 
@@ -61,6 +67,7 @@ public class ContactListActivity extends AppCompatActivity {
 
         // Observe the contact list live data and update the list view when the data changes.
         contactsViewModel.getContactListLiveData().observe(this, contactList -> {
+            Log.d("CREATION", "onCreate: observe!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
             contacts.clear();
             contacts.addAll(contactList);
             contactAdapter.notifyDataSetChanged();
@@ -73,10 +80,19 @@ public class ContactListActivity extends AppCompatActivity {
         });
 
         lvContacts.setOnItemClickListener((adapterView, view, i, l) -> {
+            // Open the chat screen when a contact is clicked.
             Intent chatScreenIntent = new Intent(getApplicationContext(), ChatScreenActivity.class);
             chatScreenIntent.putExtra("username", contacts.get(i).getUsername());
             chatScreenIntent.putExtra("mainUsername",mainUsername);
+            chatScreenIntent.putExtra("token", token);
+            chatScreenIntent.putExtra("contactId", contacts.get(i).getId());
             startActivity(chatScreenIntent);
+        });
+
+        binding.settingsButton.setOnClickListener(v -> {
+            // Open the settings activity when the settings button is clicked.
+            Intent settingsIntent = new Intent(getApplicationContext(), SettingActivity.class);
+            startActivity(settingsIntent);
         });
     }
 }
