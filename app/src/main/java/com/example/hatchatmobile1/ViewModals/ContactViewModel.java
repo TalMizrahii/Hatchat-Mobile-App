@@ -45,7 +45,7 @@ public class ContactViewModel extends ViewModel {
 
             @Override
             public void onError(String error) {
-                // Handle error
+
             }
         });
     }

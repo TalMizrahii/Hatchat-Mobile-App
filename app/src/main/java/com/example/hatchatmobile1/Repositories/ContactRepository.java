@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.room.Room;
 
+import com.example.hatchatmobile1.Adapters.ToastUtils;
 import com.example.hatchatmobile1.DaoRelated.AppDatabase;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
@@ -102,7 +103,6 @@ public class ContactRepository {
                 for (Contact contact : convertedChats) {
                     contactDao.insertContact(contact);
                 }
-
                 if (listener != null) {
                     listener.onResponse();
                 }
@@ -123,6 +123,7 @@ public class ContactRepository {
      */
     public interface OnGetAllChatsResponseListener {
         void onResponse();
+
         void onError(String error);
     }
 
@@ -146,9 +147,7 @@ public class ContactRepository {
             contactDao.insertContact(contact);
         } catch (IOException e) {
             String error = e.getMessage();
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(context, error, duration);
-            toast.show();
+            ToastUtils.showShortToast(context, error);
         }
     }
 
@@ -173,9 +172,7 @@ public class ContactRepository {
 
             @Override
             public void onError(String error) {
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, error, duration);
-                toast.show();
+                ToastUtils.showShortToast(context, error);
             }
         });
         return messages;
@@ -197,10 +194,7 @@ public class ContactRepository {
 
             @Override
             public void onError(String error) {
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, error, duration);
-                toast.show();
-                listener.onError(error);
+                ToastUtils.showShortToast(context, error);
             }
         });
 
@@ -300,6 +294,7 @@ public class ContactRepository {
 
     /**
      * Trimming a string for the profile picture.
+     *
      * @param input The string to trim.
      * @return The trimmed string.
      */
