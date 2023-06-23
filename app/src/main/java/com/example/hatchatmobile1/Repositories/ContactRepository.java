@@ -122,7 +122,7 @@ public class ContactRepository {
             Contact contact = new Contact(
                     contactChatResponse.getUser().getUsername(),
                     contactChatResponse.getUser().getDisplayName(),
-                    contactChatResponse.getUser().getProfilePic(),
+                    trimString(contactChatResponse.getUser().getProfilePic()),
                     mainUsername,
                     "bio",
                     contactChatResponse.getId(),
@@ -261,7 +261,7 @@ public class ContactRepository {
             Contact contact = new Contact(
                     chat.getUser().getUsername(),
                     chat.getUser().getDisplayName(),
-                    chat.getUser().getProfilePic(),
+                    trimString(chat.getUser().getProfilePic()),
                     mainUsername,
                     "bio",
                     chat.getId(),
@@ -282,4 +282,20 @@ public class ContactRepository {
             contactDao.deleteContactByUsername(username);
         });
     }
+
+    /**
+     * Trimming a string for the profile picture.
+     * @param input The string to trim.
+     * @return The trimmed string.
+     */
+    public String trimString(String input) {
+        int startIndex = input.indexOf(',');
+        if (startIndex != -1) {
+            return input.substring(startIndex + 1);
+        } else {
+            // Return the input string as is if '/' is not found
+            return input;
+        }
+    }
+
 }
