@@ -40,6 +40,9 @@ public class ContactListActivity extends AppCompatActivity {
         mainUsername = intent.getStringExtra("username");
         token = intent.getStringExtra("token");
         token = "Bearer " + token;
+        String displayName = intent.getStringExtra("displayName");
+        String profilePic = intent.getStringExtra("profilePic");
+
 
         // Inflate the layout using view binding.
         binding = ActivityContactListBinding.inflate(getLayoutInflater());

@@ -11,20 +11,21 @@
         android:icon="@drawable/haticon"
         android:label="@string/app_name"
         android:roundIcon="@drawable/haticon"
-        android:supportsRtl="true"
-        android:forceDarkAllowed="true"
-        android:theme="@style/Theme.HatchatMobile1"
+        android:supportsRtl="false"
+        android:theme="@style/Base.Theme.HatchatMobile1"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".Activities.SettingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.HatchatMobile1"/>
         <activity
             android:name=".Activities.ChatScreenActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.RegisterScreenActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.HatchatMobile1"/>
         <activity
             android:name=".Activities.AddContactActivity"
             android:exported="false" />

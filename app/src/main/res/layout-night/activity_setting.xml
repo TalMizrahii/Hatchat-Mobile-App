@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
+    android:background="@drawable/dark_mode"
     tools:context=".Activities.SettingActivity">
 
     <ImageButton
@@ -13,7 +13,7 @@
         android:layout_height="40dp"
         android:layout_margin="16dp"
         android:layout_marginBottom="150dp"
-        android:background="#F9F9F9"
+        android:background="#77818D"
         android:contentDescription="@string/return_icon"
         android:src="@drawable/return_icon"
         app:layout_constraintBottom_toTopOf="@id/contentLayout"
@@ -57,6 +57,7 @@
                 android:text="@string/setting"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="#000000"
                 android:typeface="normal"
                 tools:ignore="LabelFor" />
 
@@ -119,19 +120,19 @@
                 android:id="@+id/UrlLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="335dp"
-                android:layout_height="0dp"
+                android:layout_height="58dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="@drawable/taxt_field_background_night">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/UrlText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autofillHints=""
-                    android:background="@drawable/text_fields_background"
-                    android:inputType="textPersonName"
-                    android:textColor="#000000" />
+                    android:background="@drawable/taxt_field_background_night"
+                    android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

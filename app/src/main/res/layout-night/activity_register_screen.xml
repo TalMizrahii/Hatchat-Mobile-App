@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/register_screen_background"
+    android:background="@drawable/dark_mode"
     tools:context=".Activities.RegisterScreenActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,6 +54,7 @@
                 android:includeFontPadding="true"
                 android:inputType="none"
                 android:text="@string/app_name"
+                android:textColor="#000000"
                 tools:ignore="LabelFor" />
 
         </LinearLayout>
@@ -81,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autofillHints=""
-                    android:background="@drawable/text_fields_background"
+                    android:background="@drawable/taxt_field_background_night"
                     android:hint="@string/full_name"
                     android:inputType="textPersonName"
                     android:textColor="#000000" />
@@ -111,7 +112,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:autofillHints=""
-                        android:background="@drawable/text_fields_background"
+                        android:background="@drawable/taxt_field_background_night"
                         android:hint="@string/passwordHint"
                         android:inputType="textPassword"
                         android:textColor="#000000" />
@@ -147,7 +148,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autofillHints=""
-                    android:background="@drawable/text_fields_background"
+                    android:background="@drawable/taxt_field_background_night"
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword"
                     android:textColor="#000000" />
@@ -169,7 +170,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autofillHints=""
-                    android:background="@drawable/text_fields_background"
+                    android:background="@drawable/taxt_field_background_night"
                     android:hint="@string/usernameHint"
                     android:inputType="textPersonName"
                     android:textColor="#000000" />
