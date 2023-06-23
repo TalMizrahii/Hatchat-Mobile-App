@@ -33,7 +33,6 @@ public class ContactViewModel extends ViewModel {
         contactRepository = new ContactRepository(context, mainUsername, token);
         contactListData = new ContactListData();
         getAllChatsFromServer();
-
     }
 
     public void getAllChatsFromServer(){
