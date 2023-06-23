@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.TooltipCompat;
 
 import com.example.hatchatmobile1.Adapters.ToastUtils;
-import com.example.hatchatmobile1.Entities.PostUserResponse;
+import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 import com.example.hatchatmobile1.ServerAPI.UsersAPI;
@@ -279,9 +279,9 @@ public class RegisterScreenActivity extends AppCompatActivity {
         }
         String displayName = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
 
-        usersAPI.postNewUser(username, password, displayName, profilePic, new ServerResponse<PostUserResponse, String>() {
+        usersAPI.postNewUser(username, password, displayName, profilePic, new ServerResponse<UsersResponse, String>() {
             @Override
-            public void onServerResponse(PostUserResponse userResponse) {
+            public void onServerResponse(UsersResponse userResponse) {
                 CharSequence text = "User created successfully : " + userResponse.getDisplayName();
                 ToastUtils.showShortToast(getApplicationContext(), text);
 

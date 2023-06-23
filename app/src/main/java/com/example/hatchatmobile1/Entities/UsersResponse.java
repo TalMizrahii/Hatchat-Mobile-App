@@ -1,6 +1,6 @@
 package com.example.hatchatmobile1.Entities;
 
-public class PostUserResponse {
+public class UsersResponse {
     private String username;
 
     private String displayName;

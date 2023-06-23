@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.hatchatmobile1.Entities.PostUserRequest;
-import com.example.hatchatmobile1.Entities.PostUserResponse;
+import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -46,15 +46,15 @@ public class UsersAPI {
         userWebServiceAPI = retrofit.create(UsersWebServiceAPI.class);
     }
 
-    public void postNewUser(String username, String password, String displayName, String profilePic, final ServerResponse<PostUserResponse, String> callback) {
+    public void postNewUser(String username, String password, String displayName, String profilePic, final ServerResponse<UsersResponse, String> callback) {
         PostUserRequest request = new PostUserRequest(username, password, displayName, profilePic);
-        Call<PostUserResponse> call = userWebServiceAPI.postNewUser(request);
-        call.enqueue(new Callback<PostUserResponse>() {
+        Call<UsersResponse> call = userWebServiceAPI.postNewUser(request);
+        call.enqueue(new Callback<UsersResponse>() {
             @Override
-            public void onResponse(@NonNull Call<PostUserResponse> call, @NonNull Response<PostUserResponse> response) {
+            public void onResponse(@NonNull Call<UsersResponse> call, @NonNull Response<UsersResponse> response) {
                 if (response.isSuccessful()) {
                     // Process the successful response
-                    PostUserResponse userResponse = response.body();
+                    UsersResponse userResponse = response.body();
                     callback.onServerResponse(userResponse);
                 } else {
                     // Handle unsuccessful response
@@ -63,7 +63,7 @@ public class UsersAPI {
             }
 
             @Override
-            public void onFailure(@NonNull Call<PostUserResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<UsersResponse> call, @NonNull Throwable t) {
                 // Handle failure
                 callback.onServerErrorResponse(t.getMessage());
             }
@@ -71,7 +71,28 @@ public class UsersAPI {
     }
 
 
+    public void getUserByUsername(String username, final ServerResponse<UsersResponse, String> callback) {
+        Call<UsersResponse> call = userWebServiceAPI.getUserByUsername(username);
+        call.enqueue(new Callback<UsersResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<UsersResponse> call, @NonNull Response<UsersResponse> response) {
+                if (response.isSuccessful()) {
+                    // Process the successful response
+                    UsersResponse userResponse = response.body();
+                    callback.onServerResponse(userResponse);
+                } else {
+                    // Handle unsuccessful response
+                    callback.onServerErrorResponse("Unauthorized!");
+                }
+            }
 
+            @Override
+            public void onFailure(@NonNull Call<UsersResponse> call, @NonNull Throwable t) {
+                // Handle failure
+                callback.onServerErrorResponse(t.getMessage());
+            }
+        });
+    }
 
 
 }
