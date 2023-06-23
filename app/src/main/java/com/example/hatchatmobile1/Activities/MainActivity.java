@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             public void onServerResponse(String token) {
                 if (token != null && !token.isEmpty()) {
 
+                    token = "Bearer " + token;
 
                     // Call getUserByUsername API
                     getUserByUsername(username, token);

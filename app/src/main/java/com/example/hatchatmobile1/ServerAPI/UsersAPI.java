@@ -72,7 +72,7 @@ public class UsersAPI {
 
 
     public void getUserByUsername(String username, String token, final ServerResponse<UsersResponse, String> callback) {
-        token = "Bearer " + token;
+
         Call<UsersResponse> call = userWebServiceAPI.getUserByUsername(token, username);
         call.enqueue(new Callback<UsersResponse>() {
             @Override
