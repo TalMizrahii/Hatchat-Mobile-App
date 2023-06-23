@@ -1,20 +1,23 @@
 package com.example.hatchatmobile1.Activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.hatchatmobile1.Adapters.ToastUtils;
 import com.example.hatchatmobile1.DaoRelated.Settings;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivitySettingBinding;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.r0adkll.slidr.Slidr;
 
 public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
@@ -23,13 +26,20 @@ public class SettingActivity extends AppCompatActivity {
     private TextInputEditText urlText;
     private SettingsViewModal settingsViewModal;
 
+    private Button logoutBtn;
+
+    Boolean logoutBtnVisible;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        darkMode();
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        logoutBtnVisible = getIntent().getExtras().getBoolean("logoutBtnViability");
+
+        Slidr.attach(this);
+
 
         settingsViewModal = new SettingsViewModal(getApplicationContext());
 
@@ -45,31 +55,42 @@ public class SettingActivity extends AppCompatActivity {
 
             }
         });
-        if (!settingsViewModal.getSettings().isDayMode()){
+        if (!settingsViewModal.getSettings().isDayMode()) {
             binding.darkModeSwitch.setChecked(true);
             darkMode();
         }
 
-       binding.darkModeSwitch.setOnClickListener(v -> {
-           if (binding.darkModeSwitch.isChecked()){
-               settingsViewModal.setSettings(new Settings(0, settingsViewModal.getSettings().getBaseUrl(), false));
-           }else {
-               settingsViewModal.setSettings(new Settings(0, settingsViewModal.getSettings().getBaseUrl(), true));
+        binding.darkModeSwitch.setOnClickListener(v -> {
+            if (binding.darkModeSwitch.isChecked()) {
+                settingsViewModal.setSettings(new Settings(0, settingsViewModal.getSettings().getBaseUrl(), false));
+            } else {
+                settingsViewModal.setSettings(new Settings(0, settingsViewModal.getSettings().getBaseUrl(), true));
 
-           }
-           darkMode();
-       });
+            }
+            darkMode();
+        });
 
         binding.returnButton.setOnClickListener(v -> finish());
         urlLayout = binding.UrlLayout;
         urlText = binding.UrlText;
 
 
-        urlText.setHint("The current URL: " + settingsViewModal.getSettings().getBaseUrl());
+        urlText.setHint("Current URL: " + settingsViewModal.getSettings().getBaseUrl());
 
         binding.IPSwitch.setOnClickListener(v -> validateIP());
 
+        logoutBtn = binding.logoutButton;
 
+        if (this.logoutBtnVisible){
+            logoutBtn.setVisibility(View.VISIBLE);
+        }else {
+            logoutBtn.setVisibility(View.GONE);
+        }
+
+        logoutBtn.setOnClickListener(v ->{
+            Intent settingsIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(settingsIntent);
+        });
     }
 
 
@@ -93,12 +114,11 @@ public class SettingActivity extends AppCompatActivity {
             // Reset switch button and clear text field
             binding.IPSwitch.setChecked(false);
             urlText.getText().clear();
-            urlText.setHint("The current URL: " + settingsViewModal.getSettings().getBaseUrl());
+            urlText.setHint("Current URL: " + settingsViewModal.getSettings().getBaseUrl());
 
             CharSequence text = "The URL has changed to: " + settingsViewModal.getSettings().getBaseUrl();
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-            toast.show();
+            ToastUtils.showShortToast(getApplicationContext(), text);
+
         } else {
             // Invalid URL, show error
             urlText.setError("Invalid URL");
@@ -108,30 +128,20 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void darkMode() {
-            if (settingsViewModal.getSettings().isDayMode()) {
-                CharSequence text = "Dark Mode Off!";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-                toast.show();
+        if (settingsViewModal.getSettings().isDayMode()) {
+            CharSequence text = "Dark Mode Off!";
+            ToastUtils.showShortToast(getApplicationContext(), text);
 
-                // Dark mode is disabled
+            // Dark mode is disabled
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
 
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            CharSequence text = "Dark Mode On!";
+            ToastUtils.showShortToast(getApplicationContext(), text);
 
-
-
-
-            } else {
-
-                CharSequence text = "Dark Mode On!";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-                toast.show();
-                // Dark mode is enabled
-
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
-            }
+            // Dark mode is enabled
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
     }
 }
 

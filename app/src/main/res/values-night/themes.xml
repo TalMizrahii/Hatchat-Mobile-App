@@ -1,8 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.HatchatMobile1" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:windowBackground">@drawable/register_screen_background</item>
+        <item name="android:windowBackground">@drawable/dark_mode</item>
 
+    </style>
+
+    <style name="Base.Theme.HatchatMobile1.SlidrActivityTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
 

@@ -17,18 +17,37 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.TooltipCompat;
 
+import com.example.hatchatmobile1.Adapters.ToastUtils;
+import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.R;
+import com.example.hatchatmobile1.ServerAPI.ServerResponse;
+import com.example.hatchatmobile1.ServerAPI.UsersAPI;
+import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivityRegisterScreenBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.r0adkll.slidr.Slidr;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
+import java.util.Objects;
 
 public class RegisterScreenActivity extends AppCompatActivity {
     private ActivityRegisterScreenBinding binding;
     private TextInputEditText passwordInputText;
     private TextInputLayout passwordInputLayout;
+
+    private TextInputLayout confirmPasswordInputLayout;
+
+    private TextInputEditText confirmPasswordInputText;
+
+    private SettingsViewModal settingsViewModal;
+    private Bitmap userImage;
+
+    private boolean hasSelectedImage = false;
+
     private static final int REQUEST_IMAGE_GALLERY = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 2;
     private float rotationAngle = 0.0f;
@@ -41,10 +60,19 @@ public class RegisterScreenActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        Slidr.attach(this);
+
         passwordInputText = binding.passwordInputText;
         passwordInputLayout = binding.passwordInputLayout;
+
+        confirmPasswordInputText = binding.confirmPasswordInputText;
+        confirmPasswordInputLayout = binding.confirmPasswordInputLayout;
+
+
         ImageButton rotateLeftButton = binding.rotateLeftButton;
         ImageButton rotateRightButton = binding.rotateRightButton;
+
+
         ImageView uploadImage = binding.uploadImage;
 
         uploadImage.setOnClickListener(v -> openImageSelectionOptions());
@@ -54,6 +82,9 @@ public class RegisterScreenActivity extends AppCompatActivity {
 
         // Add click listener to show password requirements dialog
         binding.passwordRequirementsButton.setOnClickListener(v -> showPasswordRequirementsDialog());
+
+        settingsViewModal = new SettingsViewModal(getApplicationContext());
+
 
         // Add text change listener to the password input field
         passwordInputText.addTextChangedListener(new TextWatcher() {
@@ -72,8 +103,46 @@ public class RegisterScreenActivity extends AppCompatActivity {
             }
         });
 
+        confirmPasswordInputText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not needed in this case
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                confirmPasswordMatch(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         rotateLeftButton.setOnClickListener(v -> rotateImage(-90));
         rotateRightButton.setOnClickListener(v -> rotateImage(90));
+
+        UsersAPI usersAPI = new UsersAPI(getApplicationContext());
+
+
+        binding.loginBtn.setOnClickListener(v -> {
+            if (validFields()) {
+                serverResponse(usersAPI);
+            } else {
+                CharSequence text = "Please fill all the fields";
+                ToastUtils.showShortToast(getApplicationContext(), text);
+
+            }
+        });
+
+
+        binding.settingsButton.setOnClickListener(v -> {
+            // Settings button click logic
+            Intent settingsIntent = new Intent(RegisterScreenActivity.this, SettingActivity.class);
+            settingsIntent.putExtra("logoutBtnViability", false);
+            startActivity(settingsIntent);
+        });
+
     }
 
     private void showPasswordRequirementsDialog() {
@@ -98,7 +167,6 @@ public class RegisterScreenActivity extends AppCompatActivity {
             passwordInputText.setError("Password requirements not met!     Click me to see the password.");
             passwordInputLayout.setEndIconCheckable(false);
             passwordInputLayout.setEndIconDrawable(null);
-//            passwordInputLayout.setEndIconTintList(null);
         }
     }
 
@@ -147,19 +215,19 @@ public class RegisterScreenActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        hasSelectedImage = true;
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                uploadedImage = imageBitmap;
-                binding.uploadImage.setImageBitmap(imageBitmap);
+                userImage = (Bitmap) extras.get("data");
+                uploadedImage = userImage;
+                binding.uploadImage.setImageBitmap(userImage);
             } else if (requestCode == REQUEST_IMAGE_GALLERY) {
                 Uri selectedImageUri = data.getData();
                 try {
-                    Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    uploadedImage = imageBitmap;
-                    binding.uploadImage.setImageBitmap(imageBitmap);
+                    userImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                    uploadedImage = userImage;
+                    binding.uploadImage.setImageBitmap(userImage);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -175,5 +243,59 @@ public class RegisterScreenActivity extends AppCompatActivity {
             Bitmap rotatedBitmap = Bitmap.createBitmap(uploadedImage, 0, 0, uploadedImage.getWidth(), uploadedImage.getHeight(), matrix, true);
             binding.uploadImage.setImageBitmap(rotatedBitmap);
         }
+    }
+
+    private void confirmPasswordMatch(String confirmPassword) {
+        if (Objects.equals(confirmPassword, Objects.requireNonNull(passwordInputText.getText()).toString())) {
+            confirmPasswordInputLayout.setErrorEnabled(false);
+            confirmPasswordInputText.setError(null);
+            confirmPasswordInputLayout.setEndIconCheckable(true);
+            confirmPasswordInputLayout.setEndIconDrawable(R.drawable.ic_checkmark);
+            confirmPasswordInputLayout.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+        } else {
+            confirmPasswordInputText.setError("Password does not match!");
+            confirmPasswordInputLayout.setEndIconCheckable(false);
+            confirmPasswordInputLayout.setEndIconDrawable(null);
+//            passwordInputLayout.setEndIconTintList(null);
+        }
+    }
+
+    private boolean validFields() {
+        return !Objects.requireNonNull(passwordInputText.getText()).toString().equals("")
+                && !Objects.requireNonNull(binding.usernameInputText.getText()).toString().equals("")
+                && !Objects.requireNonNull(confirmPasswordInputText.getText()).toString().equals("")
+                && !Objects.requireNonNull(binding.fullnameInputText.getText()).toString().equals("");
+    }
+
+    private void serverResponse(UsersAPI usersAPI) {
+        String username = Objects.requireNonNull(binding.fullnameInputText.getText()).toString();
+        String password = Objects.requireNonNull(binding.passwordInputText.getText()).toString();
+        String profilePic = "";
+        if (hasSelectedImage) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            this.uploadedImage.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            profilePic = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(byteArray);
+        }
+        String displayName = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
+
+        usersAPI.postNewUser(username, password, displayName, profilePic, new ServerResponse<UsersResponse, String>() {
+            @Override
+            public void onServerResponse(UsersResponse userResponse) {
+                CharSequence text = "User created successfully : " + userResponse.getDisplayName();
+                ToastUtils.showShortToast(getApplicationContext(), text);
+
+                // User created, finish this activity and return to the previous activity
+                finish();
+
+            }
+
+            @Override
+            public void onServerErrorResponse(String error) {
+                // User creation error, show toast message
+                ToastUtils.showShortToast(getApplicationContext(), error);
+
+            }
+        });
     }
 }

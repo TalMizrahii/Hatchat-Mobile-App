@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginUserAPI {
     private Retrofit retrofit;
-    private UserWebServiceAPI userWebServiceAPI;
+    private TokenWebServiceAPI userWebServiceAPI;
     private String baseUrl;
     private Gson gson;
     private SettingsViewModal settingsViewModal;
@@ -38,10 +38,10 @@ public class LoginUserAPI {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        userWebServiceAPI = retrofit.create(UserWebServiceAPI.class);
+        userWebServiceAPI = retrofit.create(TokenWebServiceAPI.class);
     }
 
-    public void getToken(String username, String password, final TokenCallback callback) {
+    public void getToken(String username, String password, final ServerResponse<String, String> callback) {
         LoginRequest request = new LoginRequest(username, password);
 
         Call<String> call = userWebServiceAPI.getToken(request);
@@ -52,24 +52,25 @@ public class LoginUserAPI {
                     String token = response.body();
                     if (token != null) {
                         // Token retrieval successful
-                        callback.onTokenReceived(token);
+                        callback.onServerResponse(token);
                     } else {
                         // Handle null response
-                        callback.onTokenError("Null response");
+                        callback.onServerErrorResponse("Null response");
                     }
                 } else {
                     // Handle unsuccessful response
-                    callback.onTokenError("Invalid username/password");
+                    callback.onServerErrorResponse("Invalid username/password");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 // Handle failure
-                callback.onTokenError(t.getMessage());
+                callback.onServerErrorResponse(t.getMessage());
             }
         });
     }
+
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -77,13 +78,9 @@ public class LoginUserAPI {
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        userWebServiceAPI = retrofit.create(UserWebServiceAPI.class);
+        userWebServiceAPI = retrofit.create(TokenWebServiceAPI.class);
 
     }
 
-    public interface TokenCallback {
-        void onTokenReceived(String token);
 
-        void onTokenError(String error);
-    }
 }

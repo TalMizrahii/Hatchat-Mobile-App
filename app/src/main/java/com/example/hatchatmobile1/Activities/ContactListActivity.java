@@ -36,6 +36,8 @@ public class ContactListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mainUsername = intent.getStringExtra("username");
         token = intent.getStringExtra("token");
+        String displayName = intent.getStringExtra("displayName");
+        String profilePic = intent.getStringExtra("profilePic");
 
 
         binding = ActivityContactListBinding.inflate(getLayoutInflater());
