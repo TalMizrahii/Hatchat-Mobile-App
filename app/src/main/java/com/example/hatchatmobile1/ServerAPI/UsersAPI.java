@@ -71,8 +71,8 @@ public class UsersAPI {
     }
 
 
-    public void getUserByUsername(String username, final ServerResponse<UsersResponse, String> callback) {
-        Call<UsersResponse> call = userWebServiceAPI.getUserByUsername(username);
+    public void getUserByUsername(String username, String token, final ServerResponse<UsersResponse, String> callback) {
+        Call<UsersResponse> call = userWebServiceAPI.getUserByUsername(token, username);
         call.enqueue(new Callback<UsersResponse>() {
             @Override
             public void onResponse(@NonNull Call<UsersResponse> call, @NonNull Response<UsersResponse> response) {
@@ -93,6 +93,7 @@ public class UsersAPI {
             }
         });
     }
+
 
 
 }

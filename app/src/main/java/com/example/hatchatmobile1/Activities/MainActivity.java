@@ -8,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.hatchatmobile1.Adapters.ToastUtils;
+import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.ServerAPI.LoginUserAPI;
 import com.example.hatchatmobile1.ServerAPI.ServerResponse;
+import com.example.hatchatmobile1.ServerAPI.UsersAPI;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivityMainBinding;
 
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private LoginUserAPI loginUserAPI;
 
+    private UsersAPI usersAPI;
+
     private SettingsViewModal settingsViewModal;
 
     @Override
@@ -32,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view);
 
         loginUserAPI = new LoginUserAPI(getApplicationContext());
+
+        usersAPI = new UsersAPI(getApplicationContext());
 
         settingsViewModal = new SettingsViewModal(getApplicationContext());
 
@@ -74,13 +80,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onServerResponse(String token) {
                 if (token != null && !token.isEmpty()) {
-                    CharSequence text = "Welcome back " + username + "!";
-                    ToastUtils.showShortToast(getApplicationContext(), text);
-                    // Valid token, start ContactListActivity
-                    Intent contactListIntent = new Intent(MainActivity.this, ContactListActivity.class);
-                    contactListIntent.putExtra("username", username);
-                    contactListIntent.putExtra("token", token);
-                    startActivity(contactListIntent);
+
+
+                    // Call getUserByUsername API
+                    getUserByUsername(username, token);
+
                 } else {
                     // Token is null or empty, show toast message
                     CharSequence text = "Invalid token";
@@ -92,10 +96,31 @@ public class MainActivity extends AppCompatActivity {
             public void onServerErrorResponse(String error) {
                 // Token retrieval error, show toast message
                 ToastUtils.showShortToast(getApplicationContext(), error);
-
             }
         });
+    }
 
+
+    private void getUserByUsername(String username, String token) {
+        usersAPI.getUserByUsername(username, token, new ServerResponse<UsersResponse, String>() {
+            @Override
+            public void onServerResponse(UsersResponse userResponse) {
+                CharSequence text = "Welcome back " + username + "!";
+                ToastUtils.showShortToast(getApplicationContext(), text);
+                Intent contactListIntent = new Intent(MainActivity.this, ContactListActivity.class);
+                contactListIntent.putExtra("username", userResponse.getUsername());
+                contactListIntent.putExtra("displayName", userResponse.getDisplayName());
+                contactListIntent.putExtra("profilePic", userResponse.getProfilePic());
+                contactListIntent.putExtra("token", token);
+                startActivity(contactListIntent);
+            }
+
+            @Override
+            public void onServerErrorResponse(String error) {
+                // Handle the error while retrieving user data
+                ToastUtils.showShortToast(getApplicationContext(), error);
+            }
+        });
     }
 
 }
