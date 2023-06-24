@@ -25,7 +25,7 @@ public class LoginUserAPI {
 
     public LoginUserAPI(@NonNull Context context) {
 
-        this.settingsViewModal = new SettingsViewModal(context);
+        this.settingsViewModal = SettingsViewModal.getInstance(context);
 
         baseUrl = settingsViewModal.getSettings().getBaseUrl();
 

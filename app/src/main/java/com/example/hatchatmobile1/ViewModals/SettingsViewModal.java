@@ -9,18 +9,35 @@ import com.example.hatchatmobile1.Repositories.SettingsRepository;
 
 public class SettingsViewModal {
 
+    private static SettingsViewModal instance;
     private SettingsRepository settingsRepository;
-
     private LiveData<Settings> settingsLiveData;
 
     /**
-     * A constructor for the class.
+     * Private constructor to prevent direct instantiation.
      *
      * @param context The context of the app.
      */
-    public SettingsViewModal(Context context) {
+    private SettingsViewModal(Context context) {
         settingsRepository = new SettingsRepository(context);
         settingsLiveData = settingsRepository.getSettingsLiveData();
+    }
+
+    /**
+     * Retrieves the singleton instance of SettingsViewModal.
+     *
+     * @param context The context of the app.
+     * @return The singleton instance of SettingsViewModal.
+     */
+    public static SettingsViewModal getInstance(Context context) {
+        if (instance == null) {
+            synchronized (SettingsViewModal.class) {
+                if (instance == null) {
+                    instance = new SettingsViewModal(context.getApplicationContext());
+                }
+            }
+        }
+        return instance;
     }
 
     /**

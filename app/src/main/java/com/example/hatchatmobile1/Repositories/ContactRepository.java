@@ -57,7 +57,7 @@ public class ContactRepository {
      * @param token        The authentication token.
      */
     public ContactRepository(Context context, String mainUsername, String token) {
-        this.settingsViewModal = new SettingsViewModal(context);
+        this.settingsViewModal = SettingsViewModal.getInstance(context);
         this.context = context;
         this.mainUsername = mainUsername;
         this.token = token;
@@ -65,7 +65,7 @@ public class ContactRepository {
                 .allowMainThreadQueries()
                 .build();
         contactDao = appDatabase.getContactDao();
-        SettingsViewModal settingsViewModal = new SettingsViewModal(context);
+        SettingsViewModal settingsViewModal = SettingsViewModal.getInstance(context);
         contactsAPI = new ContactsAPI(settingsViewModal.getSettings().getBaseUrl(), token);
         settingsViewModal.getSettingsLiveData().observeForever(settings -> {
             if (settings != null) {

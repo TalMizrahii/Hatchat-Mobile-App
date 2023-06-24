@@ -30,7 +30,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
     private int resourceId;
 
     // Set the desired diameter for circular images
-    private int desiredDiameter = 225;
+    private int desiredDiameter = 180;
 
     /**
      * Constructor for ContactListAdapter.

@@ -41,7 +41,7 @@ public class SettingActivity extends AppCompatActivity {
         Slidr.attach(this);
 
 
-        settingsViewModal = new SettingsViewModal(getApplicationContext());
+        settingsViewModal = SettingsViewModal.getInstance(getApplicationContext());
 
         settingsViewModal.getSettingsLiveData().observe(this, settings -> {
             if (settings.isDayMode()) {

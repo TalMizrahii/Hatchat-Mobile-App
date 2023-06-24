@@ -25,7 +25,7 @@ public class UsersAPI {
     private SettingsViewModal settingsViewModal;
 
     public UsersAPI(@NonNull Context context) {
-        this.settingsViewModal = new SettingsViewModal(context);
+        this.settingsViewModal = SettingsViewModal.getInstance(context);
         baseUrl = settingsViewModal.getSettings().getBaseUrl();
         gson = new GsonBuilder().setLenient().create();
 
