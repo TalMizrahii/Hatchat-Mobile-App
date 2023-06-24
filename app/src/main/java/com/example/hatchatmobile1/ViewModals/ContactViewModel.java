@@ -103,8 +103,9 @@ public class ContactViewModel extends ViewModel {
         }
     }
 
-    public void getAllMessagesFromChatId(int chatId) {
-
+    public void getAllMessagesFromChatId(Contact contact, int chatId) {
+        contactRepository.fetchAllMessages(contact, chatId);
+        reload();
     }
 
 

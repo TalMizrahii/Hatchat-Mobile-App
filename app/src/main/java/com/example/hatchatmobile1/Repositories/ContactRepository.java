@@ -14,6 +14,7 @@ import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.Entities.AllChatResponse;
 import com.example.hatchatmobile1.Entities.AllMessagesResponse;
 import com.example.hatchatmobile1.Entities.ContactChatResponse;
+import com.example.hatchatmobile1.Entities.MessageForFullChat;
 import com.example.hatchatmobile1.Entities.MessageRequest;
 import com.example.hatchatmobile1.Entities.MessageResponse;
 import com.example.hatchatmobile1.ServerAPI.ContactsAPI;
@@ -251,24 +252,45 @@ public class ContactRepository {
         });
     }
 
-    public void fetchAllMessages(int chatId) {
+    public void fetchAllMessages(Contact contact, int chatId) {
         contactsAPI.GetAllMessagesById(chatId, new ServerResponse<AllMessagesResponse, String>() {
             @Override
             public void onServerResponse(AllMessagesResponse response) {
-                convertAllMessages(response);
+                List<Message> messages = convertAllMessages(response);
+                contact.getMessages().clear();
+                contact.getMessages().addAll(messages);
+                contactDao.insertContact(contact);
             }
 
             @Override
             public void onServerErrorResponse(String error) {
-
+                ToastUtils.showShortToast(context, error);
             }
         });
     }
 
+    /**
+     * Converts a list of MessageForFullChat objects to a list of Message objects.
+     *
+     * @param messageResponse The AllMessagesResponse containing the list of MessageForFullChat objects.
+     * @return The converted list of Message objects.
+     */
+    public List<Message> convertAllMessages(AllMessagesResponse messageResponse) {
+        List<Message> convertedMessages = new ArrayList<>();
 
-    public List<Message> convertAllMessages(AllMessagesResponse messageResponse){
+        for (MessageForFullChat message : messageResponse.getMessages()) {
+            String content = message.getContent();
+            String timeAndDate = message.getCreated();
+            String sender = message.getSender().getUsername();
+            // Create a new Message object with the extracted information
+            Message convertedMessage = new Message(content, timeAndDate, sender);
+            // Add the converted Message object to the list.
+            convertedMessages.add(convertedMessage);
+        }
 
+        return convertedMessages;
     }
+
 
     /**
      * Deletes a contact from the database.

@@ -129,6 +129,9 @@ public class ChatScreenActivity extends AppCompatActivity {
             settingsIntent.putExtra("logoutBtnViability", true);
             startActivity(settingsIntent);
         });
+
+        // Reload all messages from the server.
+        viewModel.getAllMessagesFromChatId(contact, contactId);
     }
 
     /**
@@ -140,7 +143,7 @@ public class ChatScreenActivity extends AppCompatActivity {
         Date date = new java.util.Date();
         DateFormat dateFormat = DateFormat.getDateInstance();
         String formattedDate = dateFormat.format(date);
-        Message message= new Message(textMessage, formattedDate, mainUsername);
+        Message message = new Message(textMessage, formattedDate, mainUsername);
         contact.getMessages().add(message);
         viewModel.reEnterContactMessageAdd(message, contact);
     }
