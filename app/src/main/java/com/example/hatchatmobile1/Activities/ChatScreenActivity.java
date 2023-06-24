@@ -14,6 +14,7 @@ import android.util.Base64;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,7 @@ import com.r0adkll.slidr.Slidr;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This activity represents the chat screen where users can exchange messages with a contact.
@@ -47,6 +49,8 @@ public class ChatScreenActivity extends AppCompatActivity {
     private int desiredDiameter = 250;
 
     private String token;
+
+    private RecyclerView recyclerView;
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
@@ -69,13 +73,20 @@ public class ChatScreenActivity extends AppCompatActivity {
         messages = viewModel.getMessagesForContact(contact);
 
         // Set up the RecyclerView for displaying the messages.
-        RecyclerView recyclerView = binding.ChatMessagesRV;
+        recyclerView = binding.ChatMessagesRV;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         messageAdapter = new MessageAdapter(messages, contactUsername);
         recyclerView.setAdapter(messageAdapter);
 
+        // Set the scroll position to the bottom.
+        recyclerView.scrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1);
+        // Set the scroll listener to keep the scroll position at the bottom.
+
+
+
+
+
         EditText messageInputBar = binding.messageInputBar;
-//        Button sendButton = binding.sendBtn;
 
         // Set the contact's username as the title of the chat screen.
         binding.ContactInChatName.setText(contactUsername);
@@ -122,6 +133,7 @@ public class ChatScreenActivity extends AppCompatActivity {
                     break;
                 }
             }
+            recyclerView.scrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1);
         });
 
         binding.settingsButton.setOnClickListener(v -> {
@@ -130,6 +142,9 @@ public class ChatScreenActivity extends AppCompatActivity {
             settingsIntent.putExtra("logoutBtnViability", true);
             startActivity(settingsIntent);
         });
+
+        // Reload all messages from the server.
+        viewModel.getAllMessagesFromChatId(contact, contactId);
     }
 
     /**
@@ -141,8 +156,24 @@ public class ChatScreenActivity extends AppCompatActivity {
         Date date = new java.util.Date();
         DateFormat dateFormat = DateFormat.getDateInstance();
         String formattedDate = dateFormat.format(date);
-        contact.getMessages().add(new Message(textMessage, formattedDate, mainUsername));
-        viewModel.reEnterContactMessageAdd(contact);
+        Message message = new Message(textMessage, formattedDate, mainUsername);
+        contact.getMessages().add(message);
+        contact.setBio(trimBio(textMessage));
+        viewModel.reEnterContactMessageAdd(message, contact);
+    }
+
+    /**
+     * Trims the given text message to a maximum of 11 characters followed by three dots (...),
+     * if the length of the text message is greater than 11.
+     *
+     * @param textMessage The text message to be trimmed.
+     * @return The trimmed text message.
+     */
+    private String trimBio(String textMessage) {
+        if (textMessage.length() > 11) {
+            textMessage = textMessage.substring(textMessage.length() - 11) + "...";
+        }
+        return textMessage;
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

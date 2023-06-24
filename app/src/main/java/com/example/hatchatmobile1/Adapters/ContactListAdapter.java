@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
     private int resourceId;
 
     // Set the desired diameter for circular images
-    private int desiredDiameter = 225;
+    private int desiredDiameter = 180;
 
     /**
      * Constructor for ContactListAdapter.
@@ -86,11 +87,21 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
             // Set the bitmap to the ImageView
             viewHolder.contactImage.setImageBitmap(circularBitmap);
             viewHolder.username.setText(contact.getUsername());
-            viewHolder.bio.setText(contact.getDisplayName());
+
+            // Set the bio text
+            viewHolder.bio.setText(contact.getBio());
+
+            // Hide the bio TextView if the bio is empty or null
+            if (TextUtils.isEmpty(contact.getBio())) {
+                viewHolder.bio.setVisibility(View.GONE);
+            } else {
+                viewHolder.bio.setVisibility(View.VISIBLE);
+            }
         }
 
         return view;
     }
+
 
     /**
      * ViewHolder class for holding references to the views of each item in the list.
@@ -101,6 +112,12 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
         TextView bio;
     }
 
+    /**
+     * Converting an image to be rounded in and in to a fixed size.
+     *
+     * @param bitmap The image's bitmap.
+     * @return The image rounded.
+     */
     private Bitmap getCircleBitmap(Bitmap bitmap) {
         int diameter = desiredDiameter;
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, diameter, diameter, false);

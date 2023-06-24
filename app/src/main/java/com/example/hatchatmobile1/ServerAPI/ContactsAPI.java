@@ -4,9 +4,12 @@ package com.example.hatchatmobile1.ServerAPI;
 import androidx.annotation.NonNull;
 
 import com.example.hatchatmobile1.Entities.AllChatResponse;
+import com.example.hatchatmobile1.Entities.AllMessagesResponse;
 import com.example.hatchatmobile1.Entities.ContactChatResponse;
+import com.example.hatchatmobile1.Entities.MessageRequest;
 import com.example.hatchatmobile1.Entities.MessageResponse;
 import com.example.hatchatmobile1.Entities.NewContactChatRequest;
+import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -109,6 +112,39 @@ public class ContactsAPI {
             @Override
             public void onFailure(@NonNull Call<List<AllChatResponse>> call, @NonNull Throwable t) {
                 listener.onError(t.getMessage());
+            }
+        });
+    }
+
+
+    public void AddMessage(MessageRequest messageRequest, int chatId, final ServerResponse<MessageResponse, String> callback) {
+        Call<MessageResponse> call = contactsWebServiceAPI.AddNewMessageToChat(token, chatId, messageRequest);
+        call.enqueue(new Callback<MessageResponse>() {
+            @Override
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+                MessageResponse messageResponse = response.body();
+                callback.onServerResponse(messageResponse);
+            }
+
+            @Override
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
+                callback.onServerErrorResponse(t.getMessage());
+            }
+        });
+    }
+
+    public void GetAllMessagesById(int chatId, final ServerResponse<AllMessagesResponse, String> callback) {
+        Call<AllMessagesResponse> call = contactsWebServiceAPI.GetAllMessagesById(token, chatId);
+        call.enqueue(new Callback<AllMessagesResponse>() {
+            @Override
+            public void onResponse(Call<AllMessagesResponse> call, Response<AllMessagesResponse> response) {
+                AllMessagesResponse messages = response.body();
+                callback.onServerResponse(messages);
+            }
+
+            @Override
+            public void onFailure(Call<AllMessagesResponse> call, Throwable t) {
+                callback.onServerErrorResponse(t.getMessage());
             }
         });
     }

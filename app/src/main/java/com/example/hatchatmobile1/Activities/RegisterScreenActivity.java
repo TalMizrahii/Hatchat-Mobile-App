@@ -83,7 +83,8 @@ public class RegisterScreenActivity extends AppCompatActivity {
         // Add click listener to show password requirements dialog
         binding.passwordRequirementsButton.setOnClickListener(v -> showPasswordRequirementsDialog());
 
-        settingsViewModal = new SettingsViewModal(getApplicationContext());
+        settingsViewModal = SettingsViewModal.getInstance(getApplicationContext());
+        ;
 
 
         // Add text change listener to the password input field

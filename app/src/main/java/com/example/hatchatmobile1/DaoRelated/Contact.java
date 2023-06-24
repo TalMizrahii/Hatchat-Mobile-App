@@ -46,24 +46,6 @@ public class Contact {
     }
 
     /**
-     * Constructor for creating a Contact object with a default bio value.
-     *
-     * @param username    The username of the contact.
-     * @param displayName The display name of the contact.
-     * @param profilePic  The profile picture resource ID of the contact.
-     * @param mainUser    The username of the main user.
-     * @param messages    The list of messages associated with the contact.
-     */
-//    public Contact(@NonNull String username, String displayName, String profilePic, String mainUser, List<Message> messages) {
-//        this.username = username;
-//        this.displayName = displayName;
-//        this.profilePic = profilePic;
-//        this.bio = "bio";
-//        this.mainUser = mainUser;
-//        this.messages = messages;
-//    }
-
-    /**
      * Retrieves the username of the contact.
      *
      * @return The username of the contact.

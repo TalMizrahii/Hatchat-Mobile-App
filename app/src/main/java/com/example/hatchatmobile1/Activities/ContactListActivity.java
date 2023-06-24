@@ -42,7 +42,7 @@ public class ContactListActivity extends AppCompatActivity {
     private String profilePic;
 
     // Set the desired diameter for circular images
-    private int desiredDiameter = 250;
+    private int desiredDiameter = 300;
 
 
     @Override

@@ -37,21 +37,18 @@ public class MainActivity extends AppCompatActivity {
 
         usersAPI = new UsersAPI(getApplicationContext());
 
-        settingsViewModal = new SettingsViewModal(getApplicationContext());
-
-        settingsViewModal.getSettingsLiveData().observe(this, settings -> {
-            loginUserAPI.setBaseUrl(settings.getBaseUrl());
-            if (settings.isDayMode()) {
-                // Dark mode is disabled
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        settingsViewModal = SettingsViewModal.getInstance(getApplicationContext());
 
 
-            } else {
-                // Dark mode is enabled
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        loginUserAPI.setBaseUrl(settingsViewModal.getSettings().getBaseUrl());
+        if (settingsViewModal.getSettings().isDayMode()) {
+            // Dark mode is disabled
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            // Dark mode is enabled
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
 
-            }
-        });
 
         binding.loginBtn.setOnClickListener(v -> {
             serverResponse(loginUserAPI);

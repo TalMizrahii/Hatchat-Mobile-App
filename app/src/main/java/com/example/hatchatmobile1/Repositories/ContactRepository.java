@@ -1,6 +1,8 @@
 package com.example.hatchatmobile1.Repositories;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,13 +14,19 @@ import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
 import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.Entities.AllChatResponse;
+import com.example.hatchatmobile1.Entities.AllMessagesResponse;
 import com.example.hatchatmobile1.Entities.ContactChatResponse;
+import com.example.hatchatmobile1.Entities.MessageForFullChat;
+import com.example.hatchatmobile1.Entities.MessageRequest;
 import com.example.hatchatmobile1.Entities.MessageResponse;
 import com.example.hatchatmobile1.ServerAPI.ContactsAPI;
+import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -57,7 +65,7 @@ public class ContactRepository {
      * @param token        The authentication token.
      */
     public ContactRepository(Context context, String mainUsername, String token) {
-        this.settingsViewModal = new SettingsViewModal(context);
+        this.settingsViewModal = SettingsViewModal.getInstance(context);
         this.context = context;
         this.mainUsername = mainUsername;
         this.token = token;
@@ -65,7 +73,7 @@ public class ContactRepository {
                 .allowMainThreadQueries()
                 .build();
         contactDao = appDatabase.getContactDao();
-        SettingsViewModal settingsViewModal = new SettingsViewModal(context);
+        SettingsViewModal settingsViewModal = SettingsViewModal.getInstance(context);
         contactsAPI = new ContactsAPI(settingsViewModal.getSettings().getBaseUrl(), token);
         settingsViewModal.getSettingsLiveData().observeForever(settings -> {
             if (settings != null) {
@@ -232,11 +240,90 @@ public class ContactRepository {
      *
      * @param contact The contact to be inserted.
      */
-    public void reEnterContactMessageAdd(Contact contact) {
-        executorService.execute(() -> {
-            contactDao.insertContact(contact);
+    public void reEnterContactMessageAdd(Message message, Contact contact) {
+        MessageRequest messageRequest = new MessageRequest(message.getContent());
+        contactDao.insertContact(contact);
+        contactsAPI.AddMessage(messageRequest, contact.getId(), new ServerResponse<MessageResponse, String>() {
+            @Override
+            public void onServerResponse(MessageResponse response) {
+
+            }
+
+            @Override
+            public void onServerErrorResponse(String error) {
+                ToastUtils.showShortToast(context, error);
+            }
         });
     }
+
+    public void fetchAllMessages(Contact contact, int chatId) {
+        contactsAPI.GetAllMessagesById(chatId, new ServerResponse<AllMessagesResponse, String>() {
+            @Override
+            public void onServerResponse(AllMessagesResponse response) {
+                List<Message> messages = convertAllMessages(response);
+                contact.getMessages().clear();
+                contact.getMessages().addAll(messages);
+                contact.setBio(trimBio(messages.get(messages.size() - 1).getContent()));
+                contactDao.insertContact(contact);
+            }
+
+            @Override
+            public void onServerErrorResponse(String error) {
+                ToastUtils.showShortToast(context, error);
+            }
+        });
+    }
+
+
+    /**
+     * Converts a list of MessageForFullChat objects to a list of Message objects.
+     *
+     * @param messageResponse The AllMessagesResponse containing the list of MessageForFullChat objects.
+     * @return The converted list of Message objects.
+     */
+    public List<Message> convertAllMessages(AllMessagesResponse messageResponse) {
+        List<Message> convertedMessages = new ArrayList<>();
+
+        for (MessageForFullChat message : messageResponse.getMessages()) {
+            String content = message.getContent();
+            String timeAndDate = message.getCreated();
+            String sender = message.getSender().getUsername();
+
+            // Convert the timestamp format
+            String formattedDate = convertTimestamp(timeAndDate);
+
+            // Create a new Message object with the extracted information
+            Message convertedMessage = new Message(content, formattedDate, sender);
+            // Add the converted Message object to the list.
+            convertedMessages.add(convertedMessage);
+        }
+
+        return convertedMessages;
+    }
+
+    /**
+     * Converts the timestamp format from "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" to "MMM dd, yyyy".
+     *
+     * @param timestamp The input timestamp string.
+     * @return The formatted date string.
+     */
+    private String convertTimestamp(String timestamp) {
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+
+        try {
+            // Parse the input timestamp
+            Date date = inputDateFormat.parse(timestamp);
+            // Format the date to the desired output format
+            return outputDateFormat.format(date);
+        } catch (ParseException e) {
+            // Handle any parsing errors here
+            e.printStackTrace();
+        }
+
+        return ""; // Return an empty string if the conversion fails
+    }
+
 
     /**
      * Deletes a contact from the database.
@@ -272,7 +359,7 @@ public class ContactRepository {
                     chat.getUser().getDisplayName(),
                     trimString(chat.getUser().getProfilePic()),
                     mainUsername,
-                    "bio",
+                    "",
                     chat.getId(),
                     new ArrayList<>()
             );
@@ -306,6 +393,20 @@ public class ContactRepository {
             // Return the input string as is if '/' is not found
             return input;
         }
+    }
+
+    /**
+     * Trims the given text message to a maximum of 11 characters followed by three dots (...),
+     * if the length of the text message is greater than 11.
+     *
+     * @param textMessage The text message to be trimmed.
+     * @return The trimmed text message.
+     */
+    private String trimBio(String textMessage) {
+        if (textMessage.length() > 11) {
+            textMessage = textMessage.substring(textMessage.length() - 11) + "...";
+        }
+        return textMessage;
     }
 
 }
