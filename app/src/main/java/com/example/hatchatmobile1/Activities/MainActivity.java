@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 contactListIntent.putExtra("displayName", userResponse.getDisplayName());
                 contactListIntent.putExtra("profilePic", userResponse.getProfilePic());
                 contactListIntent.putExtra("token", token);
+                binding.passwordInputText.setText("");
                 startActivity(contactListIntent);
             }
 

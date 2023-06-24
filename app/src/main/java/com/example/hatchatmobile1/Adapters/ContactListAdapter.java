@@ -3,6 +3,11 @@ package com.example.hatchatmobile1.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +28,9 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
 
     private LayoutInflater inflater;
     private int resourceId;
+
+    // Set the desired diameter for circular images
+    private int desiredDiameter = 225;
 
     /**
      * Constructor for ContactListAdapter.
@@ -74,9 +82,9 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
             // Convert the base64 string to a bitmap
             byte[] decodedBytes = Base64.decode(contact.getProfilePic(), Base64.DEFAULT);
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-
+            Bitmap circularBitmap = getCircleBitmap(decodedBitmap);
             // Set the bitmap to the ImageView
-            viewHolder.contactImage.setImageBitmap(decodedBitmap);
+            viewHolder.contactImage.setImageBitmap(circularBitmap);
             viewHolder.username.setText(contact.getUsername());
             viewHolder.bio.setText(contact.getDisplayName());
         }
@@ -91,5 +99,26 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
         ImageView contactImage;
         TextView username;
         TextView bio;
+    }
+
+    private Bitmap getCircleBitmap(Bitmap bitmap) {
+        int diameter = desiredDiameter;
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, diameter, diameter, false);
+        Bitmap circularBitmap = Bitmap.createBitmap(diameter, diameter, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(circularBitmap);
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, diameter, diameter);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawCircle(diameter / 2.0f, diameter / 2.0f, diameter / 2.0f, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
+        int left = (diameter - scaledBitmap.getWidth()) / 2;
+        int top = (diameter - scaledBitmap.getHeight()) / 2;
+        canvas.drawBitmap(scaledBitmap, left, top, paint);
+
+        return circularBitmap;
     }
 }
