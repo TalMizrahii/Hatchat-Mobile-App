@@ -14,6 +14,7 @@ import android.util.Base64;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,7 @@ import com.r0adkll.slidr.Slidr;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This activity represents the chat screen where users can exchange messages with a contact.
@@ -47,6 +49,8 @@ public class ChatScreenActivity extends AppCompatActivity {
     private int desiredDiameter = 250;
 
     private String token;
+
+    private RecyclerView recyclerView;
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
@@ -69,10 +73,18 @@ public class ChatScreenActivity extends AppCompatActivity {
         messages = viewModel.getMessagesForContact(contact);
 
         // Set up the RecyclerView for displaying the messages.
-        RecyclerView recyclerView = binding.ChatMessagesRV;
+        recyclerView = binding.ChatMessagesRV;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         messageAdapter = new MessageAdapter(messages, contactUsername);
         recyclerView.setAdapter(messageAdapter);
+
+        // Set the scroll position to the bottom.
+        recyclerView.scrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1);
+        // Set the scroll listener to keep the scroll position at the bottom.
+
+
+
+
 
         EditText messageInputBar = binding.messageInputBar;
 
@@ -121,6 +133,7 @@ public class ChatScreenActivity extends AppCompatActivity {
                     break;
                 }
             }
+            recyclerView.scrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1);
         });
 
         binding.settingsButton.setOnClickListener(v -> {
