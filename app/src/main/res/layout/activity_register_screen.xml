@@ -221,6 +221,18 @@
             android:text="@string/submit"
             android:textColor="#CCC6C6" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_2023_hatchat_inc" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
