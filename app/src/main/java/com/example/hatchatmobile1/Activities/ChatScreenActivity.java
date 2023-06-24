@@ -1,27 +1,29 @@
 package com.example.hatchatmobile1.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.os.Bundle;
-import com.r0adkll.slidr.Slidr;
+import android.util.Base64;
+import android.view.KeyEvent;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Base64;
-import android.view.KeyEvent;
-
-import android.widget.Button;
-import android.widget.EditText;
-
+import com.example.hatchatmobile1.Adapters.MessageAdapter;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.Message;
-import com.example.hatchatmobile1.Adapters.MessageAdapter;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.databinding.ActivityChatScreenBinding;
+import com.r0adkll.slidr.Slidr;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -41,6 +43,8 @@ public class ChatScreenActivity extends AppCompatActivity {
 
     private List<Message> messages;
     private MessageAdapter messageAdapter;
+
+    private int desiredDiameter = 250;
 
     private String token;
 
@@ -71,7 +75,7 @@ public class ChatScreenActivity extends AppCompatActivity {
         recyclerView.setAdapter(messageAdapter);
 
         EditText messageInputBar = binding.messageInputBar;
-        Button sendButton = binding.sendBtn;
+//        Button sendButton = binding.sendBtn;
 
         // Set the contact's username as the title of the chat screen.
         binding.ContactInChatName.setText(contactUsername);
@@ -81,7 +85,8 @@ public class ChatScreenActivity extends AppCompatActivity {
         Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
 
         // Set the contact's profile picture.
-        binding.ContactImageInChat.setImageBitmap(decodedBitmap);
+        Bitmap circularBitmap = getCircleBitmap(decodedBitmap);
+        binding.contactImage.setImageBitmap(circularBitmap);
 
         // Send a message when the user presses the Enter key.
         messageInputBar.setOnKeyListener((v, keyCode, event) -> {
@@ -97,7 +102,7 @@ public class ChatScreenActivity extends AppCompatActivity {
         });
 
         // Send a message when the user clicks the send button.
-        sendButton.setOnClickListener(v -> {
+        binding.sendBtn.setOnClickListener(v -> {
             String messageText = messageInputBar.getText().toString().trim();
             if (!messageText.isEmpty()) {
                 // Send the message.
@@ -138,5 +143,26 @@ public class ChatScreenActivity extends AppCompatActivity {
         String formattedDate = dateFormat.format(date);
         contact.getMessages().add(new Message(textMessage, formattedDate, mainUsername));
         viewModel.reEnterContactMessageAdd(contact);
+    }
+
+    private Bitmap getCircleBitmap(Bitmap bitmap) {
+        int diameter = desiredDiameter;
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, diameter, diameter, false);
+        Bitmap circularBitmap = Bitmap.createBitmap(diameter, diameter, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(circularBitmap);
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, diameter, diameter);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawCircle(diameter / 2.0f, diameter / 2.0f, diameter / 2.0f, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
+        int left = (diameter - scaledBitmap.getWidth()) / 2;
+        int top = (diameter - scaledBitmap.getHeight()) / 2;
+        canvas.drawBitmap(scaledBitmap, left, top, paint);
+
+        return circularBitmap;
     }
 }
