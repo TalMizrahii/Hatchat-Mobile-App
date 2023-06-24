@@ -75,7 +75,6 @@ public class ChatScreenActivity extends AppCompatActivity {
         recyclerView.setAdapter(messageAdapter);
 
         EditText messageInputBar = binding.messageInputBar;
-//        Button sendButton = binding.sendBtn;
 
         // Set the contact's username as the title of the chat screen.
         binding.ContactInChatName.setText(contactUsername);
@@ -141,8 +140,9 @@ public class ChatScreenActivity extends AppCompatActivity {
         Date date = new java.util.Date();
         DateFormat dateFormat = DateFormat.getDateInstance();
         String formattedDate = dateFormat.format(date);
-        contact.getMessages().add(new Message(textMessage, formattedDate, mainUsername));
-        viewModel.reEnterContactMessageAdd(contact);
+        Message message= new Message(textMessage, formattedDate, mainUsername);
+        contact.getMessages().add(message);
+        viewModel.reEnterContactMessageAdd(message, contact);
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

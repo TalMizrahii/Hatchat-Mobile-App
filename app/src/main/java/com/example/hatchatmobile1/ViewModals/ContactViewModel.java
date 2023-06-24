@@ -7,11 +7,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.hatchatmobile1.Adapters.ToastUtils;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
 import com.example.hatchatmobile1.DaoRelated.Message;
+import com.example.hatchatmobile1.Entities.MessageResponse;
 import com.example.hatchatmobile1.Repositories.ContactListData;
 import com.example.hatchatmobile1.Repositories.ContactRepository;
+import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ public class ContactViewModel extends ViewModel {
         getAllChatsFromServer();
     }
 
-    public void getAllChatsFromServer(){
+    public void getAllChatsFromServer() {
         contactRepository.getAllChatsFromServer(new ContactRepository.OnGetAllChatsResponseListener() {
             @Override
             public void onResponse() {
@@ -52,9 +55,10 @@ public class ContactViewModel extends ViewModel {
 
     /**
      * Method to get the singleton instance of ContactViewModel.
-     * @param context The context of the app.
+     *
+     * @param context      The context of the app.
      * @param mainUsername The current user's username.
-     * @param token The user's token for authorization to the server.
+     * @param token        The user's token for authorization to the server.
      * @return An singleton instance of the class.
      */
     public static ContactViewModel getInstance(Context context, String mainUsername, String token) {
@@ -91,6 +95,7 @@ public class ContactViewModel extends ViewModel {
                 setValue(new ArrayList<>());
             }
         }
+
         @Override
         protected void onActive() {
             super.onActive();
@@ -98,71 +103,82 @@ public class ContactViewModel extends ViewModel {
         }
     }
 
-    /**
+    public void getAllMessagesFromChatId(int chatId) {
 
-     Reloads the contact list from the repository.
+    }
+
+
+    /**
+     * Reloads the contact list from the repository.
      */
-    public void reload(){
+    public void reload() {
         List<Contact> contacts = contactRepository.getIndex();
         contactListData.setValue(contacts);
     }
-    /**
 
-     Retrieves the LiveData object containing the list of contacts.
-     @return The LiveData object containing the list of contacts.
+    /**
+     * Retrieves the LiveData object containing the list of contacts.
+     *
+     * @return The LiveData object containing the list of contacts.
      */
     public LiveData<List<Contact>> getAll() {
         return contactListData;
     }
-    /**
 
-     Retrieves the LiveData object containing the list of contacts.
-     @return The LiveData object containing the list of contacts.
+    /**
+     * Retrieves the LiveData object containing the list of contacts.
+     *
+     * @return The LiveData object containing the list of contacts.
      */
     public LiveData<List<Contact>> getContactListLiveData() {
         return contactListData;
     }
-    /**
 
-     Adds a new contact.
-     @param username The contact's username to be added.
+    /**
+     * Adds a new contact.
+     *
+     * @param username The contact's username to be added.
      */
     public void addContact(String username) {
         contactRepository.addContact(username);
         reload();
     }
-    /**
 
-     Adds a new contact message.
-     @param contact The contact to whom the message is added.
+    /**
+     * Adds a new contact message.
+     *
+     * @param contact The contact to whom the message is added.
      */
-    public void reEnterContactMessageAdd(Contact contact) {
-        contactRepository.reEnterContactMessageAdd(contact);
+    public void reEnterContactMessageAdd(Message message, Contact contact) {
+        contactRepository.reEnterContactMessageAdd(message, contact);
         reload();
     }
-    /**
 
-     Deletes a contact.
-     @param contact The contact to be deleted.
+    /**
+     * Deletes a contact.
+     *
+     * @param contact The contact to be deleted.
      */
     public void deleteContact(Contact contact) {
         contactRepository.deleteContact(contact);
         reload();
     }
-    /**
 
-     Retrieves a contact by username.
-     @param username The username of the contact.
-     @return The Contact object matching the username.
+    /**
+     * Retrieves a contact by username.
+     *
+     * @param username The username of the contact.
+     * @return The Contact object matching the username.
      */
     public Contact getContactByUsername(String username) {
         return contactRepository.getContactByUsername(username);
     }
-    /**
 
-     Retrieves the list of messages for a contact.
-     @param contact The contact.
-     @return The list of messages for the contact.
+    /**
+     * Retrieves the list of messages for a contact.
+     *
+     * @param contact The contact.
+     * @return The list of messages for the contact.
      */
     public List<Message> getMessagesForContact(Contact contact) {
         return contactRepository.getMessagesForContact(contact);

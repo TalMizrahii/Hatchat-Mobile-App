@@ -101,6 +101,12 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
         TextView bio;
     }
 
+    /**
+     * Converting an image to be rounded in and in to a fixed size.
+     *
+     * @param bitmap The image's bitmap.
+     * @return The image rounded.
+     */
     private Bitmap getCircleBitmap(Bitmap bitmap) {
         int diameter = desiredDiameter;
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, diameter, diameter, false);

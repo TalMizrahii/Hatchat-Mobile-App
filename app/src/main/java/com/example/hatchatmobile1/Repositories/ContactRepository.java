@@ -12,9 +12,12 @@ import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
 import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.Entities.AllChatResponse;
+import com.example.hatchatmobile1.Entities.AllMessagesResponse;
 import com.example.hatchatmobile1.Entities.ContactChatResponse;
+import com.example.hatchatmobile1.Entities.MessageRequest;
 import com.example.hatchatmobile1.Entities.MessageResponse;
 import com.example.hatchatmobile1.ServerAPI.ContactsAPI;
+import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 
 import java.io.IOException;
@@ -232,10 +235,39 @@ public class ContactRepository {
      *
      * @param contact The contact to be inserted.
      */
-    public void reEnterContactMessageAdd(Contact contact) {
-        executorService.execute(() -> {
-            contactDao.insertContact(contact);
+    public void reEnterContactMessageAdd(Message message, Contact contact) {
+        MessageRequest messageRequest = new MessageRequest(message.getContent());
+        contactDao.insertContact(contact);
+        contactsAPI.AddMessage(messageRequest, contact.getId(), new ServerResponse<MessageResponse, String>() {
+            @Override
+            public void onServerResponse(MessageResponse response) {
+
+            }
+
+            @Override
+            public void onServerErrorResponse(String error) {
+                ToastUtils.showShortToast(context, error);
+            }
         });
+    }
+
+    public void fetchAllMessages(int chatId) {
+        contactsAPI.GetAllMessagesById(chatId, new ServerResponse<AllMessagesResponse, String>() {
+            @Override
+            public void onServerResponse(AllMessagesResponse response) {
+                convertAllMessages(response);
+            }
+
+            @Override
+            public void onServerErrorResponse(String error) {
+
+            }
+        });
+    }
+
+
+    public List<Message> convertAllMessages(AllMessagesResponse messageResponse){
+
     }
 
     /**
