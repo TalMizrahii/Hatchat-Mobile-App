@@ -43,7 +43,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/text_gchat_timestamp_me"
+        android:id="@+id/Time_stemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10:00"

@@ -1,6 +1,8 @@
 package com.example.hatchatmobile1.Repositories;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,7 +24,9 @@ import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -282,13 +286,40 @@ public class ContactRepository {
             String content = message.getContent();
             String timeAndDate = message.getCreated();
             String sender = message.getSender().getUsername();
+
+            // Convert the timestamp format
+            String formattedDate = convertTimestamp(timeAndDate);
+
             // Create a new Message object with the extracted information
-            Message convertedMessage = new Message(content, timeAndDate, sender);
+            Message convertedMessage = new Message(content, formattedDate, sender);
             // Add the converted Message object to the list.
             convertedMessages.add(convertedMessage);
         }
 
         return convertedMessages;
+    }
+
+    /**
+     * Converts the timestamp format from "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" to "MMM dd, yyyy".
+     *
+     * @param timestamp The input timestamp string.
+     * @return The formatted date string.
+     */
+    private String convertTimestamp(String timestamp) {
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+
+        try {
+            // Parse the input timestamp
+            Date date = inputDateFormat.parse(timestamp);
+            // Format the date to the desired output format
+            return outputDateFormat.format(date);
+        } catch (ParseException e) {
+            // Handle any parsing errors here
+            e.printStackTrace();
+        }
+
+        return ""; // Return an empty string if the conversion fails
     }
 
 
