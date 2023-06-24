@@ -263,6 +263,7 @@ public class ContactRepository {
                 List<Message> messages = convertAllMessages(response);
                 contact.getMessages().clear();
                 contact.getMessages().addAll(messages);
+                contact.setBio(trimBio(messages.get(messages.size() - 1).getContent()));
                 contactDao.insertContact(contact);
             }
 
@@ -272,6 +273,7 @@ public class ContactRepository {
             }
         });
     }
+
 
     /**
      * Converts a list of MessageForFullChat objects to a list of Message objects.
@@ -357,7 +359,7 @@ public class ContactRepository {
                     chat.getUser().getDisplayName(),
                     trimString(chat.getUser().getProfilePic()),
                     mainUsername,
-                    "bio",
+                    "",
                     chat.getId(),
                     new ArrayList<>()
             );
@@ -391,6 +393,20 @@ public class ContactRepository {
             // Return the input string as is if '/' is not found
             return input;
         }
+    }
+
+    /**
+     * Trims the given text message to a maximum of 11 characters followed by three dots (...),
+     * if the length of the text message is greater than 11.
+     *
+     * @param textMessage The text message to be trimmed.
+     * @return The trimmed text message.
+     */
+    private String trimBio(String textMessage) {
+        if (textMessage.length() > 11) {
+            textMessage = textMessage.substring(textMessage.length() - 11) + "...";
+        }
+        return textMessage;
     }
 
 }

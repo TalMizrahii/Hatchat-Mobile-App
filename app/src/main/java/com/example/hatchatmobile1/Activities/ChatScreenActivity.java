@@ -145,7 +145,22 @@ public class ChatScreenActivity extends AppCompatActivity {
         String formattedDate = dateFormat.format(date);
         Message message = new Message(textMessage, formattedDate, mainUsername);
         contact.getMessages().add(message);
+        contact.setBio(trimBio(textMessage));
         viewModel.reEnterContactMessageAdd(message, contact);
+    }
+
+    /**
+     * Trims the given text message to a maximum of 11 characters followed by three dots (...),
+     * if the length of the text message is greater than 11.
+     *
+     * @param textMessage The text message to be trimmed.
+     * @return The trimmed text message.
+     */
+    private String trimBio(String textMessage) {
+        if (textMessage.length() > 11) {
+            textMessage = textMessage.substring(textMessage.length() - 11) + "...";
+        }
+        return textMessage;
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

@@ -53,6 +53,8 @@ public class ContactViewModel extends ViewModel {
         });
     }
 
+
+
     /**
      * Method to get the singleton instance of ContactViewModel.
      *
