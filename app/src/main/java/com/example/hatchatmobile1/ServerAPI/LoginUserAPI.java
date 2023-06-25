@@ -3,7 +3,6 @@ package com.example.hatchatmobile1.ServerAPI;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 
 import com.example.hatchatmobile1.Entities.LoginRequest;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
@@ -41,9 +40,9 @@ public class LoginUserAPI {
 
         userWebServiceAPI = retrofit.create(TokenWebServiceAPI.class);
 
-        settingsViewModal.getSettingsLiveData().observeForever(settings -> {
-            setBaseUrl(settings.getBaseUrl());
-        });
+//        settingsViewModal.getSettingsLiveData().observeForever(settings -> {
+//            setBaseUrl(settings.getBaseUrl());
+//        });
     }
 
     public void getToken(String username, String password, final ServerResponse<String, String> callback) {

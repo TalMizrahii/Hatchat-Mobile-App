@@ -72,6 +72,7 @@ public class RegisterScreenActivity extends AppCompatActivity {
         ImageButton rotateLeftButton = binding.rotateLeftButton;
         ImageButton rotateRightButton = binding.rotateRightButton;
 
+        UsersAPI usersAPI = new UsersAPI(getApplicationContext());
 
         ImageView uploadImage = binding.uploadImage;
 
@@ -84,7 +85,13 @@ public class RegisterScreenActivity extends AppCompatActivity {
         binding.passwordRequirementsButton.setOnClickListener(v -> showPasswordRequirementsDialog());
 
         settingsViewModal = SettingsViewModal.getInstance(getApplicationContext());
-        ;
+
+
+        settingsViewModal.getSettingsLiveData().observe(this, settings -> {
+
+            usersAPI.setBaseUrl(settings.getBaseUrl());
+
+        });
 
 
         // Add text change listener to the password input field
@@ -123,7 +130,7 @@ public class RegisterScreenActivity extends AppCompatActivity {
         rotateLeftButton.setOnClickListener(v -> rotateImage(-90));
         rotateRightButton.setOnClickListener(v -> rotateImage(90));
 
-        UsersAPI usersAPI = new UsersAPI(getApplicationContext());
+
 
 
         binding.loginBtn.setOnClickListener(v -> {
