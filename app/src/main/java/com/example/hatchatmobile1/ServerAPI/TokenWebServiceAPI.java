@@ -9,5 +9,6 @@ import retrofit2.http.POST;
 
 public interface TokenWebServiceAPI {
     @POST("Tokens")
-    Call<String> getToken(@Body LoginRequest request, @retrofit2.http.Header("androidToken") String androidToken);
+    @Headers({"Content-Type: application/json"})
+    Call<String> getToken(@Body LoginRequest request, @retrofit2.http.Header("Authorization") String androidToken);
 }
