@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+
+
         loginUserAPI = new LoginUserAPI(getApplicationContext());
 
         usersAPI = new UsersAPI(getApplicationContext());
@@ -68,15 +70,17 @@ public class MainActivity extends AppCompatActivity {
             Intent registerScreen = new Intent(this, RegisterScreenActivity.class);
             startActivity(registerScreen);
         });
+
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, instanceIdResult -> {
+            androidToken = instanceIdResult.getToken();
+        });
     }
 
     private void serverResponse() {
         String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
         String password = Objects.requireNonNull(binding.passwordInputText.getText()).toString();
 
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, instanceIdResult -> {
-            androidToken = instanceIdResult.getToken();
-        });
 
         loginUserAPI.getToken(username, password, androidToken, new ServerResponse<String, String>() {
             @Override

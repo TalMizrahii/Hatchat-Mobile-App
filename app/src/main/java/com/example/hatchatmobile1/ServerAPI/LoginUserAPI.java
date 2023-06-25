@@ -40,9 +40,7 @@ public class LoginUserAPI {
 
         userWebServiceAPI = retrofit.create(TokenWebServiceAPI.class);
 
-//        settingsViewModal.getSettingsLiveData().observeForever(settings -> {
-//            setBaseUrl(settings.getBaseUrl());
-//        });
+
     }
 
     public void getToken(String username, String password, String androidToken, final ServerResponse<String, String> callback) {

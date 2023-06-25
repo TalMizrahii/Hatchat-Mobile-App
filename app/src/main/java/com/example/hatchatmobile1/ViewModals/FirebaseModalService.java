@@ -28,6 +28,7 @@ public class FirebaseModalService extends FirebaseMessagingService {
     private MutableLiveData<MessageForFullChat> messageForFullChatMutableLiveData;
 
     private FirebaseModalService() {
+        this.messageForFullChatMutableLiveData = new MutableLiveData<MessageForFullChat>();
     }
 
     public static synchronized FirebaseModalService getInstance() {

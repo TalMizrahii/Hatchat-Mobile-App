@@ -66,7 +66,7 @@ public class ContactViewModel extends ViewModel {
      * @param token        The user's token for authorization to the server.
      * @return An singleton instance of the class.
      */
-    public static synchronized ContactViewModel getInstance(Context context, String mainUsername, String token) {
+    public static  ContactViewModel getInstance(Context context, String mainUsername, String token) {
         if (instance == null) {
             synchronized (ContactViewModel.class) {
                 if (instance == null) {
