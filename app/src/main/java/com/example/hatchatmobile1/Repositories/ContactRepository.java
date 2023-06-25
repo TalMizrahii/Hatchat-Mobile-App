@@ -3,7 +3,7 @@ package com.example.hatchatmobile1.Repositories;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 
-import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import com.example.hatchatmobile1.Adapters.Utils;
@@ -17,6 +17,7 @@ import com.example.hatchatmobile1.Entities.ContactChatResponse;
 import com.example.hatchatmobile1.Entities.MessageForFullChat;
 import com.example.hatchatmobile1.Entities.MessageRequest;
 import com.example.hatchatmobile1.Entities.MessageResponse;
+import com.example.hatchatmobile1.ViewModals.FirebaseModalService;
 import com.example.hatchatmobile1.ServerAPI.ContactsAPI;
 import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
@@ -54,6 +55,10 @@ public class ContactRepository {
     // An instance of the SettingsViewModal class, responsible for handling settings-related operations.
     private SettingsViewModal settingsViewModal;
 
+    private FirebaseModalService firebaseModalService;
+
+    private LiveData<MessageForFullChat> messageForFullChatLiveData;
+
 
     /**
      * Constructor for ContactRepository.
@@ -64,7 +69,8 @@ public class ContactRepository {
      */
     public ContactRepository(Context context, String mainUsername, String token) {
         this.settingsViewModal = SettingsViewModal.getInstance(context);
-
+        this.firebaseModalService = FirebaseModalService.getInstance();
+        this.messageForFullChatLiveData = firebaseModalService.getMessageForFullChatMutableLiveData();
         this.context = context;
         this.mainUsername = mainUsername;
         this.token = token;
@@ -83,6 +89,43 @@ public class ContactRepository {
             contactsAPI.setBaseUrl(settings.getBaseUrl());
         });
     }
+
+    /**
+     * A getter for the messageForFullChatLiveData.
+     *
+     * @return The messageForFullChatLiveData.
+     */
+    public LiveData<MessageForFullChat> getMessageForFullChatLiveData() {
+        return messageForFullChatLiveData;
+    }
+
+    /**
+     * Checking if the contact we got is valid, if so inserting the message to his list.
+     * If not, asking the server for the contact and his messages.
+     *
+     * @param messageForFullChat The full message received from the firebase.
+     */
+    public void handleFirebaseChange(MessageForFullChat messageForFullChat) {
+        Contact contact = contactDao.getContactByUsername(messageForFullChat.getSender().getUsername());
+        if (contact != null) {
+            Message message = new Message(messageForFullChat.getContent(),
+                    convertTimestamp(messageForFullChat.getCreated()),
+                    messageForFullChat.getSender().getUsername());
+            contact.getMessages().add(message);
+            contact.setBio(trimBio(message.getContent()));
+            contactDao.insertContact(contact);
+            return;
+        }
+        contact = new Contact(messageForFullChat.getSender().getUsername(),
+                messageForFullChat.getSender().getDisplayName(),
+                messageForFullChat.getSender().getProfilePic(),
+                mainUsername,
+                trimBio(messageForFullChat.getContent()),
+                messageForFullChat.getId(),
+                new ArrayList<>());
+        fetchAllMessages(contact, messageForFullChat.getId());
+    }
+
 
     /**
      * Retrieves the list of contacts from the local database.
@@ -117,7 +160,6 @@ public class ContactRepository {
                     listener.onResponse();
                 }
             }
-
             @Override
             public void onError(String error) {
                 if (listener != null) {

@@ -1,16 +1,19 @@
-package com.example.hatchatmobile1.Firebase;
+package com.example.hatchatmobile1.ViewModals;
 
-import android.annotation.SuppressLint;
+import static java.lang.Integer.parseInt;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.hatchatmobile1.Entities.MessageForFullChat;
+import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -20,15 +23,16 @@ import java.util.Map;
 public class FirebaseModalService extends FirebaseMessagingService {
 
     private static FirebaseModalService instance;
-    private Context context;
 
-    private FirebaseModalService(Context context) {
-        this.context = context;
+
+    private MutableLiveData<MessageForFullChat> messageForFullChatMutableLiveData;
+
+    private FirebaseModalService() {
     }
 
-    public static synchronized FirebaseModalService getInstance(Context context) {
+    public static synchronized FirebaseModalService getInstance() {
         if (instance == null) {
-            instance = new FirebaseModalService(context.getApplicationContext());
+            instance = new FirebaseModalService();
         }
         return instance;
     }
@@ -59,10 +63,12 @@ public class FirebaseModalService extends FirebaseMessagingService {
         String chatID = notificationMessage.get("chatID");
         String contactUsername = notificationMessage.get("senderUsername");
         String contactDisplayName = notificationMessage.get("senderDisplayName");
-        String sender = notificationMessage.get("receiver");
-        String msgId = notificationMessage.get("msgID");
-        String date = notificationMessage.get("date");
-
+        String profilePic = notificationMessage.get("senderProfilePic");
+        String created = notificationMessage.get("created");
+        String content = notificationMessage.get("content");
+        assert chatID != null;
+        MessageForFullChat MessageForFullChat = new MessageForFullChat(parseInt(chatID), created, content, new UsersResponse(contactUsername, contactDisplayName, profilePic));
+        messageForFullChatMutableLiveData.postValue(MessageForFullChat);
     }
 
     private void createNotificationChannel() {
@@ -76,4 +82,9 @@ public class FirebaseModalService extends FirebaseMessagingService {
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
     }
+
+    public LiveData<MessageForFullChat> getMessageForFullChatMutableLiveData() {
+        return messageForFullChatMutableLiveData;
+    }
+
 }

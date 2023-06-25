@@ -8,17 +8,18 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.Message;
+import com.example.hatchatmobile1.Entities.MessageForFullChat;
 import com.example.hatchatmobile1.Repositories.ContactRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 /**
  * ContactViewModel class for managing the contact-related data and operations.
  */
 public class ContactViewModel extends ViewModel {
     private static ContactViewModel instance;
-
     private ContactRepository contactRepository;
     private ContactListData contactListData;
     private String mainUsername;
@@ -29,6 +30,16 @@ public class ContactViewModel extends ViewModel {
         contactRepository = new ContactRepository(context, mainUsername, token);
         contactListData = new ContactListData();
         getAllChatsFromServer();
+
+        contactRepository.getMessageForFullChatLiveData().observeForever(this::handleFirebaseChange);
+    }
+
+
+    public void handleFirebaseChange(MessageForFullChat messageForFullChat){
+        Executors.newSingleThreadExecutor().execute(() ->{
+            contactRepository.handleFirebaseChange(messageForFullChat);
+            reload();
+        });
     }
 
     public void getAllChatsFromServer() {
@@ -45,7 +56,6 @@ public class ContactViewModel extends ViewModel {
             }
         });
     }
-
 
 
     /**

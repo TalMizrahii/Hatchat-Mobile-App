@@ -14,9 +14,7 @@ import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 import com.example.hatchatmobile1.ServerAPI.UsersAPI;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivityMainBinding;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.internal.FirebaseInstanceIdInternal;
 
 import java.util.Objects;
 
@@ -28,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private LoginUserAPI loginUserAPI;
     private UsersAPI usersAPI;
     private SettingsViewModal settingsViewModal;
-
     private String androidToken;
 
     @Override
@@ -57,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         binding.loginBtn.setOnClickListener(v -> {
             serverResponse();
         });
@@ -73,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(registerScreen);
         });
     }
-
 
     private void serverResponse() {
         String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
@@ -108,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void getUserByUsername(String username, String token) {
         usersAPI.getUserByUsername(username, token, new ServerResponse<UsersResponse, String>() {
             @Override
@@ -131,7 +125,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
 
