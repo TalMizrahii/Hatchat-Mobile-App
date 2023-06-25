@@ -40,18 +40,22 @@ public class MainActivity extends AppCompatActivity {
         settingsViewModal = SettingsViewModal.getInstance(getApplicationContext());
 
 
-        loginUserAPI.setBaseUrl(settingsViewModal.getSettings().getBaseUrl());
-        if (settingsViewModal.getSettings().isDayMode()) {
-            // Dark mode is disabled
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        } else {
-            // Dark mode is enabled
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
+
+        settingsViewModal.getSettingsLiveData().observe(this, settings -> {
+            loginUserAPI.setBaseUrl(settings.getBaseUrl());
+            usersAPI.setBaseUrl(settings.getBaseUrl());
+            if (settings.isDayMode()) {
+                // Dark mode is disabled
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                // Dark mode is enabled
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        });
 
 
         binding.loginBtn.setOnClickListener(v -> {
-            serverResponse(loginUserAPI);
+            serverResponse();
         });
 
         binding.settingsButton.setOnClickListener(v -> {
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void serverResponse(LoginUserAPI loginUserAPI) {
+    private void serverResponse() {
         String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
         String password = Objects.requireNonNull(binding.passwordInputText.getText()).toString();
 
@@ -120,11 +124,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loginUserAPI.setBaseUrl(settingsViewModal.getSettings().getBaseUrl());
 
-    }
 }
 
