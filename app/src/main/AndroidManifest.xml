@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <uses-permission android:name="android.permission.USE_NOTIFICATIONS"/>
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -19,17 +17,9 @@
         tools:targetApi="31">
         <service
             android:name=".ViewModals.FirebaseModalService"
-            android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGE_EVENT" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".ViewModals.FirebaseModalService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
         <activity
