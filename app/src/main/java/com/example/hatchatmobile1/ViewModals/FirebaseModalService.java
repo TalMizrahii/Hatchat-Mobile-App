@@ -25,7 +25,7 @@ public class FirebaseModalService extends FirebaseMessagingService {
     private static FirebaseModalService instance;
 
 
-    private MutableLiveData<MessageForFullChat> messageForFullChatMutableLiveData;
+    private MutableLiveData<F> messageForFullChatMutableLiveData;
 
     private FirebaseModalService() {
         this.messageForFullChatMutableLiveData = new MutableLiveData<MessageForFullChat>();
@@ -63,8 +63,6 @@ public class FirebaseModalService extends FirebaseMessagingService {
         }
         String chatID = notificationMessage.get("chatID");
         String contactUsername = notificationMessage.get("senderUsername");
-        String contactDisplayName = notificationMessage.get("senderDisplayName");
-        String profilePic = notificationMessage.get("senderProfilePic");
         String created = notificationMessage.get("created");
         String content = notificationMessage.get("content");
         assert chatID != null;
