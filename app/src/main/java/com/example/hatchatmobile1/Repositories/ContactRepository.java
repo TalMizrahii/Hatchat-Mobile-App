@@ -3,6 +3,7 @@ package com.example.hatchatmobile1.Repositories;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.room.Room;
 
 import com.example.hatchatmobile1.Adapters.Utils;
@@ -63,6 +64,7 @@ public class ContactRepository {
      */
     public ContactRepository(Context context, String mainUsername, String token) {
         this.settingsViewModal = SettingsViewModal.getInstance(context);
+
         this.context = context;
         this.mainUsername = mainUsername;
         this.token = token;
@@ -76,6 +78,9 @@ public class ContactRepository {
             if (settings != null) {
                 contactsAPI.setBaseUrl(settings.getBaseUrl());
             }
+        });
+        settingsViewModal.getSettingsLiveData().observe((LifecycleOwner) context, settings -> {
+            contactsAPI.setBaseUrl(settings.getBaseUrl());
         });
     }
 
