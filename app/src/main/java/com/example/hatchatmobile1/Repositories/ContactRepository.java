@@ -248,7 +248,6 @@ public class ContactRepository {
         contactsAPI.AddMessage(messageRequest, contact.getId(), new ServerResponse<MessageResponse, String>() {
             @Override
             public void onServerResponse(MessageResponse response) {
-
             }
 
             @Override
@@ -359,13 +358,17 @@ public class ContactRepository {
     private List<Contact> convertToContacts(List<AllChatResponse> chats) {
         List<Contact> convertedChats = new ArrayList<>();
         for (AllChatResponse chat : chats) {
+            String bio = "";
+            if (chat.getLastMessage() != null) {
+                bio = chat.getLastMessage().getContent();
+            }
             // Convert AllChatResponse to Contact if needed.
             Contact contact = new Contact(
                     chat.getUser().getUsername(),
                     chat.getUser().getDisplayName(),
                     trimString(chat.getUser().getProfilePic()),
                     mainUsername,
-                    "",
+                    bio,
                     chat.getId(),
                     new ArrayList<>()
             );

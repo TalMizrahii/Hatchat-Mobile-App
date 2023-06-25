@@ -12,6 +12,7 @@ import com.example.hatchatmobile1.DaoRelated.Settings;
 import com.example.hatchatmobile1.DaoRelated.SettingsDao;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class SettingsRepository {
 
@@ -47,7 +48,7 @@ public class SettingsRepository {
         settingsLiveData.setValue(settingsDao.getById(0));
     }
 
-    public LiveData<Settings> getSettingsLiveData(){
+    public LiveData<Settings> getSettingsLiveData() {
         return settingsLiveData;
     }
 
@@ -56,8 +57,10 @@ public class SettingsRepository {
     }
 
     public void setSettings(Settings settings) {
-        settingsDao.insert(settings);
-        reload();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            settingsDao.insert(settings);
+            reload();
+        });
     }
 
     public void deleteSettings() {

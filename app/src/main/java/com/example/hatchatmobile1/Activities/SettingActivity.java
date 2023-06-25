@@ -74,7 +74,6 @@ public class SettingActivity extends AppCompatActivity {
         urlLayout = binding.UrlLayout;
         urlText = binding.UrlText;
 
-
         urlText.setHint("Current URL: " + settingsViewModal.getSettings().getBaseUrl());
 
         binding.IPSwitch.setOnClickListener(v -> validateIP());

@@ -84,7 +84,6 @@ public class LoginUserAPI {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         userWebServiceAPI = retrofit.create(TokenWebServiceAPI.class);
-
     }
 
 }
