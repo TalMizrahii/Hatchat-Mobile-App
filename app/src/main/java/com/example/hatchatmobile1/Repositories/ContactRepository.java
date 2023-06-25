@@ -405,5 +405,4 @@ public class ContactRepository {
         }
         return textMessage;
     }
-
 }
