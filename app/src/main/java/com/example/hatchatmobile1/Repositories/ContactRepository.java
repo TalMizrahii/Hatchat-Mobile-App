@@ -145,7 +145,7 @@ public class ContactRepository {
                     contactChatResponse.getUser().getDisplayName(),
                     trimString(contactChatResponse.getUser().getProfilePic()),
                     mainUsername,
-                    "bio",
+                    "",
                     contactChatResponse.getId(),
                     new ArrayList<>()
             );
@@ -260,7 +260,11 @@ public class ContactRepository {
                 List<Message> messages = convertAllMessages(response);
                 contact.getMessages().clear();
                 contact.getMessages().addAll(messages);
-                contact.setBio(trimBio(messages.get(messages.size() - 1).getContent()));
+                if (messages.size() > 0) {
+                    contact.setBio(trimBio(messages.get(messages.size() - 1).getContent()));
+                } else {
+                    contact.setBio("");
+                }
                 contactDao.insertContact(contact);
             }
 
