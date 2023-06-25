@@ -15,14 +15,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/etContent"
+            android:id="@+id/getContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:ems="10"
             android:hint="@string/Enter_Username"
-            android:autofillHints="username" />
+            android:autofillHints="username"
+            android:inputType="textPersonName" />
 
         <ImageButton
             android:id="@+id/btnSubmit"
@@ -30,6 +31,7 @@
             android:layout_height="75dp"
             android:layout_gravity="center"
             android:background="@drawable/add_contact_icon"
-            android:text="@string/submit" />
+            android:text="@string/submit"
+            android:contentDescription="@string/add_contact" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
