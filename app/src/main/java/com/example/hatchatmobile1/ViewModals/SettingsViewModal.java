@@ -29,7 +29,7 @@ public class SettingsViewModal {
      * @param context The context of the app.
      * @return The singleton instance of SettingsViewModal.
      */
-    public static SettingsViewModal getInstance(Context context) {
+    public static synchronized SettingsViewModal getInstance(Context context) {
         if (instance == null) {
             synchronized (SettingsViewModal.class) {
                 if (instance == null) {

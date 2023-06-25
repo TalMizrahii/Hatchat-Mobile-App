@@ -14,6 +14,9 @@ import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 import com.example.hatchatmobile1.ServerAPI.UsersAPI;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivityMainBinding;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal;
 
 import java.util.Objects;
 
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private LoginUserAPI loginUserAPI;
     private UsersAPI usersAPI;
     private SettingsViewModal settingsViewModal;
+
+    private String androidToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         usersAPI = new UsersAPI(getApplicationContext());
 
         settingsViewModal = SettingsViewModal.getInstance(getApplicationContext());
-
 
 
         settingsViewModal.getSettingsLiveData().observe(this, settings -> {
@@ -75,7 +79,11 @@ public class MainActivity extends AppCompatActivity {
         String username = Objects.requireNonNull(binding.usernameInputText.getText()).toString();
         String password = Objects.requireNonNull(binding.passwordInputText.getText()).toString();
 
-        loginUserAPI.getToken(username, password, new ServerResponse<String, String>() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, instanceIdResult -> {
+            androidToken = instanceIdResult.getToken();
+        });
+
+        loginUserAPI.getToken(username, password, androidToken, new ServerResponse<String, String>() {
             @Override
             public void onServerResponse(String token) {
                 if (token != null && !token.isEmpty()) {
