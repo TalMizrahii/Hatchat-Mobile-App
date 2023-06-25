@@ -79,7 +79,7 @@ public class ContactRepository {
                 contactsAPI.setBaseUrl(settings.getBaseUrl());
             }
         });
-        settingsViewModal.getSettingsLiveData().observe((LifecycleOwner) context, settings -> {
+        settingsViewModal.getSettingsLiveData().observeForever(settings -> {
             contactsAPI.setBaseUrl(settings.getBaseUrl());
         });
     }

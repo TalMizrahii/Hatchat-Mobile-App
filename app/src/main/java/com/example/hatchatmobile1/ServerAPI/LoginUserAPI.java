@@ -41,7 +41,7 @@ public class LoginUserAPI {
 
         userWebServiceAPI = retrofit.create(TokenWebServiceAPI.class);
 
-        settingsViewModal.getSettingsLiveData().observe((LifecycleOwner) this, settings -> {
+        settingsViewModal.getSettingsLiveData().observeForever(settings -> {
             setBaseUrl(settings.getBaseUrl());
         });
     }
