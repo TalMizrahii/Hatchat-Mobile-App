@@ -4,22 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hatchatmobile1.Adapters.MessageAdapter;
+import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
@@ -83,9 +78,6 @@ public class ChatScreenActivity extends AppCompatActivity {
         // Set the scroll listener to keep the scroll position at the bottom.
 
 
-
-
-
         EditText messageInputBar = binding.messageInputBar;
 
         // Set the contact's username as the title of the chat screen.
@@ -96,7 +88,7 @@ public class ChatScreenActivity extends AppCompatActivity {
         Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
 
         // Set the contact's profile picture.
-        Bitmap circularBitmap = getCircleBitmap(decodedBitmap);
+        Bitmap circularBitmap = Utils.getCircleBitmap(decodedBitmap, desiredDiameter);
         binding.contactImage.setImageBitmap(circularBitmap);
 
         // Send a message when the user presses the Enter key.
@@ -176,24 +168,5 @@ public class ChatScreenActivity extends AppCompatActivity {
         return textMessage;
     }
 
-    private Bitmap getCircleBitmap(Bitmap bitmap) {
-        int diameter = desiredDiameter;
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, diameter, diameter, false);
-        Bitmap circularBitmap = Bitmap.createBitmap(diameter, diameter, Bitmap.Config.ARGB_8888);
 
-        Canvas canvas = new Canvas(circularBitmap);
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, diameter, diameter);
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawCircle(diameter / 2.0f, diameter / 2.0f, diameter / 2.0f, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-
-        int left = (diameter - scaledBitmap.getWidth()) / 2;
-        int top = (diameter - scaledBitmap.getHeight()) / 2;
-        canvas.drawBitmap(scaledBitmap, left, top, paint);
-
-        return circularBitmap;
-    }
 }

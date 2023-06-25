@@ -1,14 +1,11 @@
 package com.example.hatchatmobile1.Repositories;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.room.Room;
 
-import com.example.hatchatmobile1.Adapters.ToastUtils;
+import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.DaoRelated.AppDatabase;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.ContactDao;
@@ -155,7 +152,7 @@ public class ContactRepository {
             contactDao.insertContact(contact);
         } catch (IOException e) {
             String error = e.getMessage();
-            ToastUtils.showShortToast(context, error);
+            Utils.showShortToast(context, error);
         }
     }
 
@@ -180,7 +177,7 @@ public class ContactRepository {
 
             @Override
             public void onError(String error) {
-                ToastUtils.showShortToast(context, error);
+                Utils.showShortToast(context, error);
             }
         });
         return messages;
@@ -202,7 +199,7 @@ public class ContactRepository {
 
             @Override
             public void onError(String error) {
-                ToastUtils.showShortToast(context, error);
+                Utils.showShortToast(context, error);
             }
         });
 
@@ -251,7 +248,7 @@ public class ContactRepository {
 
             @Override
             public void onServerErrorResponse(String error) {
-                ToastUtils.showShortToast(context, error);
+                Utils.showShortToast(context, error);
             }
         });
     }
@@ -269,7 +266,7 @@ public class ContactRepository {
 
             @Override
             public void onServerErrorResponse(String error) {
-                ToastUtils.showShortToast(context, error);
+                Utils.showShortToast(context, error);
             }
         });
     }

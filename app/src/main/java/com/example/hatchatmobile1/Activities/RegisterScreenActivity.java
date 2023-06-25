@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.TooltipCompat;
 
-import com.example.hatchatmobile1.Adapters.ToastUtils;
+import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ServerAPI.ServerResponse;
@@ -131,7 +131,7 @@ public class RegisterScreenActivity extends AppCompatActivity {
                 serverResponse(usersAPI);
             } else {
                 CharSequence text = "Please fill all the fields";
-                ToastUtils.showShortToast(getApplicationContext(), text);
+                Utils.showShortToast(getApplicationContext(), text);
 
             }
         });
@@ -284,7 +284,7 @@ public class RegisterScreenActivity extends AppCompatActivity {
             @Override
             public void onServerResponse(UsersResponse userResponse) {
                 CharSequence text = "User created successfully : " + userResponse.getDisplayName();
-                ToastUtils.showShortToast(getApplicationContext(), text);
+                Utils.showShortToast(getApplicationContext(), text);
 
                 // User created, finish this activity and return to the previous activity
                 finish();
@@ -294,7 +294,7 @@ public class RegisterScreenActivity extends AppCompatActivity {
             @Override
             public void onServerErrorResponse(String error) {
                 // User creation error, show toast message
-                ToastUtils.showShortToast(getApplicationContext(), error);
+                Utils.showShortToast(getApplicationContext(), error);
 
             }
         });
