@@ -3,11 +3,6 @@ package com.example.hatchatmobile1.Activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Base64;
 import android.widget.ListView;
@@ -15,6 +10,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hatchatmobile1.Adapters.ContactListAdapter;
+import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
@@ -61,7 +57,7 @@ public class ContactListActivity extends AppCompatActivity {
         byte[] decodedBytes = Base64.decode(profilePic, Base64.DEFAULT);
         Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
         // Set it to the top screen bar.
-        Bitmap circularBitmap = getCircleBitmap(decodedBitmap);
+        Bitmap circularBitmap = Utils.getCircleBitmap(decodedBitmap, desiredDiameter);
         binding.userImageInList.setImageBitmap(circularBitmap);
 
         // Inflate the layout using view binding.
@@ -130,27 +126,6 @@ public class ContactListActivity extends AppCompatActivity {
             return input;
         }
 
-    }
-
-    private Bitmap getCircleBitmap(Bitmap bitmap) {
-        int diameter = desiredDiameter;
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, diameter, diameter, false);
-        Bitmap circularBitmap = Bitmap.createBitmap(diameter, diameter, Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(circularBitmap);
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, diameter, diameter);
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawCircle(diameter / 2.0f, diameter / 2.0f, diameter / 2.0f, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-
-        int left = (diameter - scaledBitmap.getWidth()) / 2;
-        int top = (diameter - scaledBitmap.getHeight()) / 2;
-        canvas.drawBitmap(scaledBitmap, left, top, paint);
-
-        return circularBitmap;
     }
 
 

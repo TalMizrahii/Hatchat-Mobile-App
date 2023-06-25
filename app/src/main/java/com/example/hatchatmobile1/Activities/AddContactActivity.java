@@ -1,9 +1,9 @@
 package com.example.hatchatmobile1.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.databinding.ActivityAddContactBinding;
@@ -34,7 +34,7 @@ public class AddContactActivity extends AppCompatActivity {
         contactViewModel = ContactViewModel.getInstance(getApplicationContext(), mainUsername, token);
         // Set the click listener for the submit button.
         binding.btnSubmit.setOnClickListener(view -> {
-            contactViewModel.addContact(binding.etContent.getText().toString());
+            contactViewModel.addContact(binding.getContent.getText().toString());
             // Finish the activity and go back to the contacts list.
             finish();
         });

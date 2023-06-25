@@ -1,22 +1,15 @@
 package com.example.hatchatmobile1.ViewModals;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.hatchatmobile1.Adapters.ToastUtils;
 import com.example.hatchatmobile1.DaoRelated.Contact;
-import com.example.hatchatmobile1.DaoRelated.ContactDao;
 import com.example.hatchatmobile1.DaoRelated.Message;
-import com.example.hatchatmobile1.Entities.MessageResponse;
-import com.example.hatchatmobile1.Repositories.ContactListData;
 import com.example.hatchatmobile1.Repositories.ContactRepository;
-import com.example.hatchatmobile1.ServerAPI.ServerResponse;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

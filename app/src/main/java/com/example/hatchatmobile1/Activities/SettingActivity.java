@@ -11,7 +11,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.example.hatchatmobile1.Adapters.ToastUtils;
+import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.DaoRelated.Settings;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 import com.example.hatchatmobile1.databinding.ActivitySettingBinding;
@@ -117,7 +117,7 @@ public class SettingActivity extends AppCompatActivity {
             urlText.setHint("Current URL: " + settingsViewModal.getSettings().getBaseUrl());
 
             CharSequence text = "The URL has changed to: " + settingsViewModal.getSettings().getBaseUrl();
-            ToastUtils.showShortToast(getApplicationContext(), text);
+            Utils.showShortToast(getApplicationContext(), text);
 
         } else {
             // Invalid URL, show error
@@ -130,14 +130,14 @@ public class SettingActivity extends AppCompatActivity {
     private void darkMode() {
         if (settingsViewModal.getSettings().isDayMode()) {
             CharSequence text = "Dark Mode Off!";
-            ToastUtils.showShortToast(getApplicationContext(), text);
+            Utils.showShortToast(getApplicationContext(), text);
 
             // Dark mode is disabled
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         } else {
 
             CharSequence text = "Dark Mode On!";
-            ToastUtils.showShortToast(getApplicationContext(), text);
+            Utils.showShortToast(getApplicationContext(), text);
 
             // Dark mode is enabled
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);

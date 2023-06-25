@@ -7,7 +7,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.example.hatchatmobile1.Adapters.ToastUtils;
+import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.ServerAPI.LoginUserAPI;
 import com.example.hatchatmobile1.ServerAPI.ServerResponse;
@@ -84,14 +84,14 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // Token is null or empty, show toast message
                     CharSequence text = "Invalid token";
-                    ToastUtils.showShortToast(getApplicationContext(), text);
+                    Utils.showShortToast(getApplicationContext(), text);
                 }
             }
 
             @Override
             public void onServerErrorResponse(String error) {
                 // Token retrieval error, show toast message
-                ToastUtils.showShortToast(getApplicationContext(), error);
+                Utils.showShortToast(getApplicationContext(), error);
             }
         });
     }
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onServerResponse(UsersResponse userResponse) {
                 CharSequence text = "Welcome back " + username + "!";
-                ToastUtils.showShortToast(getApplicationContext(), text);
+                Utils.showShortToast(getApplicationContext(), text);
                 Intent contactListIntent = new Intent(MainActivity.this, ContactListActivity.class);
                 contactListIntent.putExtra("username", userResponse.getUsername());
                 contactListIntent.putExtra("displayName", userResponse.getDisplayName());
@@ -115,9 +115,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onServerErrorResponse(String error) {
                 // Handle the error while retrieving user data
-                ToastUtils.showShortToast(getApplicationContext(), error);
+                Utils.showShortToast(getApplicationContext(), error);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loginUserAPI.setBaseUrl(settingsViewModal.getSettings().getBaseUrl());
+
     }
 }
 
