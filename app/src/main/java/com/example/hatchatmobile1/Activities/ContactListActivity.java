@@ -14,6 +14,7 @@ import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
+import com.example.hatchatmobile1.ViewModals.FireBaseLiveData;
 import com.example.hatchatmobile1.databinding.ActivityContactListBinding;
 import com.r0adkll.slidr.Slidr;
 
@@ -81,10 +82,12 @@ public class ContactListActivity extends AppCompatActivity {
         lvContacts.setAdapter(contactAdapter);
 
         // Observe the contact list live data and update the list view when the data changes.
-        contactsViewModel.getContactListLiveData().observe(this, contactList -> {
-            contacts.clear();
-            contacts.addAll(contactList);
-            contactAdapter.notifyDataSetChanged();
+        contactsViewModel.getContactListLiveData().observe(this, this::refresh);
+
+        FireBaseLiveData fireBaseLiveData = FireBaseLiveData.getInstance();
+        fireBaseLiveData.getLiveData().observe(this, firebaseIncomeMessage -> {
+            List<Contact> contactList = contactsViewModel.handleFirebaseChange(firebaseIncomeMessage);
+            refresh(contactList);
         });
 
         // Delete a contact from the list.
@@ -102,6 +105,7 @@ public class ContactListActivity extends AppCompatActivity {
             chatScreenIntent.putExtra("contactId", contacts.get(i).getId());
             startActivity(chatScreenIntent);
         });
+
 
         binding.settingsButton.setOnClickListener(v -> {
             // Open the settings activity when the settings button is clicked.
@@ -125,8 +129,11 @@ public class ContactListActivity extends AppCompatActivity {
             // Return the input string as is if '/' is not found
             return input;
         }
-
     }
 
-
+    public void refresh(List<Contact> contactList) {
+        contacts.clear();
+        contacts.addAll(contactList);
+        contactAdapter.notifyDataSetChanged();
+    }
 }

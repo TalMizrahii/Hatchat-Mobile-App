@@ -2,6 +2,7 @@ package com.example.hatchatmobile1.ViewModals;
 
 import static java.lang.Integer.parseInt;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
@@ -9,24 +10,27 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
+import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.Entities.FirebaseIncomeMessage;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.Repositories.ContactRepository;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+@SuppressLint("MissingFirebaseInstanceTokenRefresh")
 public class FirebaseModalService extends FirebaseMessagingService {
-
-    private ContactViewModel contactViewModel;
-
-
-    public FirebaseModalService(ContactViewModel contactViewModel) {
+    private MutableLiveData<FirebaseIncomeMessage> firebaseLiveData;
+    public FirebaseModalService() {
         super();
-        this.contactViewModel = contactViewModel;
-
+        FireBaseLiveData fireBaseLiveData = FireBaseLiveData.getInstance();
+        firebaseLiveData = fireBaseLiveData.getLiveData();
     }
 
     @Override
@@ -34,6 +38,7 @@ public class FirebaseModalService extends FirebaseMessagingService {
         super.onMessageSent(s);
     }
 
+    @SuppressLint("WrongThread")
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         if (message.getNotification() == null) {
@@ -61,7 +66,7 @@ public class FirebaseModalService extends FirebaseMessagingService {
                 contactUsername,
                 created,
                 content);
-        contactViewModel.handleFirebaseChange(firebaseIncomeMessage);
+        firebaseLiveData.postValue(firebaseIncomeMessage);
     }
 
     private void createNotificationChannel() {
@@ -76,6 +81,7 @@ public class FirebaseModalService extends FirebaseMessagingService {
         notificationManager.createNotificationChannel(channel);
     }
 
-
-
+    public MutableLiveData<FirebaseIncomeMessage> getFirebaseIncomeMessageMutableLiveData() {
+        return firebaseLiveData;
+    }
 }

@@ -27,19 +27,16 @@ public class ContactViewModel extends ViewModel {
     // Private constructor to prevent direct instantiation
     private ContactViewModel(Context context, String mainUsername, String token) {
         this.mainUsername = mainUsername;
-        contactRepository = new ContactRepository(context, mainUsername, token,this);
+        contactRepository = new ContactRepository(context, mainUsername, token, this);
         contactListData = new ContactListData();
         getAllChatsFromServer();
-
-
     }
 
 
-    public void handleFirebaseChange(FirebaseIncomeMessage firebaseIncomeMessage){
-        Executors.newSingleThreadExecutor().execute(() ->{
-            contactRepository.handleFirebaseChange(firebaseIncomeMessage);
-            reload();
-        });
+    public List<Contact> handleFirebaseChange(FirebaseIncomeMessage firebaseIncomeMessage) {
+        contactRepository.handleFirebaseChange(firebaseIncomeMessage);
+        reload();
+        return contactRepository.getIndex();
     }
 
     public void getAllChatsFromServer() {
@@ -66,7 +63,7 @@ public class ContactViewModel extends ViewModel {
      * @param token        The user's token for authorization to the server.
      * @return An singleton instance of the class.
      */
-    public static  ContactViewModel getInstance(Context context, String mainUsername, String token) {
+    public static ContactViewModel getInstance(Context context, String mainUsername, String token) {
         if (instance == null) {
             synchronized (ContactViewModel.class) {
                 if (instance == null) {

@@ -3,6 +3,7 @@ package com.example.hatchatmobile1.Repositories;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import com.example.hatchatmobile1.Adapters.Utils;
@@ -71,7 +72,7 @@ public class ContactRepository {
      */
     public ContactRepository(Context context, String mainUsername, String token, ContactViewModel contactViewModel) {
         this.settingsViewModal = SettingsViewModal.getInstance(context);
-        this.firebaseModalService = new FirebaseModalService(contactViewModel);
+        this.firebaseModalService = new FirebaseModalService();
         this.context = context;
         this.mainUsername = mainUsername;
         this.token = token;
@@ -90,7 +91,6 @@ public class ContactRepository {
             contactsAPI.setBaseUrl(settings.getBaseUrl());
         });
     }
-
 
     /**
      * Checking if the contact we got is valid, if so inserting the message to his list.
@@ -133,7 +133,7 @@ public class ContactRepository {
             Contact contact = new Contact(
                     usersResponse.getUsername(),
                     usersResponse.getDisplayName(),
-                    usersResponse.getProfilePic(),
+                    trimString(usersResponse.getProfilePic()),
                     mainUsername,
                     bio,
                     chatId,
