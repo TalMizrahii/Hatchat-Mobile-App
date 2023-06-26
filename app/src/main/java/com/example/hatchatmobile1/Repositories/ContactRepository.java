@@ -3,7 +3,6 @@ package com.example.hatchatmobile1.Repositories;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import com.example.hatchatmobile1.Adapters.Utils;
@@ -19,9 +18,10 @@ import com.example.hatchatmobile1.Entities.MessageForFullChat;
 import com.example.hatchatmobile1.Entities.MessageRequest;
 import com.example.hatchatmobile1.Entities.MessageResponse;
 import com.example.hatchatmobile1.Entities.UsersResponse;
-import com.example.hatchatmobile1.ViewModals.FirebaseModalService;
 import com.example.hatchatmobile1.ServerAPI.ContactsAPI;
 import com.example.hatchatmobile1.ServerAPI.ServerResponse;
+import com.example.hatchatmobile1.ViewModals.ContactViewModel;
+import com.example.hatchatmobile1.ViewModals.FirebaseModalService;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 
 import java.io.IOException;
@@ -59,20 +59,19 @@ public class ContactRepository {
 
     private FirebaseModalService firebaseModalService;
 
-    private LiveData<FirebaseIncomeMessage> firebaseIncomeMessageLiveData;
 
 
     /**
      * Constructor for ContactRepository.
      *
-     * @param context      The context.
-     * @param mainUsername The main user's username.
-     * @param token        The authentication token.
+     * @param context          The context.
+     * @param mainUsername     The main user's username.
+     * @param token            The authentication token.
+     * @param contactViewModel
      */
-    public ContactRepository(Context context, String mainUsername, String token) {
+    public ContactRepository(Context context, String mainUsername, String token, ContactViewModel contactViewModel) {
         this.settingsViewModal = SettingsViewModal.getInstance(context);
-        this.firebaseModalService = FirebaseModalService.getInstance();
-        this.firebaseIncomeMessageLiveData = firebaseModalService.getFirebaseIncomeMessageMutableLiveData();
+        this.firebaseModalService = new FirebaseModalService(contactViewModel);
         this.context = context;
         this.mainUsername = mainUsername;
         this.token = token;
@@ -92,14 +91,6 @@ public class ContactRepository {
         });
     }
 
-    /**
-     * A getter for the messageForFullChatLiveData.
-     *
-     * @return The messageForFullChatLiveData.
-     */
-    public LiveData<FirebaseIncomeMessage> getFirebaseIncomeMessageLiveData() {
-        return firebaseIncomeMessageLiveData;
-    }
 
     /**
      * Checking if the contact we got is valid, if so inserting the message to his list.

@@ -9,12 +9,10 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.hatchatmobile1.Entities.FirebaseIncomeMessage;
-import com.example.hatchatmobile1.Entities.MessageForFullChat;
 import com.example.hatchatmobile1.R;
+import com.example.hatchatmobile1.Repositories.ContactRepository;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -22,20 +20,13 @@ import java.util.Map;
 
 public class FirebaseModalService extends FirebaseMessagingService {
 
-    private static FirebaseModalService instance;
+    private ContactViewModel contactViewModel;
 
 
-    private MutableLiveData<FirebaseIncomeMessage> firebaseIncomeMessageMutableLiveData;
+    public FirebaseModalService(ContactViewModel contactViewModel) {
+        super();
+        this.contactViewModel = contactViewModel;
 
-    private FirebaseModalService() {
-        this.firebaseIncomeMessageMutableLiveData = new MutableLiveData<FirebaseIncomeMessage>();
-    }
-
-    public static synchronized FirebaseModalService getInstance() {
-        if (instance == null) {
-            instance = new FirebaseModalService();
-        }
-        return instance;
     }
 
     @Override
@@ -70,12 +61,12 @@ public class FirebaseModalService extends FirebaseMessagingService {
                 contactUsername,
                 created,
                 content);
-        firebaseIncomeMessageMutableLiveData.postValue(firebaseIncomeMessage);
+        contactViewModel.handleFirebaseChange(firebaseIncomeMessage);
     }
 
     private void createNotificationChannel() {
         // Do Not Remove!
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
             return;
         }
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -85,8 +76,6 @@ public class FirebaseModalService extends FirebaseMessagingService {
         notificationManager.createNotificationChannel(channel);
     }
 
-    public LiveData<FirebaseIncomeMessage> getFirebaseIncomeMessageMutableLiveData() {
-        return firebaseIncomeMessageMutableLiveData;
-    }
+
 
 }
