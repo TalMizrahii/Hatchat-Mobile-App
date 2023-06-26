@@ -71,10 +71,7 @@ public class ContactRepository {
     public ContactRepository(Context context, String mainUsername, String token, ContactViewModel contactViewModel) {
         this.settingsViewModal = SettingsViewModal.getInstance(context);
         this.context = context;
-//        this.firebaseModalService = new FirebaseModalService();
-//        this.firebaseModalService.setContext(context);
-//        this.firebaseModalService.setMainUsername(mainUsername);
-//        this.firebaseModalService.setToken(token);
+
 
         this.mainUsername = mainUsername;
         this.token = token;
@@ -534,5 +531,18 @@ public class ContactRepository {
             textMessage = textMessage.substring(textMessage.length() - 11) + "...";
         }
         return textMessage;
+    }
+
+
+    public String getMainUsername() {
+        return this.mainUsername;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public Context getContext() {
+        return this.context;
     }
 }

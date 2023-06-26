@@ -13,7 +13,6 @@ import com.example.hatchatmobile1.Repositories.ContactRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
 
 /**
  * ContactViewModel class for managing the contact-related data and operations.
@@ -55,6 +54,8 @@ public class ContactViewModel extends ViewModel {
     }
 
 
+
+
     /**
      * Method to get the singleton instance of ContactViewModel.
      *
@@ -71,6 +72,10 @@ public class ContactViewModel extends ViewModel {
                 }
             }
         }
+        return instance;
+    }
+
+    public static ContactViewModel getInstanceForFireBase() {
         return instance;
     }
 
@@ -185,5 +190,9 @@ public class ContactViewModel extends ViewModel {
      */
     public List<Message> getMessagesForContact(Contact contact) {
         return contactRepository.getMessagesForContact(contact);
+    }
+
+    public ContactRepository getContactRepository() {
+        return contactRepository;
     }
 }

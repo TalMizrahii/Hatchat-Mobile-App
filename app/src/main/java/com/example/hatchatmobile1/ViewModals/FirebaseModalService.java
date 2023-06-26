@@ -64,6 +64,10 @@ public class FirebaseModalService extends FirebaseMessagingService {
             return;
         }
 
+        ContactViewModel contactViewModel = ContactViewModel.getInstanceForFireBase();
+        setContext(contactViewModel.getContactRepository().getContext());
+        setMainUsername(contactViewModel.getContactRepository().getMainUsername());
+        setToken(contactViewModel.getContactRepository().getToken());
 
         createNotificationChannel();
 
@@ -89,7 +93,7 @@ public class FirebaseModalService extends FirebaseMessagingService {
         chatIntent.putExtra("mainUsername", this.mainUsername);
         chatIntent.putExtra("token", this.token);
         chatIntent.putExtra("contactId", notificationMessage.get("chatID"));
-        PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, chatIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, chatIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
                 .setSmallIcon(R.drawable.haticon)
                 .setContentTitle(message.getNotification().getTitle())
@@ -100,7 +104,6 @@ public class FirebaseModalService extends FirebaseMessagingService {
 
 
         notificationManager.notify(1, builder.build());
-
 
 
     }
