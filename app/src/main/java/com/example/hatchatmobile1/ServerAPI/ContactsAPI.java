@@ -67,6 +67,27 @@ public class ContactsAPI {
     }
 
 
+    public AllMessagesResponse getChatById(int chatId) throws IOException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Response<AllMessagesResponse>> future = executor.submit(() -> {
+            Call<AllMessagesResponse> call = contactsWebServiceAPI.GetAllMessagesById(token, chatId);
+            return call.execute();
+        });
+        try {
+            Response<AllMessagesResponse> response = future.get();
+            if (response != null && response.isSuccessful()) {
+                return response.body();
+            } else {
+                throw new IOException("Request failed with code: " + response.code());
+            }
+        } catch (Exception e) {
+            throw new IOException("Error executing the request: " + e.getMessage());
+        } finally {
+            executor.shutdown();
+        }
+    }
+
+
     public void getMessagesForContact(int contactId, final OnGetMessagesResponseListener listener) {
         Call<List<MessageResponse>> call = contactsWebServiceAPI.GetMessagesForContact(token, contactId);
         call.enqueue(new Callback<List<MessageResponse>>() {

@@ -12,8 +12,8 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.hatchatmobile1.Entities.FirebaseIncomeMessage;
 import com.example.hatchatmobile1.Entities.MessageForFullChat;
-import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -25,10 +25,10 @@ public class FirebaseModalService extends FirebaseMessagingService {
     private static FirebaseModalService instance;
 
 
-    private MutableLiveData<F> messageForFullChatMutableLiveData;
+    private MutableLiveData<FirebaseIncomeMessage> firebaseIncomeMessageMutableLiveData;
 
     private FirebaseModalService() {
-        this.messageForFullChatMutableLiveData = new MutableLiveData<MessageForFullChat>();
+        this.firebaseIncomeMessageMutableLiveData = new MutableLiveData<FirebaseIncomeMessage>();
     }
 
     public static synchronized FirebaseModalService getInstance() {
@@ -66,8 +66,11 @@ public class FirebaseModalService extends FirebaseMessagingService {
         String created = notificationMessage.get("created");
         String content = notificationMessage.get("content");
         assert chatID != null;
-        MessageForFullChat MessageForFullChat = new MessageForFullChat(parseInt(chatID), created, content, new UsersResponse(contactUsername, contactDisplayName, profilePic));
-        messageForFullChatMutableLiveData.postValue(MessageForFullChat);
+        FirebaseIncomeMessage firebaseIncomeMessage = new FirebaseIncomeMessage(parseInt(chatID),
+                contactUsername,
+                created,
+                content);
+        firebaseIncomeMessageMutableLiveData.postValue(firebaseIncomeMessage);
     }
 
     private void createNotificationChannel() {
@@ -82,8 +85,8 @@ public class FirebaseModalService extends FirebaseMessagingService {
         notificationManager.createNotificationChannel(channel);
     }
 
-    public LiveData<MessageForFullChat> getMessageForFullChatMutableLiveData() {
-        return messageForFullChatMutableLiveData;
+    public LiveData<FirebaseIncomeMessage> getFirebaseIncomeMessageMutableLiveData() {
+        return firebaseIncomeMessageMutableLiveData;
     }
 
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.Message;
+import com.example.hatchatmobile1.Entities.FirebaseIncomeMessage;
 import com.example.hatchatmobile1.Entities.MessageForFullChat;
 import com.example.hatchatmobile1.Repositories.ContactRepository;
 
@@ -31,13 +32,13 @@ public class ContactViewModel extends ViewModel {
         contactListData = new ContactListData();
         getAllChatsFromServer();
 
-        contactRepository.getMessageForFullChatLiveData().observeForever(this::handleFirebaseChange);
+        contactRepository.getFirebaseIncomeMessageLiveData().observeForever(this::handleFirebaseChange);
     }
 
 
-    public void handleFirebaseChange(MessageForFullChat messageForFullChat){
+    public void handleFirebaseChange(FirebaseIncomeMessage firebaseIncomeMessage){
         Executors.newSingleThreadExecutor().execute(() ->{
-            contactRepository.handleFirebaseChange(messageForFullChat);
+            contactRepository.handleFirebaseChange(firebaseIncomeMessage);
             reload();
         });
     }

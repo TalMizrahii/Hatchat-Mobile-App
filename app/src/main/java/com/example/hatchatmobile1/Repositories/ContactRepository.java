@@ -14,9 +14,11 @@ import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.Entities.AllChatResponse;
 import com.example.hatchatmobile1.Entities.AllMessagesResponse;
 import com.example.hatchatmobile1.Entities.ContactChatResponse;
+import com.example.hatchatmobile1.Entities.FirebaseIncomeMessage;
 import com.example.hatchatmobile1.Entities.MessageForFullChat;
 import com.example.hatchatmobile1.Entities.MessageRequest;
 import com.example.hatchatmobile1.Entities.MessageResponse;
+import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.ViewModals.FirebaseModalService;
 import com.example.hatchatmobile1.ServerAPI.ContactsAPI;
 import com.example.hatchatmobile1.ServerAPI.ServerResponse;
@@ -57,7 +59,7 @@ public class ContactRepository {
 
     private FirebaseModalService firebaseModalService;
 
-    private LiveData<MessageForFullChat> messageForFullChatLiveData;
+    private LiveData<FirebaseIncomeMessage> firebaseIncomeMessageLiveData;
 
 
     /**
@@ -70,7 +72,7 @@ public class ContactRepository {
     public ContactRepository(Context context, String mainUsername, String token) {
         this.settingsViewModal = SettingsViewModal.getInstance(context);
         this.firebaseModalService = FirebaseModalService.getInstance();
-        this.messageForFullChatLiveData = firebaseModalService.getMessageForFullChatMutableLiveData();
+        this.firebaseIncomeMessageLiveData = firebaseModalService.getFirebaseIncomeMessageMutableLiveData();
         this.context = context;
         this.mainUsername = mainUsername;
         this.token = token;
@@ -95,35 +97,61 @@ public class ContactRepository {
      *
      * @return The messageForFullChatLiveData.
      */
-    public LiveData<MessageForFullChat> getMessageForFullChatLiveData() {
-        return messageForFullChatLiveData;
+    public LiveData<FirebaseIncomeMessage> getFirebaseIncomeMessageLiveData() {
+        return firebaseIncomeMessageLiveData;
     }
 
     /**
      * Checking if the contact we got is valid, if so inserting the message to his list.
      * If not, asking the server for the contact and his messages.
      *
-     * @param messageForFullChat The full message received from the firebase.
+     * @param firebaseIncomeMessage The full message received from the firebase.
      */
-    public void handleFirebaseChange(MessageForFullChat messageForFullChat) {
-        Contact contact = contactDao.getContactByUsername(messageForFullChat.getSender().getUsername());
+    public void handleFirebaseChange(FirebaseIncomeMessage firebaseIncomeMessage) {
+        Contact contact = contactDao.getContactByUsername(firebaseIncomeMessage.getUsername());
         if (contact != null) {
-            Message message = new Message(messageForFullChat.getContent(),
-                    convertTimestamp(messageForFullChat.getCreated()),
-                    messageForFullChat.getSender().getUsername());
+            // Create the message.
+            Message message = new Message(firebaseIncomeMessage.getContent(),
+                    convertTimestamp(firebaseIncomeMessage.getCreated()),
+                    firebaseIncomeMessage.getUsername());
+            // Add the message to the current contact.
             contact.getMessages().add(message);
+            // Set the new bio to he contact.
             contact.setBio(trimBio(message.getContent()));
+            // Insert the contact.
             contactDao.insertContact(contact);
             return;
         }
-        contact = new Contact(messageForFullChat.getSender().getUsername(),
-                messageForFullChat.getSender().getDisplayName(),
-                messageForFullChat.getSender().getProfilePic(),
-                mainUsername,
-                trimBio(messageForFullChat.getContent()),
-                messageForFullChat.getId(),
-                new ArrayList<>());
-        fetchAllMessages(contact, messageForFullChat.getId());
+        getChatById(firebaseIncomeMessage.getChaId(), firebaseIncomeMessage.getUsername());
+    }
+
+    public void getChatById(int chatId, String username) {
+        try {
+            AllMessagesResponse allMessagesResponse = contactsAPI.getChatById(chatId);
+            UsersResponse usersResponse;
+            if (allMessagesResponse.getUsers().get(0).getUsername().equals(username)) {
+                usersResponse = allMessagesResponse.getUsers().get(0);
+            } else {
+                usersResponse = allMessagesResponse.getUsers().get(1);
+            }
+            List<Message> messages = convertAllMessages(allMessagesResponse);
+            String bio = "";
+            if (messages.size() > 0) {
+                bio = (trimBio(messages.get(messages.size() - 1).getContent()));
+            }
+            Contact contact = new Contact(
+                    usersResponse.getUsername(),
+                    usersResponse.getDisplayName(),
+                    usersResponse.getProfilePic(),
+                    mainUsername,
+                    bio,
+                    chatId,
+                    messages);
+            contactDao.insertContact(contact);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -160,6 +188,7 @@ public class ContactRepository {
                     listener.onResponse();
                 }
             }
+
             @Override
             public void onError(String error) {
                 if (listener != null) {
