@@ -3,7 +3,6 @@ package com.example.hatchatmobile1.Repositories;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import com.example.hatchatmobile1.Adapters.Utils;
@@ -71,8 +70,12 @@ public class ContactRepository {
      */
     public ContactRepository(Context context, String mainUsername, String token, ContactViewModel contactViewModel) {
         this.settingsViewModal = SettingsViewModal.getInstance(context);
-        this.firebaseModalService = new FirebaseModalService();
         this.context = context;
+//        this.firebaseModalService = new FirebaseModalService();
+//        this.firebaseModalService.setContext(context);
+//        this.firebaseModalService.setMainUsername(mainUsername);
+//        this.firebaseModalService.setToken(token);
+
         this.mainUsername = mainUsername;
         this.token = token;
         AppDatabase appDatabase = Room.databaseBuilder(context, AppDatabase.class, "AppDatabase")
