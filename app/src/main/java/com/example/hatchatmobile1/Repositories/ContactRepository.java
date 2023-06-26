@@ -61,7 +61,6 @@ public class ContactRepository {
     private FirebaseModalService firebaseModalService;
 
 
-
     /**
      * Constructor for ContactRepository.
      *
@@ -200,11 +199,45 @@ public class ContactRepository {
     }
 
     /**
-     * Adds a new contact to the list.
+     * Check if a contact has an open chat with the user.
      *
-     * @param contactUsername The username of the contact to be added.
+     * @param contactUsername The contact's username.
+     * @return True is he has, false otherwise.
      */
-    public void addContact(String contactUsername) {
+    private boolean isChatInServer(String contactUsername) {
+        try {
+            List<AllChatResponse> allChatsResponse = contactsAPI.getAllChatsSync();
+            for (AllChatResponse chatResponse : allChatsResponse) {
+                if (chatResponse.getUser().getUsername().equals(contactUsername)) {
+                    String bio = "";
+                    if (chatResponse.getLastMessage() != null) {
+                        bio = chatResponse.getLastMessage().getContent();
+                    }
+                    contactDao.insertContact(new Contact(
+                            chatResponse.getUser().getUsername(),
+                            chatResponse.getUser().getDisplayName(),
+                            chatResponse.getUser().getProfilePic(),
+                            mainUsername,
+                            trimBio(bio),
+                            chatResponse.getId(),
+                            new ArrayList<>()
+                    ));
+                    return true;
+                }
+            }
+            return false;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
+        }
+    }
+
+    /**
+     * Posting to the server the new contact.
+     *
+     * @param contactUsername The contact's username.
+     */
+    private void postNewContact(String contactUsername) {
         try {
             ContactChatResponse contactChatResponse = contactsAPI.postNewContactChat(contactUsername);
             Contact contact = new Contact(
@@ -221,6 +254,25 @@ public class ContactRepository {
             String error = e.getMessage();
             Utils.showShortToast(context, error);
         }
+    }
+
+    /**
+     * Adds a new contact to the list.
+     *
+     * @param contactUsername The username of the contact to be added.
+     */
+    public void addContact(String contactUsername) {
+        // Check if the contact is already in the system.
+        if (contactDao.getContactByUsername(contactUsername) != null) {
+            Utils.showShortToast(context, "contact already exist.");
+            return;
+        }
+        // Check if the contact is in the server.
+        if (isChatInServer(contactUsername)) {
+            return;
+        }
+        // Post the contact to the server.
+        postNewContact(contactUsername);
     }
 
     /**
