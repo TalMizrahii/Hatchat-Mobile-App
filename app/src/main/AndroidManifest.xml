@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,17 +15,24 @@
         android:theme="@style/Base.Theme.HatchatMobile1"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <service
+            android:name=".ViewModals.FirebaseModalService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
         <activity
             android:name=".Activities.SettingActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.HatchatMobile1"/>
+            android:theme="@style/Base.Theme.HatchatMobile1" />
         <activity
             android:name=".Activities.ChatScreenActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.RegisterScreenActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.HatchatMobile1"/>
+            android:theme="@style/Base.Theme.HatchatMobile1" />
         <activity
             android:name=".Activities.AddContactActivity"
             android:exported="false" />
@@ -37,11 +44,9 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

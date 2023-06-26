@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "361995879367",
+    "project_id": "hatchatmobile",
+    "storage_bucket": "hatchatmobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361995879367:android:6b9aaab6c60e8afa88cfe2",
+        "android_client_info": {
+          "package_name": "com.example.hatchatmobile1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "361995879367-oldqd5mpfg8koeq7in1pser0d0cvhg96.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1bQguksJLUbyn-kE3X5EdMmKFkMbuWXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361995879367-oldqd5mpfg8koeq7in1pser0d0cvhg96.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

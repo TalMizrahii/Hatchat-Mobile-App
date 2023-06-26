@@ -40,15 +40,13 @@ public class LoginUserAPI {
 
         userWebServiceAPI = retrofit.create(TokenWebServiceAPI.class);
 
-//        settingsViewModal.getSettingsLiveData().observeForever(settings -> {
-//            setBaseUrl(settings.getBaseUrl());
-//        });
+
     }
 
-    public void getToken(String username, String password, final ServerResponse<String, String> callback) {
+    public void getToken(String username, String password, String androidToken, final ServerResponse<String, String> callback) {
         LoginRequest request = new LoginRequest(username, password);
 
-        Call<String> call = userWebServiceAPI.getToken(request);
+        Call<String> call = userWebServiceAPI.getToken(request, androidToken);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

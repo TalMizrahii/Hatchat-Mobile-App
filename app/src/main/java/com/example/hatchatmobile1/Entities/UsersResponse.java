@@ -7,6 +7,12 @@ public class UsersResponse {
 
     private  String profilePic;
 
+    public UsersResponse(String username, String displayName, String profilePic) {
+        this.username = username;
+        this.displayName = displayName;
+        this.profilePic = profilePic;
+    }
+
     public String getDisplayName() {
         return displayName;
     }
@@ -17,5 +23,17 @@ public class UsersResponse {
 
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
     }
 }

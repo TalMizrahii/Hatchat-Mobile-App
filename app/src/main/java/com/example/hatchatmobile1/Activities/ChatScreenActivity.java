@@ -17,7 +17,9 @@ import com.example.hatchatmobile1.Adapters.MessageAdapter;
 import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.Message;
+import com.example.hatchatmobile1.Entities.FirebaseIncomeMessage;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
+import com.example.hatchatmobile1.ViewModals.FireBaseLiveData;
 import com.example.hatchatmobile1.databinding.ActivityChatScreenBinding;
 import com.r0adkll.slidr.Slidr;
 
@@ -25,6 +27,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * This activity represents the chat screen where users can exchange messages with a contact.
@@ -116,16 +120,12 @@ public class ChatScreenActivity extends AppCompatActivity {
         });
 
         // Observe changes in the contact list and update the messages if the current contact has new messages.
-        viewModel.getContactListLiveData().observe(this, updatedContacts -> {
-            for (Contact updatedContact : updatedContacts) {
-                if (updatedContact.getUsername().equals(contactUsername)) {
-                    messages.clear();
-                    messages.addAll(updatedContact.getMessages());
-                    messageAdapter.notifyDataSetChanged();
-                    break;
-                }
-            }
-            recyclerView.scrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1);
+        viewModel.getContactListLiveData().observe(this, this::refresh);
+
+        FireBaseLiveData fireBaseLiveData = FireBaseLiveData.getInstance();
+        fireBaseLiveData.getLiveData().observe(this, firebaseIncomeMessage -> {
+            List<Contact> updatedContacts = viewModel.handleFirebaseChange(firebaseIncomeMessage);
+            refresh(updatedContacts);
         });
 
         binding.settingsButton.setOnClickListener(v -> {
@@ -168,5 +168,17 @@ public class ChatScreenActivity extends AppCompatActivity {
         return textMessage;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void refresh(List<Contact> updatedContacts) {
+        for (Contact updatedContact : updatedContacts) {
+            if (updatedContact.getUsername().equals(contactUsername)) {
+                messages.clear();
+                messages.addAll(updatedContact.getMessages());
+                messageAdapter.notifyDataSetChanged();
+                break;
+            }
+        }
+        recyclerView.scrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1);
+    }
 
 }

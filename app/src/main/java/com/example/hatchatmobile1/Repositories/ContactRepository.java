@@ -3,7 +3,7 @@ package com.example.hatchatmobile1.Repositories;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 
-import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import com.example.hatchatmobile1.Adapters.Utils;
@@ -14,11 +14,15 @@ import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.Entities.AllChatResponse;
 import com.example.hatchatmobile1.Entities.AllMessagesResponse;
 import com.example.hatchatmobile1.Entities.ContactChatResponse;
+import com.example.hatchatmobile1.Entities.FirebaseIncomeMessage;
 import com.example.hatchatmobile1.Entities.MessageForFullChat;
 import com.example.hatchatmobile1.Entities.MessageRequest;
 import com.example.hatchatmobile1.Entities.MessageResponse;
+import com.example.hatchatmobile1.Entities.UsersResponse;
 import com.example.hatchatmobile1.ServerAPI.ContactsAPI;
 import com.example.hatchatmobile1.ServerAPI.ServerResponse;
+import com.example.hatchatmobile1.ViewModals.ContactViewModel;
+import com.example.hatchatmobile1.ViewModals.FirebaseModalService;
 import com.example.hatchatmobile1.ViewModals.SettingsViewModal;
 
 import java.io.IOException;
@@ -54,17 +58,20 @@ public class ContactRepository {
     // An instance of the SettingsViewModal class, responsible for handling settings-related operations.
     private SettingsViewModal settingsViewModal;
 
+    private FirebaseModalService firebaseModalService;
+
 
     /**
      * Constructor for ContactRepository.
      *
-     * @param context      The context.
-     * @param mainUsername The main user's username.
-     * @param token        The authentication token.
+     * @param context          The context.
+     * @param mainUsername     The main user's username.
+     * @param token            The authentication token.
+     * @param contactViewModel
      */
-    public ContactRepository(Context context, String mainUsername, String token) {
+    public ContactRepository(Context context, String mainUsername, String token, ContactViewModel contactViewModel) {
         this.settingsViewModal = SettingsViewModal.getInstance(context);
-
+        this.firebaseModalService = new FirebaseModalService();
         this.context = context;
         this.mainUsername = mainUsername;
         this.token = token;
@@ -83,6 +90,60 @@ public class ContactRepository {
             contactsAPI.setBaseUrl(settings.getBaseUrl());
         });
     }
+
+    /**
+     * Checking if the contact we got is valid, if so inserting the message to his list.
+     * If not, asking the server for the contact and his messages.
+     *
+     * @param firebaseIncomeMessage The full message received from the firebase.
+     */
+    public void handleFirebaseChange(FirebaseIncomeMessage firebaseIncomeMessage) {
+        Contact contact = contactDao.getContactByUsername(firebaseIncomeMessage.getUsername());
+        if (contact != null) {
+            // Create the message.
+            Message message = new Message(firebaseIncomeMessage.getContent(),
+                    convertTimestamp(firebaseIncomeMessage.getCreated()),
+                    firebaseIncomeMessage.getUsername());
+            // Add the message to the current contact.
+            contact.getMessages().add(message);
+            // Set the new bio to he contact.
+            contact.setBio(trimBio(message.getContent()));
+            // Insert the contact.
+            contactDao.insertContact(contact);
+            return;
+        }
+        getChatById(firebaseIncomeMessage.getChaId(), firebaseIncomeMessage.getUsername());
+    }
+
+    public void getChatById(int chatId, String username) {
+        try {
+            AllMessagesResponse allMessagesResponse = contactsAPI.getChatById(chatId);
+            UsersResponse usersResponse;
+            if (allMessagesResponse.getUsers().get(0).getUsername().equals(username)) {
+                usersResponse = allMessagesResponse.getUsers().get(0);
+            } else {
+                usersResponse = allMessagesResponse.getUsers().get(1);
+            }
+            List<Message> messages = convertAllMessages(allMessagesResponse);
+            String bio = "";
+            if (messages.size() > 0) {
+                bio = (trimBio(messages.get(messages.size() - 1).getContent()));
+            }
+            Contact contact = new Contact(
+                    usersResponse.getUsername(),
+                    usersResponse.getDisplayName(),
+                    trimString(usersResponse.getProfilePic()),
+                    mainUsername,
+                    bio,
+                    chatId,
+                    messages);
+            contactDao.insertContact(contact);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /**
      * Retrieves the list of contacts from the local database.
@@ -138,11 +199,45 @@ public class ContactRepository {
     }
 
     /**
-     * Adds a new contact to the list.
+     * Check if a contact has an open chat with the user.
      *
-     * @param contactUsername The username of the contact to be added.
+     * @param contactUsername The contact's username.
+     * @return True is he has, false otherwise.
      */
-    public void addContact(String contactUsername) {
+    private boolean isChatInServer(String contactUsername) {
+        try {
+            List<AllChatResponse> allChatsResponse = contactsAPI.getAllChatsSync();
+            for (AllChatResponse chatResponse : allChatsResponse) {
+                if (chatResponse.getUser().getUsername().equals(contactUsername)) {
+                    String bio = "";
+                    if (chatResponse.getLastMessage() != null) {
+                        bio = chatResponse.getLastMessage().getContent();
+                    }
+                    contactDao.insertContact(new Contact(
+                            chatResponse.getUser().getUsername(),
+                            chatResponse.getUser().getDisplayName(),
+                            chatResponse.getUser().getProfilePic(),
+                            mainUsername,
+                            trimBio(bio),
+                            chatResponse.getId(),
+                            new ArrayList<>()
+                    ));
+                    return true;
+                }
+            }
+            return false;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
+        }
+    }
+
+    /**
+     * Posting to the server the new contact.
+     *
+     * @param contactUsername The contact's username.
+     */
+    private void postNewContact(String contactUsername) {
         try {
             ContactChatResponse contactChatResponse = contactsAPI.postNewContactChat(contactUsername);
             Contact contact = new Contact(
@@ -159,6 +254,25 @@ public class ContactRepository {
             String error = e.getMessage();
             Utils.showShortToast(context, error);
         }
+    }
+
+    /**
+     * Adds a new contact to the list.
+     *
+     * @param contactUsername The username of the contact to be added.
+     */
+    public void addContact(String contactUsername) {
+        // Check if the contact is already in the system.
+        if (contactDao.getContactByUsername(contactUsername) != null) {
+            Utils.showShortToast(context, "contact already exist.");
+            return;
+        }
+        // Check if the contact is in the server.
+        if (isChatInServer(contactUsername)) {
+            return;
+        }
+        // Post the contact to the server.
+        postNewContact(contactUsername);
     }
 
     /**
