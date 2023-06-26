@@ -343,7 +343,7 @@ public class ContactRepository {
         List<Message> convertedMessages = new ArrayList<>();
         for (MessageResponse msgResponse : messageResponses) {
             String content = msgResponse.getContent();
-            String timeAndDate = msgResponse.getCreated();
+            String timeAndDate = convertTimestamp(msgResponse.getCreated());
             String sender = msgResponse.getSender().getUsername();
             Message message = new Message(content, timeAndDate, sender);
             convertedMessages.add(message);

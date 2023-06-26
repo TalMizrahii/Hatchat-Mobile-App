@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.hatchatmobile1.Adapters.ContactListAdapter;
 import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.DaoRelated.Contact;
+import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.ViewModals.FireBaseLiveData;
@@ -19,6 +20,17 @@ import com.example.hatchatmobile1.databinding.ActivityContactListBinding;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -132,8 +144,49 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
     public void refresh(List<Contact> contactList) {
+        // Sort the contactList based on the last message's timeAndDate
+        Collections.sort(contactList, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact contact1, Contact contact2) {
+                // Get the last messages from each contact
+                List<Message> messages1 = contact1.getMessages();
+                List<Message> messages2 = contact2.getMessages();
+
+                // Check if messages lists are empty
+                if (messages1.isEmpty() && messages2.isEmpty()) {
+                    return 0; // Both lists are empty, no change in order
+                } else if (messages1.isEmpty()) {
+                    return 1; // Only messages1 list is empty, contact2 should come first
+                } else if (messages2.isEmpty()) {
+                    return -1; // Only messages2 list is empty, contact1 should come first
+                }
+
+                // Get the last messages from each contact
+                Message lastMessage1 = messages1.get(messages1.size() - 1);
+                Message lastMessage2 = messages2.get(messages2.size() - 1);
+
+                // Parse the timeAndDate strings into date objects for comparison
+                DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+                try {
+                    Date date1 = dateFormat.parse(lastMessage1.getTimeAndDate());
+                    Date date2 = dateFormat.parse(lastMessage2.getTimeAndDate());
+
+                    // Compare the parsed date objects in reverse order
+                    return date1.compareTo(date2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                return 0; // If there is an error in parsing, assume equal dates
+            }
+        });
+
+        Collections.reverse(contactList); // Reverse the sorted list to get the reverse order
+
         contacts.clear();
         contacts.addAll(contactList);
         contactAdapter.notifyDataSetChanged();
     }
+
+
 }

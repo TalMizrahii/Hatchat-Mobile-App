@@ -65,7 +65,6 @@ public class SettingActivity extends AppCompatActivity {
                 settingsViewModal.setSettings(new Settings(0, settingsViewModal.getSettings().getBaseUrl(), false));
             } else {
                 settingsViewModal.setSettings(new Settings(0, settingsViewModal.getSettings().getBaseUrl(), true));
-
             }
             darkMode();
         });
@@ -73,7 +72,6 @@ public class SettingActivity extends AppCompatActivity {
         binding.returnButton.setOnClickListener(v -> finish());
         urlLayout = binding.UrlLayout;
         urlText = binding.UrlText;
-
 
         urlText.setHint("Current URL: " + settingsViewModal.getSettings().getBaseUrl());
 
