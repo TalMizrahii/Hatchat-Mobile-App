@@ -180,5 +180,4 @@ public class ChatScreenActivity extends AppCompatActivity {
         }
         recyclerView.scrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1);
     }
-
 }

@@ -94,12 +94,12 @@ public class ContactListActivity extends AppCompatActivity {
         lvContacts.setAdapter(contactAdapter);
 
         // Observe the contact list live data and update the list view when the data changes.
-        contactsViewModel.getContactListLiveData().observe(this, this::refresh);
+        contactsViewModel.getContactListLiveData().observe(this, contactsList -> refresh(contactsList, null));
 
         FireBaseLiveData fireBaseLiveData = FireBaseLiveData.getInstance();
         fireBaseLiveData.getLiveData().observe(this, firebaseIncomeMessage -> {
             List<Contact> contactList = contactsViewModel.handleFirebaseChange(firebaseIncomeMessage);
-            refresh(contactList);
+            refresh(contactList, firebaseIncomeMessage.getUsername());
         });
 
         // Delete a contact from the list.
@@ -143,50 +143,25 @@ public class ContactListActivity extends AppCompatActivity {
         }
     }
 
-    public void refresh(List<Contact> contactList) {
-        // Sort the contactList based on the last message's timeAndDate
-        Collections.sort(contactList, new Comparator<Contact>() {
-            @Override
-            public int compare(Contact contact1, Contact contact2) {
-                // Get the last messages from each contact
-                List<Message> messages1 = contact1.getMessages();
-                List<Message> messages2 = contact2.getMessages();
-
-                // Check if messages lists are empty
-                if (messages1.isEmpty() && messages2.isEmpty()) {
-                    return 0; // Both lists are empty, no change in order
-                } else if (messages1.isEmpty()) {
-                    return 1; // Only messages1 list is empty, contact2 should come first
-                } else if (messages2.isEmpty()) {
-                    return -1; // Only messages2 list is empty, contact1 should come first
+    public void refresh(List<Contact> contactList, String username) {
+        if (username != null) {
+            // Find the contact with the matching username
+            Contact matchingContact = null;
+            for (Contact contact : contactList) {
+                if (contact.getUsername().equals(username)) {
+                    matchingContact = contact;
+                    break;
                 }
-
-                // Get the last messages from each contact
-                Message lastMessage1 = messages1.get(messages1.size() - 1);
-                Message lastMessage2 = messages2.get(messages2.size() - 1);
-
-                // Parse the timeAndDate strings into date objects for comparison
-                DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
-                try {
-                    Date date1 = dateFormat.parse(lastMessage1.getTimeAndDate());
-                    Date date2 = dateFormat.parse(lastMessage2.getTimeAndDate());
-
-                    // Compare the parsed date objects in reverse order
-                    return date1.compareTo(date2);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                return 0; // If there is an error in parsing, assume equal dates
             }
-        });
-
-        Collections.reverse(contactList); // Reverse the sorted list to get the reverse order
-
+            if(matchingContact != null){
+                // Remove the matching contact from the list.
+                contactList.remove(matchingContact);
+                // Insert the matching contact at position 0.
+                contactList.add(0, matchingContact);
+            }
+        }
         contacts.clear();
         contacts.addAll(contactList);
         contactAdapter.notifyDataSetChanged();
     }
-
-
 }
