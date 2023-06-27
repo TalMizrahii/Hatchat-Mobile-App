@@ -22,6 +22,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
+import java.util.Objects;
 
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
 public class FirebaseModalService extends FirebaseMessagingService {
@@ -92,7 +93,7 @@ public class FirebaseModalService extends FirebaseMessagingService {
         chatIntent.putExtra("username", notificationMessage.get("senderUsername"));
         chatIntent.putExtra("mainUsername", this.mainUsername);
         chatIntent.putExtra("token", this.token);
-        chatIntent.putExtra("contactId", notificationMessage.get("chatID"));
+        chatIntent.putExtra("contactId", parseInt(Objects.requireNonNull(notificationMessage.get("chatID"))));
         PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, chatIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
                 .setSmallIcon(R.drawable.haticon)
