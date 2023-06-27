@@ -46,6 +46,10 @@ public class ContactsAPI {
         contactsWebServiceAPI = retrofit.create(ContactsWebServiceAPI.class);
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public ContactChatResponse postNewContactChat(String username) throws IOException {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Response<ContactChatResponse>> future = executor.submit(() -> {

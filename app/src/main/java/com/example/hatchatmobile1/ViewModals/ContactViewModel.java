@@ -23,8 +23,14 @@ public class ContactViewModel extends ViewModel {
     private ContactListData contactListData;
     private String mainUsername;
 
+    private String token;
+
+    private Context context;
+
     // Private constructor to prevent direct instantiation
     private ContactViewModel(Context context, String mainUsername, String token) {
+        this.token = token;
+        this.context = context;
         this.mainUsername = mainUsername;
         contactRepository = new ContactRepository(context, mainUsername, token, this);
         contactListData = new ContactListData();
@@ -53,9 +59,6 @@ public class ContactViewModel extends ViewModel {
         });
     }
 
-
-
-
     /**
      * Method to get the singleton instance of ContactViewModel.
      *
@@ -68,15 +71,21 @@ public class ContactViewModel extends ViewModel {
         if (instance == null) {
             synchronized (ContactViewModel.class) {
                 if (instance == null) {
-                    instance = new ContactViewModel(context.getApplicationContext(), mainUsername, token);
+                    instance = new ContactViewModel(context, mainUsername, token);
                 }
             }
         }
         return instance;
     }
 
-    public static ContactViewModel getInstanceForFireBase() {
-        return instance;
+    public void setMainUsername(String mainUsername) {
+        this.mainUsername = mainUsername;
+        contactRepository.setMainUsername(mainUsername);
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+        contactRepository.setToken(token);
     }
 
     /**
@@ -85,22 +94,6 @@ public class ContactViewModel extends ViewModel {
     public class ContactListData extends MutableLiveData<List<Contact>> {
         public ContactListData() {
             super();
-            loadChatsFromDatabase();
-        }
-
-        /**
-         * Loads the chats from the database.
-         */
-        private void loadChatsFromDatabase() {
-            List<Contact> allContacts = contactRepository.getIndex();
-            if (allContacts != null
-                    && !allContacts.isEmpty()
-                    && allContacts.get(0).getMainUser().equals(mainUsername)) {
-                setValue(allContacts);
-            } else {
-                contactRepository.deleteAllContacts();
-                setValue(new ArrayList<>());
-            }
         }
 
         @Override
@@ -113,6 +106,21 @@ public class ContactViewModel extends ViewModel {
     public void getAllMessagesFromChatId(Contact contact, int chatId) {
         contactRepository.fetchAllMessages(contact, chatId);
         reload();
+    }
+    /**
+     * Loads the chats from the database.
+     */
+    public void loadDatabase() {
+        List<Contact> allContacts = contactRepository.getIndex();
+        if (allContacts != null
+                && !allContacts.isEmpty()
+                && allContacts.get(0).getMainUser().equals(mainUsername)) {
+            contactListData.setValue(allContacts);
+        } else {
+            contactRepository.deleteAllContacts();
+            List<Contact> contacts = new ArrayList<>();
+            contactListData.setValue(contacts);
+        }
     }
 
 
@@ -190,6 +198,10 @@ public class ContactViewModel extends ViewModel {
      */
     public List<Message> getMessagesForContact(Contact contact) {
         return contactRepository.getMessagesForContact(contact);
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public ContactRepository getContactRepository() {

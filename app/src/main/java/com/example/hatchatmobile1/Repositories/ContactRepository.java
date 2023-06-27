@@ -91,6 +91,19 @@ public class ContactRepository {
         });
     }
 
+    public void setContactDao(ContactDao contactDao) {
+        this.contactDao = contactDao;
+    }
+
+    public void setMainUsername(String mainUsername) {
+        this.mainUsername = mainUsername;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+        contactsAPI.setToken(token);
+    }
+
     /**
      * Checking if the contact we got is valid, if so inserting the message to his list.
      * If not, asking the server for the contact and his messages.
