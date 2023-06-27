@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.hatchatmobile1.Adapters.ContactListAdapter;
 import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.DaoRelated.Contact;
+import com.example.hatchatmobile1.DaoRelated.Message;
 import com.example.hatchatmobile1.R;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.ViewModals.FireBaseLiveData;
@@ -19,6 +20,17 @@ import com.example.hatchatmobile1.databinding.ActivityContactListBinding;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -82,12 +94,12 @@ public class ContactListActivity extends AppCompatActivity {
         lvContacts.setAdapter(contactAdapter);
 
         // Observe the contact list live data and update the list view when the data changes.
-        contactsViewModel.getContactListLiveData().observe(this, this::refresh);
+        contactsViewModel.getContactListLiveData().observe(this, contactsList -> refresh(contactsList, null));
 
         FireBaseLiveData fireBaseLiveData = FireBaseLiveData.getInstance();
         fireBaseLiveData.getLiveData().observe(this, firebaseIncomeMessage -> {
             List<Contact> contactList = contactsViewModel.handleFirebaseChange(firebaseIncomeMessage);
-            refresh(contactList);
+            refresh(contactList, firebaseIncomeMessage.getUsername());
         });
 
         // Delete a contact from the list.
@@ -131,7 +143,23 @@ public class ContactListActivity extends AppCompatActivity {
         }
     }
 
-    public void refresh(List<Contact> contactList) {
+    public void refresh(List<Contact> contactList, String username) {
+        if (username != null) {
+            // Find the contact with the matching username
+            Contact matchingContact = null;
+            for (Contact contact : contactList) {
+                if (contact.getUsername().equals(username)) {
+                    matchingContact = contact;
+                    break;
+                }
+            }
+            if(matchingContact != null){
+                // Remove the matching contact from the list.
+                contactList.remove(matchingContact);
+                // Insert the matching contact at position 0.
+                contactList.add(0, matchingContact);
+            }
+        }
         contacts.clear();
         contacts.addAll(contactList);
         contactAdapter.notifyDataSetChanged();
