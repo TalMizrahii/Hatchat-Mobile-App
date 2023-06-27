@@ -24,36 +24,21 @@ This project is a web application developed using [Java](https://www.java.com/en
  
 The chat application is divided into two parts: the [server-side](https://github.com/TalMizrahii/MVC-HatChat-Server), implemented in Node.js and utilizing [mongoDB](https://www.mongodb.com/), and the client-side, implemented using Java, can communicate also with the [Hatchat-Web](https://github.com/TalMizrahii/MVC-HatChat-Server) application, written in React.
  
-  ## The Client-Side
+## The Application
   
-### Client-side: Login and Registration
-The client-side of the application starts with the user browsing to the client's index page, which serves as the login screen for the app.
-  
-  <img width="400" alt="rm1" src="https://user-images.githubusercontent.com/103560553/234780293-e618d743-7ac0-4805-a298-e5d668767660.PNG">
+### MainActivity
 
-
-  If the user is not registered, they can click on the "Register" button at the bottom of the screen to access the registration page. The registration screen includes a form for new users to fill out. Styling is done using [Bootstrap](https://getbootstrap.com/), ensuring a responsive design across different devices. The registration form includes input fields for username, password, display name, and profile picture. Similar to the login screen, the fields are validated, and appropriate visual feedback is provided.
-  
-<img width="400" alt="rm2" src="https://user-images.githubusercontent.com/103560553/234783338-8691a917-fed8-44a5-86be-e5060ddf356e.PNG">
-  <img width="200" alt="1" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/2b496ddb-4061-445f-a5ac-c1a8ae1aac41">
-<img width="200" alt="2" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/448fbd76-beae-4599-b1db-2d4ec3738959">
+The MainActivity is the logging screen of the app. Here, the user can enter his credentials (username an password) to log in. If the user is not registerd, he can press the register button in the buttom of the screen to move to the register activity. 
 
   
-### Chat Screen
-The chat screen consists of two main parts. Firstly, there is a list of recent conversations displaying the participants' profile pictures, along with a timestamp of the last message sent in each conversation. If the user has previous conversations, they will be presented in this list.
+### RegisterScreenActivity
+The rigister screen gives the user an option to sign up to the app. The register screen will process the request, check if all the fields were entered valid values, and will send a post request  
 
-<img width="400" alt="Capture" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/46412cf8-22df-466d-a163-9b432efbdfa9">
 
-### Updating Contact List
-When adding a new user, the app updates the contact list by placing the contact who sent the most recent message at the top. The timestamp of the last message is set, and a snippet of it is displayed within the contact entry in the list.
+### ContactListActivity
+
   
-<img width="200" alt="3 1" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/087ba499-acf6-459c-bd0e-1774ca6e6b83">
-<img width="200" alt="4" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/433bcdb9-037c-437d-9306-6bbab6f07885">
-  
-*Please note that a user cannot be simultaneously logged in with multiple tabs. Therefore, if you wish to establish a new connection, it may be necessary to refresh your page.*
-  
-  
-## The Server-Side
+### ChatScreenActivity
 
 The server-side of the application is responsible for handling the backend logic and communication with the database. It utilizes the following technologies and frameworks:
 
