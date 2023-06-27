@@ -17,7 +17,6 @@ import com.example.hatchatmobile1.Adapters.MessageAdapter;
 import com.example.hatchatmobile1.Adapters.Utils;
 import com.example.hatchatmobile1.DaoRelated.Contact;
 import com.example.hatchatmobile1.DaoRelated.Message;
-import com.example.hatchatmobile1.Entities.FirebaseIncomeMessage;
 import com.example.hatchatmobile1.ViewModals.ContactViewModel;
 import com.example.hatchatmobile1.ViewModals.FireBaseLiveData;
 import com.example.hatchatmobile1.databinding.ActivityChatScreenBinding;
@@ -27,8 +26,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Observable;
-import java.util.Observer;
+
 
 /**
  * This activity represents the chat screen where users can exchange messages with a contact.
@@ -64,12 +62,16 @@ public class ChatScreenActivity extends AppCompatActivity {
         contactUsername = intent.getStringExtra("username");
         mainUsername = intent.getStringExtra("mainUsername");
         token = intent.getStringExtra("token");
+        boolean isFirebase = intent.getBooleanExtra("isFirebase", false);
         int contactId = intent.getIntExtra("contactId", -1);
 
         // Create an instance of the ContactViewModel using the application context and the main user username.
         viewModel = ContactViewModel.getInstance(getApplicationContext(), mainUsername, token);
         contact = viewModel.getContactByUsername(contactUsername);
         messages = viewModel.getMessagesForContact(contact);
+        if(isFirebase){
+            viewModel.getContactRepository().getChatById(contactId, contactUsername);
+        }
 
         // Set up the RecyclerView for displaying the messages.
         recyclerView = binding.ChatMessagesRV;
@@ -79,8 +81,6 @@ public class ChatScreenActivity extends AppCompatActivity {
 
         // Set the scroll position to the bottom.
         recyclerView.scrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1);
-        // Set the scroll listener to keep the scroll position at the bottom.
-
 
         EditText messageInputBar = binding.messageInputBar;
 

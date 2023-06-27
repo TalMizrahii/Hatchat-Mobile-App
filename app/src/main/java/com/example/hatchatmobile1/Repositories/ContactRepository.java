@@ -3,7 +3,6 @@ package com.example.hatchatmobile1.Repositories;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import com.example.hatchatmobile1.Adapters.Utils;
@@ -71,8 +70,9 @@ public class ContactRepository {
      */
     public ContactRepository(Context context, String mainUsername, String token, ContactViewModel contactViewModel) {
         this.settingsViewModal = SettingsViewModal.getInstance(context);
-        this.firebaseModalService = new FirebaseModalService();
         this.context = context;
+
+
         this.mainUsername = mainUsername;
         this.token = token;
         AppDatabase appDatabase = Room.databaseBuilder(context, AppDatabase.class, "AppDatabase")
@@ -89,6 +89,19 @@ public class ContactRepository {
         settingsViewModal.getSettingsLiveData().observeForever(settings -> {
             contactsAPI.setBaseUrl(settings.getBaseUrl());
         });
+    }
+
+    public void setContactDao(ContactDao contactDao) {
+        this.contactDao = contactDao;
+    }
+
+    public void setMainUsername(String mainUsername) {
+        this.mainUsername = mainUsername;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+        contactsAPI.setToken(token);
     }
 
     /**
@@ -531,5 +544,18 @@ public class ContactRepository {
             textMessage = textMessage.substring(textMessage.length() - 11) + "...";
         }
         return textMessage;
+    }
+
+
+    public String getMainUsername() {
+        return this.mainUsername;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public Context getContext() {
+        return this.context;
     }
 }

@@ -79,6 +79,9 @@ public class ContactListActivity extends AppCompatActivity {
         // Set the values about the user to the top screen bar.
         binding.usernameInList.setText(mainUsername);
         contactsViewModel = ContactViewModel.getInstance(getApplicationContext(), mainUsername, token);
+        contactsViewModel.setMainUsername(mainUsername);
+        contactsViewModel.setToken(token);
+        contactsViewModel.loadDatabase();
         // Open AddContactActivity when the Add Contact button is clicked.
         binding.btnAddContact.setOnClickListener(view -> {
             Intent addContactIntent = new Intent(this, AddContactActivity.class);
@@ -92,7 +95,6 @@ public class ContactListActivity extends AppCompatActivity {
         // Creating the adapter and setting it to the ListView.
         contactAdapter = new ContactListAdapter(this, R.layout.contact_in_list, contacts);
         lvContacts.setAdapter(contactAdapter);
-
         // Observe the contact list live data and update the list view when the data changes.
         contactsViewModel.getContactListLiveData().observe(this, contactsList -> refresh(contactsList, null));
 
