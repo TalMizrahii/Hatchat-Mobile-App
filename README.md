@@ -37,9 +37,15 @@ The rigister screen gives the user an option to sign up to the app. The register
 
 ### ContactListActivity
 
-  
+On this screen, users can view all their contacts with whom they have active conversations. The system displays the current data stored on the device, but in the background, an update HTTP request is sent to the server to ensure the app's data is up to date. Additionally, the screen features an "Add" button, which directs users to the "Add Contact" activity where they can add a new contact to their list. Furthermore, a "Settings" button is available to navigate to the settings screen. To move to a chat screen with a contact, the user needs simply to press a contact from his list. 
+
 ### ChatScreenActivity
 
+The ChatScreenActivity contains all messages between the user and the contact. The messages are first being updated from the DB, and the system is making asynchronic request to the server to update the full conversation.
+
+### AddContactActivity
+
+### SettingsActivity
  
 ## Installing And Executing
   
