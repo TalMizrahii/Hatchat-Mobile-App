@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/TalMizrahii/AP2-Ex1"><img src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/a718fa2e-2d6b-4feb-8d91-9304eea35d45" alt="HTML" width="300"></a>
+  <a href="https://github.com/TalMizrahii/HatchatMobileApp"><img src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/99ceecd9-213f-49a0-bc61-73f01389f566" alt="HTML" width="300"></a>
   <br>
   Hatchat Mobile
   <br>
