@@ -79,13 +79,19 @@ The SettingActivity provides a screen where users can adjust the application set
 
 
 ## Implementation
-The app utilizes the power of [Android Room](https://developer.android.com/training/data-storage/room) , a robust data storage library, to efficiently store and retrieve large amounts of data on the user's device. This approach offers several advantages, such as seamlessly loading the current data from the Room Database into the UI components. Additionally, the app leverages the asynchronous nature of Room to make HTTP requests to the Hatachat MVC server, ensuring that the data remains up-to-date. The app uses [LiveData](https://developer.android.com/reference/android/arch/lifecycle/LiveData?hl=en) for real-time apdate of the UI components.
+The app utilizes the power of [Android Room](https://developer.android.com/training/data-storage/room) , a robust data storage library, to efficiently store and retrieve large amounts of data on the user's device. This approach offers several advantages, such as seamlessly loading the current data from the Room Database into the UI components. Additionally, the app leverages the asynchronous nature of Room to make HTTP requests to the Hatachat MVC server, ensuring that the data remains up-to-date. The app leverages  [LiveData](https://developer.android.com/reference/android/arch/lifecycle/LiveData?hl=en), an Android Architecture Component, for real-time updates of the UI components, including a RecyclerView for messages and a ListView for the contact list. LiveData allows the UI to automatically reflect changes in the underlying data sources without manual intervention.
 
-To enhance real-time data updates, the app integrates [Firebase](https://firebase.google.com/) services. This integration enables the app to instantly receive messages from the server and process them, providing users with a dynamic and responsive messaging experience. By leveraging the server-side capabilities of the Hatchat application, messages originating from the web app are intelligently routed to the appropriate destination device, specifically the Hatchat Mobile app's Firebase service. It's important to note that the server enforces a single device login policy, preventing simultaneous logins from multiple devices (web or mobile). In the event a user attempts to login from two devices, they are prompted to refresh the app to ensure a consistent and secure user experience.
+The system utilizes the ViewModel and Repository design pattern commonly used in Android apps. This design separates data handling from activities, allowing the ViewModel to act as a data API. The ViewModel relies on the Repository to handle data processing and interactions with the server and Room database, promoting code organization and testability.
 
-This combination of Android Room for efficient data storage and retrieval, along with Firebase for real-time messaging, enhances the overall functionality and responsiveness of the Hatchat mobile application.
+<img width="320" alt="dataTransfer" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/37168635-4f3a-49c7-8378-ad5f2447aadb">
 
-  
+
+To enhance real-time data updates, the app integrates [Firebase](https://firebase.google.com/) services. This integration enables the app to instantly receive messages from the server and process them, providing users with a dynamic and responsive messaging experience. By leveraging the server-side capabilities of the Hatchat application, messages originating from the web app are intelligently routed to the appropriate destination device, specifically the Hatchat Mobile app's Firebase service. Using Firebase allows us to create push notifications when a new message arrive.
+
+<img width="233" alt="notifications" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/637b19e7-52b6-4128-9394-fd8dbed1ba8f">
+
+
+This combination of Android Room for efficient data storage and retrieval, along with Firebase for real-time messaging, enhances the overall functionality and responsiveness of the Hatchat mobile application. It's important to note that the server enforces a single device login policy, preventing simultaneous logins from multiple devices (web or mobile). In the event a user attempts to login from two devices, they are prompted to refresh the app to ensure a consistent and secure user experience.
 
 ## Installing And Executing
   
