@@ -6,7 +6,7 @@
   <br>
 </h1>
 
-<h4 align="center">Hatchat is an Android chat application designed for online communication, developed as a project for the Advanced Programming course at Bar-Ilan University.
+<h4 align="center">Hatchat is an Android chat application designed for online communication, developed as a project for the Advanced Programming 2 course at Bar-Ilan University.
 
 
 <p align="center">
