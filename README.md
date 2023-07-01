@@ -62,9 +62,9 @@ The AddContactActivity provides a screen where users can enter a new contact's i
 
 The ChatScreenActivity represents the chat screen where users can exchange messages with a specific contact. This activity handles various functionalities related to messaging and displaying the conversation. This ChatScreenActivity provides the main interface for users to interact with a specific contact's chat conversation. It handles sending and displaying messages, updating the message list when changes occur, and retrieving data from the server to ensure data consistency.
 
-<img width="230" alt="ChatScreen2" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/2cb8724a-0281-47e6-9cab-caba129d5170">
-<img width="520" alt="web new message" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/e0a69176-8cf0-4cff-b508-e479e945289b">
-<img width="230" alt="ChatScreen3" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/64617991-f7cb-47ef-a644-cf38c560682e">
+<img width="200" alt="ChatScreen2" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/2cb8724a-0281-47e6-9cab-caba129d5170">
+<img width="400" alt="web new message" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/e0a69176-8cf0-4cff-b508-e479e945289b">
+<img width="200" alt="ChatScreen3" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/64617991-f7cb-47ef-a644-cf38c560682e">
 
 
 ### SettingsActivity
