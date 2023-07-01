@@ -2,7 +2,7 @@
   <br>
   <a href="https://github.com/TalMizrahii/AP2-Ex1"><img src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/a718fa2e-2d6b-4feb-8d91-9304eea35d45" alt="HTML" width="300"></a>
   <br>
-  Advanced-Programming-2
+  Hatchat Mobile
   <br>
 </h1>
 
