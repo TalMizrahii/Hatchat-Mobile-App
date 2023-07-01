@@ -63,7 +63,7 @@ $ git clone https://github.com/TalMizrahii/HatchatMobileApp
 $ cd HatchatMobileApp
   
 # Here, you can install Android Studio and run the app on an emulator, or alternatively, you can run the app by connecting a physical device to the IDE.
-
+```
 ## Authors
 * [@Yuval Arbel](https://github.com/YuvalArbel1)
 * [@Tal Mizrahi](https://github.com/TalMizrahii)
