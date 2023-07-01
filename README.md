@@ -30,25 +30,53 @@ The chat application is divided into 3 parts: the [Hatchat-MVC-server](https://g
 
 The MainActivity is the logging screen of the app. Here, the user can enter his credentials (username an password) to log in. If the user is not registerd, he can press the register button in the buttom of the screen to move to the register activity. 
 
-  
+<img width="250" alt="LoginScreen" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/43d45c4e-36ba-4d4f-84ee-b6072e91d710">
+
+
+
+
 ### RegisterScreenActivity
 The rigister screen gives the user an option to sign up to the app. The register screen will process the request, check if all the fields were entered valid values, and will send a post request  
+
+<img width="250" alt="RegistrationScreen" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/af347012-2d58-4e9d-9614-2a3eefa0c20f">
+
+Valid password and Camera
+
+
+<img width="250" alt="RegistrationScreen2" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/556c2b62-696f-4f68-9a2b-82b81335095f">
+<img width="250" alt="RegistrationScreen3" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/8116223f-a06f-472f-9cf4-997b90bb72df">
 
 
 ### ContactListActivity
 
 On this screen, users can view all their contacts with whom they have active conversations. The system displays the current data stored on the device, but in the background, an update [HTTP](https://en.wikipedia.org/wiki/HTTP) request is sent to the server to ensure the app's data is up to date. Additionally, the screen features an "Add" button, which directs users to the "Add Contact" activity where they can add a new contact to their list. Furthermore, a "Settings" button is available to navigate to the settings screen. To move to a chat screen with a contact, the user needs simply to press a contact from his list. 
 
-### ChatScreenActivity
-
-The ChatScreenActivity represents the chat screen where users can exchange messages with a specific contact. This activity handles various functionalities related to messaging and displaying the conversation. This ChatScreenActivity provides the main interface for users to interact with a specific contact's chat conversation. It handles sending and displaying messages, updating the message list when changes occur, and retrieving data from the server to ensure data consistency.
+<img width="250" alt="ContactList" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/3b244130-7c13-48d2-a556-4430626b4707">
 
 ### AddContactActivity
 The AddContactActivity provides a screen where users can enter a new contact's information and add them to their contact list. The activity interacts with the ContactViewModel to handle the addition of contacts and utilizes data binding to access and update the UI components.
 
+<img width="250" alt="AddContact" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/9a83fb94-8c31-4ef4-b8ba-ada6fc7ce4a7">
+<img width="246" alt="ContactList2" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/21bdda47-bdaf-4fce-b6c6-81042475094a">
+
+
+### ChatScreenActivity
+
+The ChatScreenActivity represents the chat screen where users can exchange messages with a specific contact. This activity handles various functionalities related to messaging and displaying the conversation. This ChatScreenActivity provides the main interface for users to interact with a specific contact's chat conversation. It handles sending and displaying messages, updating the message list when changes occur, and retrieving data from the server to ensure data consistency.
+
+<img width="230" alt="ChatScreen2" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/2cb8724a-0281-47e6-9cab-caba129d5170">
+<img width="520" alt="web new message" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/e0a69176-8cf0-4cff-b508-e479e945289b">
+<img width="230" alt="ChatScreen3" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/64617991-f7cb-47ef-a644-cf38c560682e">
+
+
 ### SettingsActivity
 
-The SettingActivity provides a screen where users can adjust the application settings. It includes options for enabling/disabling dark mode, entering a new base URL, and a logout button. The activity interacts with the SettingsViewModal to handle the settings data and utilizes data binding to access and update the UI components.
+The SettingActivity provides a screen where users can adjust the application settings. It includes options for enabling/disabling dark mode, entering a new base URL, and a logout button. The activity interacts with the SettingsViewModal to handle the settings data and utilizes data binding to access and update the UI components. This activity is accessable from all other actvities.
+
+<img width="232" alt="Settings" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/05092f75-dd2e-4893-b13e-8a2578d78735">
+
+<img width="245" alt="settingsNight" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/66469708-b73f-4a24-9964-733bec082de8">
+
 
 ## Implementation
 The app utilizes the power of [Android Room](https://developer.android.com/training/data-storage/room) , a robust data storage library, to efficiently store and retrieve large amounts of data on the user's device. This approach offers several advantages, such as seamlessly loading the current data from the Room Database into the UI components. Additionally, the app leverages the asynchronous nature of Room to make HTTP requests to the Hatachat MVC server, ensuring that the data remains up-to-date. The app uses [LiveData](https://developer.android.com/reference/android/arch/lifecycle/LiveData?hl=en) for real-time apdate of the UI components.
