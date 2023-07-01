@@ -50,6 +50,15 @@ The AddContactActivity provides a screen where users can enter a new contact's i
 
 The SettingActivity provides a screen where users can adjust the application settings. It includes options for enabling/disabling dark mode, entering a new base URL, and a logout button. The activity interacts with the SettingsViewModal to handle the settings data and utilizes data binding to access and update the UI components.
 
+## Implementation
+The app utilizes the power of [Android Room](https://developer.android.com/training/data-storage/room) , a robust data storage library, to efficiently store and retrieve large amounts of data on the user's device. This approach offers several advantages, such as seamlessly loading the current data from the Room Database into the UI components. Additionally, the app leverages the asynchronous nature of Room to make HTTP requests to the Hatachat MVC server, ensuring that the data remains up-to-date. The app uses [LiveData](https://developer.android.com/reference/android/arch/lifecycle/LiveData?hl=en) for real-time apdate of the UI components.
+
+To enhance real-time data updates, the app integrates [Firebase](https://firebase.google.com/) services. This integration enables the app to instantly receive messages from the server and process them, providing users with a dynamic and responsive messaging experience. By leveraging the server-side capabilities of the Hatchat application, messages originating from the web app are intelligently routed to the appropriate destination device, specifically the Hatchat Mobile app's Firebase service. It's important to note that the server enforces a single device login policy, preventing simultaneous logins from multiple devices (web or mobile). In the event a user attempts to login from two devices, they are prompted to refresh the app to ensure a consistent and secure user experience.
+
+This combination of Android Room for efficient data storage and retrieval, along with Firebase for real-time messaging, enhances the overall functionality and responsiveness of the Hatchat mobile application.
+
+  
+
 ## Installing And Executing
   
 To clone and run this application, you'll need [Git](https://git-scm.com) installed on your computer. From your command line:
