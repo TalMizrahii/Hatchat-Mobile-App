@@ -69,7 +69,7 @@ The ChatScreenActivity represents the chat screen where users can exchange messa
 
 ### SettingsActivity
 
-The SettingActivity provides a screen where users can adjust the application settings. It includes options for enabling/disabling dark mode, entering a new base URL, and a logout button. The activity interacts with the SettingsViewModal to handle the settings data and utilizes data binding to access and update the UI components. This activity is accessable from all other actvities.
+The SettingActivity provides a screen where users can adjust the application settings. It includes options for enabling/disabling dark mode, entering a new base URL, and a logout button. The activity interacts with the SettingsViewModal to handle the settings data and utilizes data binding to access and update the UI components. This activity is accessible from all other actvities.
 
 <img width="232" alt="Settings" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/05092f75-dd2e-4893-b13e-8a2578d78735">
 <img width="245" alt="settingsNight" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/66469708-b73f-4a24-9964-733bec082de8">
