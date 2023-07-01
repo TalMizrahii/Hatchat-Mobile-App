@@ -80,6 +80,9 @@ The SettingActivity provides a screen where users can adjust the application set
 ## Implementation
 The app utilizes the power of [Android Room](https://developer.android.com/training/data-storage/room) , a robust data storage library, to efficiently store and retrieve large amounts of data on the user's device. This approach offers several advantages, such as seamlessly loading the current data from the Room Database into the UI components. Additionally, the app leverages the asynchronous nature of Room to make HTTP requests to the Hatachat MVC server, ensuring that the data remains up-to-date. The app leverages  [LiveData](https://developer.android.com/reference/android/arch/lifecycle/LiveData?hl=en), an Android Architecture Component, for real-time updates of the UI components, including a RecyclerView for messages and a ListView for the contact list. LiveData allows the UI to automatically reflect changes in the underlying data sources without manual intervention.
 
+<img width="778" alt="serverAndroid" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/aa74c83a-24e7-41e8-b9fe-78ade1d6fed0">
+
+
 The system utilizes the ViewModel and Repository design pattern commonly used in Android apps. This design separates data handling from activities, allowing the ViewModel to act as a data API. The ViewModel relies on the Repository to handle data processing and interactions with the server and Room database, promoting code organization and testability.
 
 <img width="320" alt="dataTransfer" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/37168635-4f3a-49c7-8378-ad5f2447aadb">
