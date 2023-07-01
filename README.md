@@ -18,8 +18,6 @@
 
 ## Description
   
-*The final project seats in the "main" branch!*
-  
 This project is a web application developed using [Java](https://www.java.com/en/) and [nodeJS](https://nodejs.org/en).
  
 The chat application is divided into 3 parts: the [Hatchat-MVC-server](https://github.com/TalMizrahii/MVC-HatChat-Server), implemented in Node.js and utilizing [mongoDB](https://www.mongodb.com/), the [Hatchat-web](https://github.com/TalMizrahii/AP2-Ex3) app implemented in [React](https://react.dev/), and this [Hatchat-Mobalie](https://github.com/TalMizrahii/HatchatMobileApp) [Android](https://www.android.com/) app, implemented in Java.
