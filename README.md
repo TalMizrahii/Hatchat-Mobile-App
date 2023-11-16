@@ -90,7 +90,7 @@ The system utilizes the ViewModel and Repository design pattern commonly used in
 
 To enhance real-time data updates, the app integrates [Firebase](https://firebase.google.com/) services. This integration enables the app to instantly receive messages from the server and process them, providing users with a dynamic and responsive messaging experience. By leveraging the server-side capabilities of the Hatchat application, messages originating from the web app are intelligently routed to the appropriate destination device, specifically the Hatchat Mobile app's Firebase service. Using Firebase allows us to create push notifications when a new message arrive.
 
-<img width="233" alt="notifications" src="https://github.com/TalMizrahii/HatchatMobileApp/assets/103560553/637b19e7-52b6-4128-9394-fd8dbed1ba8f">
+<img width="450" alt="notifications" src="https://github.com/TalMizrahii/Hatchat-Mobile-App/blob/master/res/android_fcm.png">
 
 
 This combination of Android Room for efficient data storage and retrieval, along with Firebase for real-time messaging, enhances the overall functionality and responsiveness of the Hatchat mobile application. It's important to note that the server enforces a single device login policy, preventing simultaneous logins from multiple devices (web or mobile). In the event a user attempts to login from two devices, they are prompted to refresh the app to ensure a consistent and secure user experience.
